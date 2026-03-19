@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
+import config from './config';
 
-// Minimal placeholder - full config will be created in Task 2
-const game = new Phaser.Game({
-  type: Phaser.AUTO,
-  width: 480,
-  height: 320,
-  backgroundColor: '#000000',
-});
+const game = new Phaser.Game(config);
+
+// Expose game instance for E2E test hooks (dev only)
+if (import.meta.env.DEV) {
+  (window as unknown as Record<string, unknown>).__PHASER_GAME__ = game;
+}
 
 export default game;
