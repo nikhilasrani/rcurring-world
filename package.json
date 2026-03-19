@@ -14,6 +14,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
+    "canvas": "^3.2.1",
     "eslint": "^10.0.3",
     "prettier": "^3.8.1",
     "tile-extruder": "^2.1.1",
