@@ -1,7 +1,7 @@
-# Requirements: Recurring World — Bengaluru Explorer
+# Requirements: Recurring World -- Bengaluru Explorer
 
 **Defined:** 2026-03-19
-**Core Value:** The city must feel like Bengaluru — recognizable landmarks, authentic interactions, and nostalgic pixel art that makes locals say "I know that place."
+**Core Value:** The city must feel like Bengaluru -- recognizable landmarks, authentic interactions, and nostalgic pixel art that makes locals say "I know that place."
 
 ## v1 Requirements
 
@@ -39,7 +39,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Quest
 
 - [ ] **QUST-01**: Player can accept a quest from an NPC through dialogue
-- [ ] **QUST-02**: Player can track quest objectives (accepted → in-progress → complete)
+- [ ] **QUST-02**: Player can track quest objectives (accepted -> in-progress -> complete)
 - [ ] **QUST-03**: At least 1 complete quest exists: "Find the best filter coffee on MG Road" or equivalent city-specific quest
 - [ ] **QUST-04**: Quest completion triggers a reward (item, NPC reaction, or new dialogue)
 
@@ -93,7 +93,7 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ### Visual
 
-- **VISL-01**: Weather effects — rain overlay, evening palette shift, morning mist in parks
+- **VISL-01**: Weather effects -- rain overlay, evening palette shift, morning mist in parks
 - **VISL-02**: Bilingual signboards displaying Kannada + English text on in-game signs
 - **VISL-03**: Day/night palette cycle (cosmetic, no gameplay gating)
 
@@ -130,13 +130,54 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (Populated during roadmap creation) | | |
+| MOVE-01 | Phase 1 | Pending |
+| MOVE-02 | Phase 1 | Pending |
+| MOVE-03 | Phase 1 | Pending |
+| MOVE-04 | Phase 1 | Pending |
+| MOVE-05 | Phase 1 | Pending |
+| EXPL-01 | Phase 1 | Pending |
+| PLAT-01 | Phase 1 | Pending |
+| PLAT-02 | Phase 1 | Pending |
+| PLAT-03 | Phase 1 | Pending |
+| NPC-01 | Phase 2 | Pending |
+| NPC-02 | Phase 2 | Pending |
+| NPC-03 | Phase 2 | Pending |
+| NPC-04 | Phase 2 | Pending |
+| NPC-05 | Phase 2 | Pending |
+| NPC-06 | Phase 2 | Pending |
+| SIGN-01 | Phase 2 | Pending |
+| SIGN-02 | Phase 2 | Pending |
+| EXPL-02 | Phase 2 | Pending |
+| EXPL-03 | Phase 2 | Pending |
+| EXPL-04 | Phase 2 | Pending |
+| QUST-01 | Phase 3 | Pending |
+| QUST-02 | Phase 3 | Pending |
+| QUST-03 | Phase 3 | Pending |
+| QUST-04 | Phase 3 | Pending |
+| INVT-01 | Phase 3 | Pending |
+| INVT-02 | Phase 3 | Pending |
+| INVT-03 | Phase 3 | Pending |
+| JRNL-01 | Phase 3 | Pending |
+| JRNL-02 | Phase 3 | Pending |
+| JRNL-03 | Phase 3 | Pending |
+| MTRO-01 | Phase 3 | Pending |
+| MTRO-02 | Phase 3 | Pending |
+| MTRO-03 | Phase 3 | Pending |
+| SAVE-01 | Phase 3 | Pending |
+| SAVE-02 | Phase 3 | Pending |
+| SAVE-03 | Phase 3 | Pending |
+| SAVE-04 | Phase 3 | Pending |
+| PLAT-04 | Phase 3 | Pending |
+| AUDO-01 | Phase 4 | Pending |
+| AUDO-02 | Phase 4 | Pending |
+| AUDO-03 | Phase 4 | Pending |
+| AUDO-04 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 35 total
-- Mapped to phases: 0
-- Unmapped: 35 ⚠️
+- v1 requirements: 42 total
+- Mapped to phases: 42
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-19*
-*Last updated: 2026-03-19 after initial definition*
+*Last updated: 2026-03-19 after roadmap revision (PLAT-02, PLAT-03 moved to Phase 1)*
