@@ -70,10 +70,13 @@ export class BootScene extends Phaser.Scene {
     // Load inside a try/catch-style approach: if file doesn't exist, Phaser logs a warning
     // but continues. We handle the loaderror event below.
     this.load.tilemapTiledJSON(ASSETS.TILEMAP_MG_ROAD, 'assets/tilemaps/mg-road.json');
-    this.load.image(ASSETS.TILESET_GROUND, 'assets/tilesets/mg-road-ground.png');
-    this.load.image(ASSETS.TILESET_BUILDINGS, 'assets/tilesets/mg-road-buildings.png');
-    this.load.image(ASSETS.TILESET_NATURE, 'assets/tilesets/mg-road-nature.png');
-    this.load.image(ASSETS.TILESET_DECORATIONS, 'assets/tilesets/mg-road-decorations.png');
+    this.load.image(ASSETS.TILESET_GROUND, 'assets/tilesets/ground.png');
+    this.load.image(ASSETS.TILESET_BUILDINGS, 'assets/tilesets/buildings.png');
+    this.load.image(ASSETS.TILESET_NATURE, 'assets/tilesets/nature.png');
+    this.load.image(ASSETS.TILESET_DECORATIONS, 'assets/tilesets/decorations.png');
+
+    // Zone metadata
+    this.load.json('zone-mg-road', 'data/zones/mg-road.json');
 
     // Handle load errors gracefully (missing assets are expected until later plans)
     this.load.on('loaderror', (fileObj: Phaser.Loader.File) => {
