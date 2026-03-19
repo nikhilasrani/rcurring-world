@@ -75,6 +75,12 @@ export class BootScene extends Phaser.Scene {
     this.load.image(ASSETS.TILESET_NATURE, 'assets/tilesets/nature.png');
     this.load.image(ASSETS.TILESET_DECORATIONS, 'assets/tilesets/decorations.png');
 
+    // UI assets (touch controls)
+    this.load.image(ASSETS.UI_JOYSTICK_BASE, 'assets/ui/joystick-base.png');
+    this.load.image(ASSETS.UI_JOYSTICK_THUMB, 'assets/ui/joystick-thumb.png');
+    this.load.image(ASSETS.UI_BUTTON_A, 'assets/ui/button-a.png');
+    this.load.image(ASSETS.UI_BUTTON_B, 'assets/ui/button-b.png');
+
     // Zone metadata
     this.load.json('zone-mg-road', 'data/zones/mg-road.json');
 

@@ -156,10 +156,7 @@ export class WorldScene extends Phaser.Scene {
     });
 
     // --- Launch UIScene (runs in parallel, renders above WorldScene) ---
-    // UIScene may not be registered yet (plan 05); guard the launch
-    if (this.scene.manager.keys[SCENES.UI]) {
-      this.scene.launch(SCENES.UI);
-    }
+    this.scene.launch(SCENES.UI);
 
     // Signal that world is ready
     eventsCenter.emit(EVENTS.SCENE_READY, SCENES.WORLD);

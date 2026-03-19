@@ -1,10 +1,12 @@
 import Phaser from 'phaser';
 import { GridEngine } from 'grid-engine';
 import InputTextPlugin from 'phaser3-rex-plugins/plugins/inputtext-plugin.js';
+import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
 import { BootScene } from './scenes/BootScene.ts';
 import { TitleScene } from './scenes/TitleScene.ts';
 import { NameEntryScene } from './scenes/NameEntryScene.ts';
 import { WorldScene } from './scenes/WorldScene.ts';
+import { UIScene } from './scenes/UIScene.ts';
 
 export const GAME_WIDTH = 480;
 export const GAME_HEIGHT = 320;
@@ -31,6 +33,11 @@ const config: Phaser.Types.Core.GameConfig = {
         plugin: InputTextPlugin,
         start: true,
       },
+      {
+        key: 'rexVirtualJoystick',
+        plugin: VirtualJoystickPlugin,
+        start: true,
+      },
     ],
     scene: [
       {
@@ -40,7 +47,7 @@ const config: Phaser.Types.Core.GameConfig = {
       },
     ],
   },
-  scene: [BootScene, TitleScene, NameEntryScene, WorldScene],
+  scene: [BootScene, TitleScene, NameEntryScene, WorldScene, UIScene],
 };
 
 export default config;
