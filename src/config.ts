@@ -1,5 +1,9 @@
 import Phaser from 'phaser';
 import { GridEngine } from 'grid-engine';
+import InputTextPlugin from 'phaser3-rex-plugins/plugins/inputtext-plugin.js';
+import { BootScene } from './scenes/BootScene.ts';
+import { TitleScene } from './scenes/TitleScene.ts';
+import { NameEntryScene } from './scenes/NameEntryScene.ts';
 
 export const GAME_WIDTH = 480;
 export const GAME_HEIGHT = 320;
@@ -17,9 +21,16 @@ const config: Phaser.Types.Core.GameConfig = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   dom: {
-    createContainer: true,
+    createContainer: true, // Required for Rex InputText (name entry)
   },
   plugins: {
+    global: [
+      {
+        key: 'rexInputTextPlugin',
+        plugin: InputTextPlugin,
+        start: true,
+      },
+    ],
     scene: [
       {
         key: 'gridEngine',
@@ -28,7 +39,7 @@ const config: Phaser.Types.Core.GameConfig = {
       },
     ],
   },
-  scene: [], // Scenes will be added as they are created in later plans
+  scene: [BootScene, TitleScene, NameEntryScene],
 };
 
 export default config;
