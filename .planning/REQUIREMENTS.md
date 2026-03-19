@@ -10,7 +10,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Movement
 
 - [ ] **MOVE-01**: Player can walk on a 16x16 tile grid in 4 directions using keyboard or D-pad
-- [ ] **MOVE-02**: Player sprite has walk animations for all 4 directions (minimum 3 frames each)
+- [x] **MOVE-02**: Player sprite has walk animations for all 4 directions (minimum 3 frames each)
 - [ ] **MOVE-03**: Player cannot walk through walls, buildings, water, or other impassable tiles
 - [ ] **MOVE-04**: Camera follows the player smoothly and stays bounded within the map edges
 - [ ] **MOVE-05**: Player can toggle running shoes to move at 2x speed
@@ -131,7 +131,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | MOVE-01 | Phase 1 | Pending |
-| MOVE-02 | Phase 1 | Pending |
+| MOVE-02 | Phase 1 | Complete |
 | MOVE-03 | Phase 1 | Pending |
 | MOVE-04 | Phase 1 | Pending |
 | MOVE-05 | Phase 1 | Pending |

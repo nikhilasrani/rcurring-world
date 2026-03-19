@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-03-19T19:59:22Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-03-19T20:10:14Z"
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 5
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -24,26 +24,26 @@ See: .planning/PROJECT.md (updated 2026-03-19)
 ## Current Position
 
 Phase: 01 (foundation-and-movement) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 1
-- Average duration: 9min
-- Total execution time: 0.15 hours
+- Total plans completed: 2
+- Average duration: 8min
+- Total execution time: 0.25 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01 | 1/5 | 9min | 9min |
+| 01 | 2/5 | 15min | 8min |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-01(9min)
-- Trend: baseline
+- Last 5 plans: 01-01(9min), 01-02(6min)
+- Trend: improving
 
 *Updated after each plan completion*
 
@@ -61,6 +61,9 @@ Recent decisions affecting current work:
 - Touch controls (PLAT-02, PLAT-03) moved to Phase 1 so mobile testing is unblocked from the start
 - Single vite.config.ts instead of template's split dev/prod configs (01-01)
 - ESLint flat config (eslint.config.mjs) since eslint 10 was installed (01-01)
+- Rex InputText as global plugin for cleaner scene API (01-02)
+- Sprites generated programmatically via pngjs for reproducibility (01-02)
+- Graceful asset load errors in BootScene for missing tilesets (01-02)
 
 ### Pending Todos
 
@@ -72,6 +75,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-19T19:59:22Z
-Stopped at: Completed 01-01-PLAN.md
-Resume file: .planning/phases/01-foundation-and-movement/01-01-SUMMARY.md
+Last session: 2026-03-19T20:10:14Z
+Stopped at: Completed 01-02-PLAN.md
+Resume file: .planning/phases/01-foundation-and-movement/01-02-SUMMARY.md
