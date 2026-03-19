@@ -30,11 +30,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. The MG Road / CBD tilemap is visible with recognizable pixel art representations of Chinnaswamy Stadium, UB City, Cubbon Park entrance, Vidhana Soudha, and MG Road Metro station
   5. The game loads and runs in Chrome, Safari, and Firefox on both desktop and mobile
   6. On touch devices, a virtual D-pad and action button overlay appears without obscuring the gameplay area, and the player can move and interact using touch alone
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md -- Project scaffold, Phaser config, shared utilities, test infrastructure
+- [ ] 01-02-PLAN.md -- Player spritesheets and opening sequence (Boot, Title, Name Entry scenes)
+- [ ] 01-03-PLAN.md -- GBA pixel art tilesets and MG Road / CBD tilemap creation
+- [ ] 01-04-PLAN.md -- WorldScene with Grid Engine movement, collision, camera, and speed toggle
+- [ ] 01-05-PLAN.md -- Touch controls (UIScene), GitHub Pages deployment, E2E tests, and final verification
 
 ### Phase 2: World Interaction
 **Goal**: The world feels alive -- player can talk to NPCs, read signs, enter buildings, and discover landmarks
@@ -90,7 +93,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Movement | 0/? | Not started | - |
+| 1. Foundation and Movement | 0/5 | Planning complete | - |
 | 2. World Interaction | 0/? | Not started | - |
 | 3. Game Systems | 0/? | Not started | - |
 | 4. Audio and Polish | 0/? | Not started | - |
