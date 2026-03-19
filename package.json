@@ -1,0 +1,31 @@
+{
+  "name": "rcurring-world",
+  "description": "A GBA-style Bengaluru exploration game built with Phaser 3",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run --reporter=verbose",
+    "test:e2e": "playwright test",
+    "test:all": "vitest run && playwright test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.58.2",
+    "eslint": "^10.0.3",
+    "prettier": "^3.8.1",
+    "tile-extruder": "^2.1.1",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.57.1",
+    "vite": "^6.3.1",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "grid-engine": "^2.48.2",
+    "phaser": "^3.90.0",
+    "phaser3-rex-plugins": "^1.80.19",
+    "terser": "^5.39.0"
+  }
+}
