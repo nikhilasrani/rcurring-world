@@ -13,6 +13,7 @@ export const GAME_HEIGHT = 320;
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
+  parent: 'game-container',
   width: GAME_WIDTH,
   height: GAME_HEIGHT,
   pixelArt: true,
