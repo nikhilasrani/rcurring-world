@@ -34,8 +34,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md -- Project scaffold, Phaser config, shared utilities, test infrastructure
-- [ ] 01-02-PLAN.md -- Player spritesheets and opening sequence (Boot, Title, Name Entry scenes)
-- [ ] 01-03-PLAN.md -- GBA pixel art tilesets and MG Road / CBD tilemap creation
+- [x] 01-02-PLAN.md -- Player spritesheets and opening sequence (Boot, Title, Name Entry scenes)
+- [x] 01-03-PLAN.md -- GBA pixel art tilesets and MG Road / CBD tilemap creation
 - [ ] 01-04-PLAN.md -- WorldScene with Grid Engine movement, collision, camera, and speed toggle
 - [ ] 01-05-PLAN.md -- Touch controls (UIScene), GitHub Pages deployment, E2E tests, and final verification
 

@@ -17,7 +17,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Exploration
 
-- [ ] **EXPL-01**: MG Road / CBD zone is explorable with recognizable pixel art of Chinnaswamy Stadium, UB City, Cubbon Park entrance, Vidhana Soudha, and MG Road Metro station
+- [x] **EXPL-01**: MG Road / CBD zone is explorable with recognizable pixel art of Chinnaswamy Stadium, UB City, Cubbon Park entrance, Vidhana Soudha, and MG Road Metro station
 - [ ] **EXPL-02**: Player can enter and exit 2-3 building interiors (metro station, shop, landmark) via door tiles
 - [ ] **EXPL-03**: Area name banner slides in when player enters a new zone or building (e.g., "MG Road", "Cubbon Park")
 - [ ] **EXPL-04**: Player can discover and visit all major landmarks in the MG Road / CBD area
@@ -135,7 +135,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MOVE-03 | Phase 1 | Pending |
 | MOVE-04 | Phase 1 | Pending |
 | MOVE-05 | Phase 1 | Pending |
-| EXPL-01 | Phase 1 | Pending |
+| EXPL-01 | Phase 1 | Complete |
 | PLAT-01 | Phase 1 | Complete |
 | PLAT-02 | Phase 1 | Pending |
 | PLAT-03 | Phase 1 | Pending |
