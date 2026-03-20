@@ -5,6 +5,7 @@ import { NPCManager } from '../systems/NPCManager';
 import { InteractionSystem } from '../systems/InteractionSystem';
 import { ZoneManager } from '../systems/ZoneManager';
 import { TransitionManager } from '../systems/TransitionManager';
+import { AutoRickshawManager } from '../systems/AutoRickshawManager';
 import { InteractionPrompt } from '../ui/InteractionPrompt';
 import { eventsCenter } from '../utils/EventsCenter';
 import {
@@ -72,6 +73,7 @@ export class WorldScene extends Phaser.Scene {
   private interactionSystem!: InteractionSystem;
   private zoneManager!: ZoneManager;
   private transitionManager!: TransitionManager;
+  private autoRickshawManager!: AutoRickshawManager;
   private interactionPrompt!: InteractionPrompt;
   private movementFrozen = false;
   private isInInterior = false;
@@ -198,6 +200,17 @@ export class WorldScene extends Phaser.Scene {
     // Player/NPC sprite depth = 2 (set in Player/NPC class)
     if (abovePlayerLayer) abovePlayerLayer.setDepth(3);
 
+    // Chinnaswamy Stadium composite sprites (replaces tile-based stadium visuals)
+    // Stadium footprint: tile (3,41), size 10x13 tiles = pixel (48, 656), 160x208px
+    const stadiumX = 3 * TILE_SIZE;
+    const stadiumY = 41 * TILE_SIZE;
+    this.add.image(stadiumX, stadiumY, ASSETS.SPRITE_CHINNASWAMY)
+      .setOrigin(0, 0)
+      .setDepth(1);
+    this.add.image(stadiumX, stadiumY, ASSETS.SPRITE_CHINNASWAMY_ROOF)
+      .setOrigin(0, 0)
+      .setDepth(3);
+
     // --- Create Player ---
     this.player = new Player(this, playerState);
 
@@ -248,6 +261,10 @@ export class WorldScene extends Phaser.Scene {
     this.npcManager = new NPCManager();
     this.npcManager.spawnAll(this, this.gridEngine, npcDefs);
 
+    // Spawn auto-rickshaws (ambient traffic on roads)
+    this.autoRickshawManager = new AutoRickshawManager(this, this.gridEngine);
+    this.autoRickshawManager.spawnAll();
+
     // Set up interaction system
     const interiorDefs = [
       metroInterior,
@@ -289,6 +306,14 @@ export class WorldScene extends Phaser.Scene {
       if (lastInteractedNPC) {
         this.npcManager.resumeNPCPatrol(this.gridEngine, lastInteractedNPC);
         this.registry.remove('lastInteractedNPC');
+      }
+      // Resume auto-rickshaw if one was stopped
+      const lastInteractedAuto = this.registry.get('lastInteractedAuto') as
+        | string
+        | undefined;
+      if (lastInteractedAuto) {
+        this.autoRickshawManager?.resumeAuto(lastInteractedAuto);
+        this.registry.remove('lastInteractedAuto');
       }
     });
 
@@ -513,6 +538,19 @@ export class WorldScene extends Phaser.Scene {
     if (!target) return;
 
     if (target.type === 'npc') {
+      // Check if it's an auto-rickshaw
+      if (this.autoRickshawManager?.isAuto(target.id)) {
+        const dialogue = this.autoRickshawManager.getDialogue(target.id);
+        if (!dialogue) return;
+
+        // Stop the auto during dialogue
+        this.autoRickshawManager.stopAuto(target.id);
+        this.registry.set('lastInteractedAuto', target.id);
+
+        eventsCenter.emit(EVENTS.NPC_INTERACT, dialogue);
+        return;
+      }
+
       const npcData = this.npcManager.getNPCData(target.id);
       if (!npcData) return;
 
@@ -573,6 +611,12 @@ export class WorldScene extends Phaser.Scene {
 
   update(): void {
     if (!this.player || !this.gridEngine) return;
+
+    // Always update auto-rickshaws (traffic doesn't freeze during dialogue)
+    if (this.autoRickshawManager) {
+      this.autoRickshawManager.update();
+    }
+
     if (this.movementFrozen) return;
 
     // Determine run state: Shift key OR B button held
@@ -623,6 +667,7 @@ export class WorldScene extends Phaser.Scene {
     eventsCenter.off(EVENTS.DIALOGUE_CLOSE);
     eventsCenter.off(EVENTS.TOUCH_ACTION);
     this.npcManager?.destroy();
+    this.autoRickshawManager?.destroy();
     this.interactionPrompt?.destroy();
     this.player?.destroy();
   }

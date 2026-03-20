@@ -84,6 +84,8 @@ const B = { // Buildings tiles (firstgid=33)
   CHINNA_FIELD:  60,
   UB_UPPER:      61,
   BLDG_WALL_TOP: 62,
+  CHINNA_SEAT_R: 63,   // Red seating
+  CHINNA_SIGN:   64,   // Stadium name sign
   // Row 3
   OVERP_RAIL_L:  65,
   OVERP_RAIL_R:  66,
@@ -91,56 +93,75 @@ const B = { // Buildings tiles (firstgid=33)
   VS_DOME_TOP:   68,
   ROOF_VAR:      69,
   TREE_CANOPY:   70,
+  CHINNA_ROOF:   71,   // Stadium roof canopy
+  CHINNA_FLOOD:  72,   // Floodlight tower base
+  CHINNA_FLOOD_T:73,   // Floodlight tower top (above-player)
+  CHINNA_PITCH:  74,   // Cricket pitch with stumps
+  CHINNA_SCORE:  75,   // Scoreboard
+  CHINNA_CORNER: 76,   // Wall corner piece
+  CHINNA_DIRSIGN:77,   // Direction signboard
+  CHINNA_PAVE:   78,   // Concourse pavement
+  CHINNA_FLAG:   79,   // Country flag
+  CHINNA_GATE:   80,   // Turnstile/entry gate
+  // Row 4
+  CHINNA_BND_T:  81,   // Field boundary line (top)
+  CHINNA_BND_B:  82,   // Field boundary line (bottom)
+  CHINNA_BND_L:  83,   // Field boundary line (left)
+  CHINNA_BND_R:  84,   // Field boundary line (right)
+  CHINNA_WALK:   85,   // Inner walkway/concourse
+  CHINNA_SEAT_BT:86,   // Blue seating with structural top
+  CHINNA_SEAT_RT:87,   // Red seating with structural top
+  CHINNA_PALM:   88,   // Palm tree
 };
 
-const N = { // Nature tiles (firstgid=81)
-  RAIN_TRUNK:    81,
-  RAIN_CAN_TL:   82,
-  RAIN_CAN_TR:   83,
-  COCONUT_TRUNK: 84,
-  COCONUT_LEAF:  85,
-  PARK_TRUNK:    86,
-  PARK_CANOPY:   87,
-  BOUGAINVILLEA: 88,
-  HEDGE:         89,
-  GARDEN_BUSH:   90,
-  FLOWER_BED:    91,
-  POTTED_PLANT:  92,
-  BENCH_H:       93,
-  FOUNTAIN:      94,
-  FENCE:         95,
-  THICK_HEDGE:   96,
-  STONE_WALL:    97,
-  POND_EDGE:     98,
-  TREE_SHADOW:   99,
-  BAMBOO:        100,
+const N = { // Nature tiles (firstgid=97, buildings expanded to 64 tiles)
+  RAIN_TRUNK:    97,
+  RAIN_CAN_TL:   98,
+  RAIN_CAN_TR:   99,
+  COCONUT_TRUNK: 100,
+  COCONUT_LEAF:  101,
+  PARK_TRUNK:    102,
+  PARK_CANOPY:   103,
+  BOUGAINVILLEA: 104,
+  HEDGE:         105,
+  GARDEN_BUSH:   106,
+  FLOWER_BED:    107,
+  POTTED_PLANT:  108,
+  BENCH_H:       109,
+  FOUNTAIN:      110,
+  FENCE:         111,
+  THICK_HEDGE:   112,
+  STONE_WALL:    113,
+  POND_EDGE:     114,
+  TREE_SHADOW:   115,
+  BAMBOO:        116,
 };
 
-const D = { // Decorations tiles (firstgid=113)
-  FRUIT_CART:    113,
-  SUGARCANE:     114,
-  FLOWER_BASK:   115,
-  AUTO_RICK:     116,
-  TWO_WHEELER:   117,
-  BUS_STOP:      118,
-  LAMPPOST:      119,
-  TRAFFIC_LIGHT: 120,
-  FIRE_HYDRANT:  121,
-  DUSTBIN:       122,
-  ROAD_SIGN:     123,
-  SHOP_SIGN:     124,
-  BMTC_SIGN:     125,
-  METRO_PILLAR:  126,
-  METRO_SIGN_D:  127,
-  AUTO_RICK_2:   128,
-  VENDOR_UMBRELLA: 129,
-  MANHOLE:       130,
-  POTHOLE:       131,
-  ROAD_ARROW:    132,
-  NEWS_STAND:    133,
-  BOLLARD:       134,
-  BENCH_V:       135,
-  TRASH_CAN:     136,
+const D = { // Decorations tiles (firstgid=129)
+  FRUIT_CART:    129,
+  SUGARCANE:     130,
+  FLOWER_BASK:   131,
+  AUTO_RICK:     132,
+  TWO_WHEELER:   133,
+  BUS_STOP:      134,
+  LAMPPOST:      135,
+  TRAFFIC_LIGHT: 136,
+  FIRE_HYDRANT:  137,
+  DUSTBIN:       138,
+  ROAD_SIGN:     139,
+  SHOP_SIGN:     140,
+  BMTC_SIGN:     141,
+  METRO_PILLAR:  142,
+  METRO_SIGN_D:  143,
+  AUTO_RICK_2:   144,
+  VENDOR_UMBRELLA: 145,
+  MANHOLE:       146,
+  POTHOLE:       147,
+  ROAD_ARROW:    148,
+  NEWS_STAND:    149,
+  BOLLARD:       150,
+  BENCH_V:       151,
+  TRASH_CAN:     152,
 };
 
 // ─── Layer Data ─────────────────────────────────────────────────────────────
@@ -223,10 +244,14 @@ fill(ground, 12, 0, 13, 28, G.ROAD_VERT);
 fill(ground, 11, 0, 11, 28, G.SIDEWALK);
 fill(ground, 14, 0, 14, 28, G.SIDEWALK);
 
-// Small road south connecting to Chinnaswamy: x=8-9, y=34-59
-fill(ground, 8, 34, 9, 59, G.ASPHALT);
-fill(ground, 7, 34, 7, 59, G.SIDEWALK);
-fill(ground, 10, 34, 10, 59, G.SIDEWALK);
+// Small road south connecting to Chinnaswamy: x=8-9, y=34-40 (stops before stadium)
+fill(ground, 8, 34, 9, 40, G.ASPHALT);
+fill(ground, 7, 34, 7, 40, G.SIDEWALK);
+fill(ground, 10, 34, 10, 40, G.SIDEWALK);
+// Road continues south past stadium: x=7-8, y=54-59
+fill(ground, 7, 54, 8, 59, G.ASPHALT);
+fill(ground, 6, 54, 6, 59, G.SIDEWALK);
+fill(ground, 9, 54, 9, 59, G.SIDEWALK);
 
 // Road south of MG Road near metro: x=45-46 going south
 fill(ground, 45, 33, 46, 59, G.ASPHALT);
@@ -263,10 +288,18 @@ fill(ground, 14, 19, 17, 19, G.POND_EDGE);
 fill(ground, 8, 2, 17, 7, G.SIDEWALK_LT); // Courtyard
 
 // ── Chinnaswamy Stadium area (SW) ───────────────────────────────────────
-// Building footprint: x=4..11, y=42..49
-fill(ground, 4, 42, 11, 49, G.LAWN); // Stadium ground
-// Field
-fill(ground, 6, 44, 9, 47, G.GRASS3);
+// Expanded footprint: x=3..12, y=41..53 (10 wide x 13 tall)
+// Outer concourse pavement
+fill(ground, 2, 40, 13, 54, G.SIDEWALK_LT);
+// Stadium interior - lawn base
+fill(ground, 3, 41, 12, 53, G.LAWN);
+// Green outfield (inner area between stands)
+fill(ground, 5, 45, 10, 50, G.GRASS3);
+// Walkway concrete between stands and field
+fill(ground, 4, 44, 4, 51, G.METRO_FLOOR);
+fill(ground, 11, 44, 11, 51, G.METRO_FLOOR);
+fill(ground, 5, 44, 10, 44, G.METRO_FLOOR);
+fill(ground, 5, 51, 10, 51, G.METRO_FLOOR);
 
 // ── UB City area ────────────────────────────────────────────────────────
 // x=25..30, y=34..41
@@ -353,23 +386,9 @@ fill(buildings, 13, 16, 16, 16, B.ROOF);      // Roof/top row
 fill(buildings, 13, 17, 16, 17, B.CONCRETE);   // Front row with door
 set(buildings, 15, 17, B.DOOR);                 // Library door
 
-// ── Chinnaswamy Stadium (x=4..11, y=42..49) ────────────────────────────
-// Walls
-fill(buildings, 4, 42, 4, 49, B.CHINNA_WALL);
-fill(buildings, 11, 42, 11, 49, B.CHINNA_WALL);
-fill(buildings, 4, 42, 11, 42, B.CHINNA_WALL);
-fill(buildings, 4, 49, 11, 49, B.CHINNA_WALL);
-// Entrance arch
-set(buildings, 7, 49, B.CHINNA_ARCH);
-set(buildings, 8, 49, B.CHINNA_ARCH);
-// Columns
-set(buildings, 5, 42, B.CHINNA_COL);
-set(buildings, 10, 42, B.CHINNA_COL);
-set(buildings, 5, 49, B.CHINNA_COL);
-set(buildings, 10, 49, B.CHINNA_COL);
-// Seating rows
-fill(buildings, 5, 43, 10, 43, B.CHINNA_SEAT);
-fill(buildings, 5, 48, 10, 48, B.CHINNA_SEAT);
+// ── Chinnaswamy Stadium (x=3..12, y=41..53) ────────────────────────────
+// Visuals handled by composite sprite (chinnaswamy-stadium.png + chinnaswamy-roof.png).
+// Buildings layer left empty in this area; collision layer still defines walkable zones.
 
 // ── UB City (x=25..30, y=34..41) ───────────────────────────────────────
 fill(buildings, 25, 34, 25, 41, B.UB_GLASS);
@@ -488,6 +507,8 @@ fill(abovePlayer, 23, 26, 30, 26, B.ROOF);
 set(abovePlayer, 33, 33, D.VENDOR_UMBRELLA);
 set(abovePlayer, 48, 33, D.VENDOR_UMBRELLA);
 
+// ── Chinnaswamy Stadium roof — handled by chinnaswamy-roof.png sprite ──
+
 // ── More tree canopies south ────────────────────────────────────────────
 set(abovePlayer, 15, 45, N.PARK_CANOPY);
 set(abovePlayer, 32, 50, N.PARK_CANOPY);
@@ -531,16 +552,35 @@ set(collision, 16, 17, COLL);          // Front right of door
 // Water in park
 fill(collision, 14, 19, 17, 23, COLL);
 
-// Chinnaswamy Stadium walls
-fill(collision, 4, 42, 11, 42, COLL);
-fill(collision, 4, 42, 4, 49, COLL);
-fill(collision, 11, 42, 11, 49, COLL);
-fill(collision, 4, 49, 6, 49, COLL);
-fill(collision, 9, 49, 11, 49, COLL);
-// Entrance at 7-8 is passable
-// Interior seating is collision
-fill(collision, 5, 43, 10, 43, COLL);
-fill(collision, 5, 48, 10, 48, COLL);
+// Chinnaswamy Stadium walls (expanded layout x=3..12, y=42..52)
+fill(collision, 3, 42, 12, 42, COLL);     // North wall
+fill(collision, 3, 52, 12, 52, COLL);     // South wall
+fill(collision, 3, 42, 3, 52, COLL);      // West wall
+fill(collision, 12, 42, 12, 52, COLL);    // East wall
+// Entrance passable at 7-8 on south wall (gates block at 6,9)
+set(collision, 7, 52, 0);                  // Clear entrance left
+set(collision, 8, 52, 0);                  // Clear entrance right
+// Seating stands are collision
+fill(collision, 4, 43, 11, 44, COLL);     // North stand (2 rows)
+fill(collision, 4, 50, 11, 51, COLL);     // South stand (2 rows)
+fill(collision, 3, 45, 4, 50, COLL);      // West stand (2 cols)
+fill(collision, 11, 45, 12, 50, COLL);    // East stand (2 cols)
+// Floodlight tower bases
+set(collision, 2, 41, COLL);
+set(collision, 13, 41, COLL);
+set(collision, 2, 53, COLL);
+set(collision, 13, 53, COLL);
+// Scoreboard
+set(collision, 7, 41, COLL);
+set(collision, 8, 41, COLL);
+// Direction signs
+set(collision, 2, 47, COLL);
+set(collision, 13, 47, COLL);
+// Palm trees
+set(collision, 2, 44, COLL);
+set(collision, 13, 44, COLL);
+set(collision, 2, 50, COLL);
+set(collision, 13, 50, COLL);
 
 // UB City building
 fill(collision, 25, 34, 30, 40, COLL);
@@ -596,11 +636,7 @@ set(buildings, 26, 33, D.SUGARCANE);
 set(buildings, 33, 33, D.FLOWER_BASK);
 set(buildings, 48, 33, D.FRUIT_CART);
 
-// Auto-rickshaws parked along road
-set(buildings, 31, 29, D.AUTO_RICK);
-set(buildings, 38, 32, D.AUTO_RICK);
-set(buildings, 52, 29, D.AUTO_RICK_2);
-set(buildings, 15, 32, D.AUTO_RICK);
+// Auto-rickshaws — now handled by moving AutoRickshawManager sprites
 
 // Two-wheelers
 set(buildings, 40, 32, D.TWO_WHEELER);
@@ -693,7 +729,6 @@ set(buildings, 50, 29, D.BOLLARD);
 set(buildings, 14, 45, D.LAMPPOST);
 set(buildings, 32, 45, D.LAMPPOST);
 set(buildings, 50, 45, D.LAMPPOST);
-set(buildings, 18, 40, D.AUTO_RICK);
 set(buildings, 40, 45, D.TWO_WHEELER);
 set(buildings, 30, 55, D.BUS_STOP);
 
@@ -706,11 +741,7 @@ set(collision, 23, 33, COLL);
 set(collision, 26, 33, COLL);
 set(collision, 33, 33, COLL);
 set(collision, 48, 33, COLL);
-// Auto-rickshaws
-set(collision, 31, 29, COLL);
-set(collision, 38, 32, COLL);
-set(collision, 52, 29, COLL);
-set(collision, 15, 32, COLL);
+// Auto-rickshaws — now moving sprites, no static collision
 // Tree trunks in park
 set(collision, 9, 25, COLL);
 set(collision, 17, 25, COLL);
@@ -777,15 +808,15 @@ const tilesets = [
     [1] // localId 1 = ASPHALT_DARK used as collision marker
   ),
   buildTilesetDef(
-    'buildings', '../tilesets/buildings.png', 33, 48, 16, 288, 54,
+    'buildings', '../tilesets/buildings.png', 33, 64, 16, 288, 72,
     [] // Collision handled by collision layer
   ),
   buildTilesetDef(
-    'nature', '../tilesets/nature.png', 81, 32, 16, 288, 36,
+    'nature', '../tilesets/nature.png', 97, 32, 16, 288, 36,
     [15] // thick hedge is collision-marked
   ),
   buildTilesetDef(
-    'decorations', '../tilesets/decorations.png', 113, 32, 16, 288, 36,
+    'decorations', '../tilesets/decorations.png', 129, 32, 16, 288, 36,
     []
   ),
 ];
@@ -844,10 +875,10 @@ const zones = [
     id: 2,
     name: 'chinnaswamy-stadium',
     type: 'landmark',
-    x: 4 * TILE,
-    y: 42 * TILE,
-    width: 8 * TILE,
-    height: 8 * TILE,
+    x: 3 * TILE,
+    y: 41 * TILE,
+    width: 10 * TILE,
+    height: 13 * TILE,
     visible: true,
     properties: [{
       name: 'displayName',

@@ -113,6 +113,36 @@ const PAL = {
   metroPillar:   '#b0b0b0',
   metroSign:     '#0060a0',
 
+  // Stadium (Chinnaswamy)
+  stadBrick:     '#a04030',
+  stadBrickDk:   '#803020',
+  stadBrickLt:   '#b85838',
+  stadConcrete:  '#909898',
+  stadConcreteDk:'#707878',
+  seatBlue:      '#3070c0',
+  seatBlueDk:    '#205898',
+  seatBlueLt:    '#4088d8',
+  seatRed:       '#c03838',
+  seatRedDk:     '#982828',
+  seatRedLt:     '#d84848',
+  roofSteel:     '#788090',
+  roofSteelDk:   '#606878',
+  roofSteelLt:   '#909aa8',
+  pitchTan:      '#c8a868',
+  pitchTanDk:    '#b09050',
+  stumpWhite:    '#e8e0d0',
+  floodGrey:     '#808890',
+  floodGreyDk:   '#687078',
+  floodLight:    '#f0e870',
+  floodPanel:    '#e0d860',
+  scoreBg:       '#182830',
+  scoreGreen:    '#30c048',
+  scoreOrange:   '#e0a020',
+  signNavy:      '#1a2a50',
+  signGold:      '#d0a830',
+  signWhite:     '#e8e8e8',
+  flagPole:      '#909090',
+
   // Common
   black:         '#000000',
   white:         '#f8f8f8',
@@ -312,9 +342,9 @@ function generateGround() {
 }
 
 // ─── BUILDINGS TILESET ──────────────────────────────────────────────────────
-// 16 columns x 3 rows = 48 tiles max, using ~32
+// 16 columns x 4 rows = 64 tiles max
 function generateBuildings() {
-  const cols = 16, rows = 3;
+  const cols = 16, rows = 4;
   const canvas = createCanvas(cols * TILE, rows * TILE);
   const ctx = canvas.getContext('2d');
 
@@ -341,34 +371,93 @@ function generateBuildings() {
   vline(ctx, 2, 0, 11, 0, 16, PAL.glassDark);
   hline(ctx, 2, 0, 0, 7, 16, PAL.glassDark);
 
-  // Tile 3: Chinnaswamy - curved wall (cream)
-  fillTile(ctx, 3, 0, PAL.cream);
-  hline(ctx, 3, 0, 0, 0, 16, PAL.creamDark);
-  hline(ctx, 3, 0, 0, 15, 16, PAL.creamDark);
-  // Curved appearance: darker at edges
-  vline(ctx, 3, 0, 0, 0, 16, PAL.creamDark);
-  vline(ctx, 3, 0, 15, 0, 16, PAL.creamDark);
-  // Structural lines
-  hline(ctx, 3, 0, 2, 5, 12, PAL.creamDark);
-  hline(ctx, 3, 0, 2, 10, 12, PAL.creamDark);
+  // Tile 3: Chinnaswamy - brick wall exterior (tileable)
+  // Detailed stretcher bond brick with grey concrete coping
+  fillTile(ctx, 3, 0, PAL.stadBrick);
+  // Concrete coping band (top 3px)
+  rect(ctx, 3, 0, 0, 0, 16, 3, PAL.stadConcrete);
+  hline(ctx, 3, 0, 0, 0, 16, PAL.roofSteelLt); // highlight
+  hline(ctx, 3, 0, 0, 2, 16, PAL.stadConcreteDk); // shadow
+  // Brick courses - stretcher bond pattern
+  // Course 1 (y=3-4): offset 0
+  hline(ctx, 3, 0, 0, 5, 16, PAL.stadBrickDk); // mortar
+  for (let x = 0; x < 16; x += 8) {
+    vline(ctx, 3, 0, x, 3, 2, PAL.stadBrickDk);
+  }
+  pixel(ctx, 3, 0, 2, 3, PAL.stadBrickLt); // brick highlight
+  pixel(ctx, 3, 0, 10, 4, PAL.stadBrickLt);
+  // Course 2 (y=6-7): offset 4
+  hline(ctx, 3, 0, 0, 8, 16, PAL.stadBrickDk);
+  for (let x = 4; x < 16; x += 8) {
+    vline(ctx, 3, 0, x, 6, 2, PAL.stadBrickDk);
+  }
+  pixel(ctx, 3, 0, 6, 6, PAL.stadBrickLt);
+  pixel(ctx, 3, 0, 14, 7, PAL.stadBrickLt);
+  // Course 3 (y=9-10): offset 0
+  hline(ctx, 3, 0, 0, 11, 16, PAL.stadBrickDk);
+  for (let x = 0; x < 16; x += 8) {
+    vline(ctx, 3, 0, x, 9, 2, PAL.stadBrickDk);
+  }
+  pixel(ctx, 3, 0, 4, 9, PAL.stadBrickLt);
+  pixel(ctx, 3, 0, 12, 10, PAL.stadBrickLt);
+  // Course 4 (y=12-13): offset 4
+  hline(ctx, 3, 0, 0, 14, 16, PAL.stadBrickDk);
+  for (let x = 4; x < 16; x += 8) {
+    vline(ctx, 3, 0, x, 12, 2, PAL.stadBrickDk);
+  }
+  pixel(ctx, 3, 0, 8, 12, PAL.stadBrickLt);
+  // Bottom shadow
+  hline(ctx, 3, 0, 0, 15, 16, PAL.stadBrickDk);
 
-  // Tile 4: Chinnaswamy - entrance arch
-  fillTile(ctx, 4, 0, PAL.cream);
-  // Arch shape
-  rect(ctx, 4, 0, 3, 0, 10, 2, PAL.creamDark);
-  vline(ctx, 4, 0, 3, 2, 14, PAL.creamDark);
-  vline(ctx, 4, 0, 12, 2, 14, PAL.creamDark);
-  // Arch top curve
-  rect(ctx, 4, 0, 4, 2, 8, 3, PAL.shadow);
-  rect(ctx, 4, 0, 5, 5, 6, 11, PAL.shadow);
+  // Tile 4: Chinnaswamy - entrance with sign above
+  fillTile(ctx, 4, 0, PAL.stadBrick);
+  // Brick base
+  for (let y = 8; y < 16; y += 3) {
+    hline(ctx, 4, 0, 0, y, 16, PAL.stadBrickDk);
+    const off = ((y - 8) / 3 % 2 === 0) ? 0 : 4;
+    for (let x = off; x < 16; x += 8) {
+      vline(ctx, 4, 0, x, Math.max(8, y - 2), Math.min(2, y - 6), PAL.stadBrickDk);
+    }
+  }
+  // Navy sign board with gold border
+  rect(ctx, 4, 0, 0, 0, 16, 8, PAL.signNavy);
+  hline(ctx, 4, 0, 0, 0, 16, PAL.signGold);
+  hline(ctx, 4, 0, 0, 7, 16, PAL.signGold);
+  vline(ctx, 4, 0, 0, 0, 8, PAL.signGold);
+  vline(ctx, 4, 0, 15, 0, 8, PAL.signGold);
+  // "BENGALURU" small text
+  rect(ctx, 4, 0, 4, 1, 8, 1, PAL.signGold);
+  // "CHINNASWAMY" main text (two lines)
+  rect(ctx, 4, 0, 1, 3, 14, 1, PAL.signWhite);
+  rect(ctx, 4, 0, 2, 4, 12, 1, PAL.signWhite);
+  // "STADIUM" below
+  rect(ctx, 4, 0, 3, 5, 10, 1, PAL.signWhite);
+  // Entrance dark opening
+  rect(ctx, 4, 0, 4, 9, 8, 7, PAL.shadow);
+  // Concrete door frame pillars
+  rect(ctx, 4, 0, 3, 8, 1, 8, PAL.stadConcrete);
+  rect(ctx, 4, 0, 12, 8, 1, 8, PAL.stadConcrete);
+  // Arch top
+  rect(ctx, 4, 0, 4, 8, 8, 1, PAL.stadConcrete);
 
-  // Tile 5: Chinnaswamy - column
-  fillTile(ctx, 5, 0, PAL.cream);
-  rect(ctx, 5, 0, 5, 0, 6, 16, PAL.pillar);
-  vline(ctx, 5, 0, 5, 0, 16, PAL.pillarDark);
-  vline(ctx, 5, 0, 10, 0, 16, PAL.pillarDark);
-  rect(ctx, 5, 0, 4, 0, 8, 2, PAL.pillar);
-  rect(ctx, 5, 0, 4, 14, 8, 2, PAL.pillar);
+  // Tile 5: Chinnaswamy - structural support column
+  fillTile(ctx, 5, 0, PAL.stadBrick);
+  // Brick background matching walls
+  for (let y = 3; y < 16; y += 3) {
+    hline(ctx, 5, 0, 0, y, 16, PAL.stadBrickDk);
+  }
+  rect(ctx, 5, 0, 0, 0, 16, 3, PAL.stadConcrete);
+  hline(ctx, 5, 0, 0, 2, 16, PAL.stadConcreteDk);
+  // Concrete column in center
+  rect(ctx, 5, 0, 5, 0, 6, 16, PAL.stadConcrete);
+  vline(ctx, 5, 0, 5, 0, 16, PAL.stadConcreteDk);
+  vline(ctx, 5, 0, 10, 0, 16, PAL.stadConcreteDk);
+  // Column details - beveled edges
+  vline(ctx, 5, 0, 6, 3, 13, PAL.roofSteelLt);
+  // Capital and base
+  rect(ctx, 5, 0, 4, 0, 8, 2, PAL.roofSteelLt);
+  rect(ctx, 5, 0, 4, 14, 8, 2, PAL.stadConcrete);
+  hline(ctx, 5, 0, 4, 14, 8, PAL.stadConcreteDk);
 
   // Tile 6: UB City - modern glass/steel
   fillTile(ctx, 6, 0, PAL.glass);
@@ -534,19 +623,42 @@ function generateBuildings() {
   vline(ctx, 9, 1, 0, 0, 16, PAL.concreteDark);
   hline(ctx, 9, 1, 0, 0, 16, PAL.concreteDark);
 
-  // Tile 26: Chinnaswamy seating
-  fillTile(ctx, 10, 1, PAL.cream);
-  for (let y = 0; y < 16; y += 3) {
-    hline(ctx, 10, 1, 0, y, 16, PAL.concrete);
-    hline(ctx, 10, 1, 0, y+1, 16, PAL.concreteDark);
+  // Tile 26: Chinnaswamy blue seating stands (top-down, detailed)
+  fillTile(ctx, 10, 1, PAL.stadConcreteDk);
+  // 5 rows of blue seats on concrete tiers
+  for (let row = 0; row < 5; row++) {
+    const y = row * 3;
+    if (y + 3 > 16) break;
+    // Concrete step riser (dark line)
+    hline(ctx, 10, 1, 0, y, 16, PAL.stadConcreteDk);
+    // Seat backs (1px darker blue)
+    hline(ctx, 10, 1, 0, y + 1, 16, PAL.seatBlueDk);
+    // Seat surfaces (1px bright blue)
+    hline(ctx, 10, 1, 0, y + 2, 16, PAL.seatBlue);
+    // Individual seat dividers every 3px
+    for (let x = 0; x < 16; x += 3) {
+      pixel(ctx, 10, 1, x, y + 1, PAL.stadConcreteDk);
+      pixel(ctx, 10, 1, x, y + 2, PAL.stadConcreteDk);
+    }
+    // Seat highlights for depth
+    for (let x = 1; x < 16; x += 6) {
+      pixel(ctx, 10, 1, x, y + 2, PAL.seatBlueLt);
+    }
   }
+  // Last row at bottom
+  hline(ctx, 10, 1, 0, 15, 16, PAL.stadConcreteDk);
 
-  // Tile 27: Chinnaswamy field
+  // Tile 27: Chinnaswamy green outfield (mowed stripe pattern)
   fillTile(ctx, 11, 1, PAL.grass3);
-  // Cricket pitch markings
-  rect(ctx, 11, 1, 6, 0, 4, 16, PAL.lawn);
-  vline(ctx, 11, 1, 6, 0, 16, PAL.crosswalk);
-  vline(ctx, 11, 1, 9, 0, 16, PAL.crosswalk);
+  // Mowed stripes - alternating slightly different greens (4px bands)
+  for (let y = 0; y < 16; y += 8) {
+    rect(ctx, 11, 1, 0, y, 16, 4, PAL.lawn);
+  }
+  // Subtle grass texture
+  for (let i = 0; i < 12; i++) {
+    pixel(ctx, 11, 1, (i*7+2)%16, (i*5+1)%16, PAL.grass2);
+    pixel(ctx, 11, 1, (i*3+5)%16, (i*11+3)%16, PAL.grass1);
+  }
 
   // Tile 28: UB City upper glass
   fillTile(ctx, 12, 1, PAL.glass);
@@ -562,9 +674,45 @@ function generateBuildings() {
   hline(ctx, 13, 1, 0, 14, 16, PAL.concreteDark);
   hline(ctx, 13, 1, 0, 15, 16, PAL.concreteDark);
 
-  // Tile 30-31: empty
-  fillTile(ctx, 14, 1, PAL.transparent);
-  fillTile(ctx, 15, 1, PAL.transparent);
+  // Tile 30: Chinnaswamy red seating stands (top-down, detailed)
+  fillTile(ctx, 14, 1, PAL.stadConcreteDk);
+  // 5 rows of red seats on concrete tiers (matches blue layout)
+  for (let row = 0; row < 5; row++) {
+    const y = row * 3;
+    if (y + 3 > 16) break;
+    hline(ctx, 14, 1, 0, y, 16, PAL.stadConcreteDk);
+    hline(ctx, 14, 1, 0, y + 1, 16, PAL.seatRedDk);
+    hline(ctx, 14, 1, 0, y + 2, 16, PAL.seatRed);
+    for (let x = 0; x < 16; x += 3) {
+      pixel(ctx, 14, 1, x, y + 1, PAL.stadConcreteDk);
+      pixel(ctx, 14, 1, x, y + 2, PAL.stadConcreteDk);
+    }
+    for (let x = 1; x < 16; x += 6) {
+      pixel(ctx, 14, 1, x, y + 2, PAL.seatRedLt);
+    }
+  }
+  hline(ctx, 14, 1, 0, 15, 16, PAL.stadConcreteDk);
+
+  // Tile 31: Chinnaswamy stadium name sign (large, prominent)
+  fillTile(ctx, 15, 1, PAL.signNavy);
+  // Gold border frame
+  hline(ctx, 15, 1, 0, 0, 16, PAL.signGold);
+  hline(ctx, 15, 1, 0, 15, 16, PAL.signGold);
+  vline(ctx, 15, 1, 0, 0, 16, PAL.signGold);
+  vline(ctx, 15, 1, 15, 0, 16, PAL.signGold);
+  // Inner gold border
+  hline(ctx, 15, 1, 1, 1, 14, PAL.signGold);
+  // "CHINNASWAMY" (two lines of white text)
+  rect(ctx, 15, 1, 2, 4, 12, 1, PAL.signWhite);
+  rect(ctx, 15, 1, 3, 5, 10, 1, PAL.signWhite);
+  // "STADIUM" below
+  rect(ctx, 15, 1, 3, 8, 10, 1, PAL.signWhite);
+  rect(ctx, 15, 1, 4, 9, 8, 1, PAL.signWhite);
+  // "BENGALURU" small gold text at top
+  rect(ctx, 15, 1, 4, 2, 8, 1, PAL.signGold);
+  // Gold accent line at bottom
+  rect(ctx, 15, 1, 2, 12, 12, 1, PAL.signGold);
+  rect(ctx, 15, 1, 3, 13, 10, 1, PAL.signGold);
 
   // Row 3
   // Tile 32: overpass railing left
@@ -604,9 +752,318 @@ function generateBuildings() {
     pixel(ctx, 5, 2, (i*5+2)%16, (i*3+1)%16, PAL.treeCanopyL);
   }
 
-  // Fill rest with transparent
-  for (let x = 6; x < 16; x++) {
-    fillTile(ctx, x, 2, PAL.transparent);
+  // Tile 38: Chinnaswamy stadium roof/canopy (angular steel, above-player)
+  fillTile(ctx, 6, 2, PAL.transparent);
+  // Main canopy sheet (angular, covering the stands)
+  rect(ctx, 6, 2, 0, 2, 16, 10, PAL.roofSteel);
+  hline(ctx, 6, 2, 0, 2, 16, PAL.roofSteelLt); // top highlight
+  hline(ctx, 6, 2, 0, 11, 16, PAL.roofSteelDk); // bottom shadow
+  // Steel truss cross-members
+  for (let x = 0; x < 16; x += 4) {
+    vline(ctx, 6, 2, x, 2, 10, PAL.roofSteelDk);
+  }
+  // Diagonal bracing lines
+  for (let i = 0; i < 7; i++) {
+    pixel(ctx, 6, 2, 1 + i * 2, 4 + (i % 3), PAL.roofSteelDk);
+    pixel(ctx, 6, 2, 1 + i * 2, 8 - (i % 3), PAL.roofSteelDk);
+  }
+  // Light reflecting off canopy
+  for (let x = 2; x < 14; x += 5) {
+    pixel(ctx, 6, 2, x, 5, PAL.roofSteelLt);
+    pixel(ctx, 6, 2, x + 1, 6, PAL.roofSteelLt);
+  }
+
+  // Tile 39: Floodlight tower (lattice structure)
+  fillTile(ctx, 7, 2, PAL.transparent);
+  // Main tower pole with lattice detail
+  rect(ctx, 7, 2, 5, 0, 6, 16, PAL.floodGrey);
+  vline(ctx, 7, 2, 5, 0, 16, PAL.floodGreyDk);
+  vline(ctx, 7, 2, 10, 0, 16, PAL.floodGreyDk);
+  // Lattice cross bracing
+  for (let y = 1; y < 14; y += 3) {
+    hline(ctx, 7, 2, 6, y, 4, PAL.floodGreyDk);
+    // X pattern inside
+    pixel(ctx, 7, 2, 6, y + 1, PAL.floodGreyDk);
+    pixel(ctx, 7, 2, 9, y + 1, PAL.floodGreyDk);
+  }
+  // Wide base plate
+  rect(ctx, 7, 2, 3, 13, 10, 3, PAL.floodGrey);
+  hline(ctx, 7, 2, 3, 13, 10, PAL.floodGreyDk);
+  hline(ctx, 7, 2, 3, 15, 10, PAL.shadow);
+
+  // Tile 40: Floodlight tower top (above-player, light panels)
+  fillTile(ctx, 8, 2, PAL.transparent);
+  // Light panel housing (wider at top)
+  rect(ctx, 8, 2, 1, 0, 14, 8, PAL.floodGrey);
+  hline(ctx, 8, 2, 1, 0, 14, PAL.roofSteelLt);
+  hline(ctx, 8, 2, 1, 7, 14, PAL.floodGreyDk);
+  // Light panels - 3x2 grid of bright lights
+  for (let ly = 0; ly < 2; ly++) {
+    for (let lx = 0; lx < 3; lx++) {
+      rect(ctx, 8, 2, 2 + lx * 4, 1 + ly * 3, 3, 2, PAL.floodLight);
+      pixel(ctx, 8, 2, 3 + lx * 4, 1 + ly * 3, PAL.white); // bright center
+    }
+  }
+  // Pole connecting down
+  rect(ctx, 8, 2, 6, 8, 4, 8, PAL.floodGrey);
+  vline(ctx, 8, 2, 6, 8, 8, PAL.floodGreyDk);
+
+  // Tile 41: Cricket pitch with stumps (narrow center strip)
+  fillTile(ctx, 9, 2, PAL.pitchTan);
+  // Worn texture - pitch isn't uniform
+  for (let i = 0; i < 15; i++) {
+    pixel(ctx, 9, 2, (i*5+2)%16, (i*3+1)%16, PAL.pitchTanDk);
+    pixel(ctx, 9, 2, (i*7+4)%16, (i*4+2)%16, PAL.pitchTanDk);
+  }
+  // Bowling/popping crease lines
+  hline(ctx, 9, 2, 1, 3, 14, PAL.stumpWhite);
+  hline(ctx, 9, 2, 1, 12, 14, PAL.stumpWhite);
+  // Return crease
+  vline(ctx, 9, 2, 3, 1, 3, PAL.stumpWhite);
+  vline(ctx, 9, 2, 12, 1, 3, PAL.stumpWhite);
+  vline(ctx, 9, 2, 3, 12, 3, PAL.stumpWhite);
+  vline(ctx, 9, 2, 12, 12, 3, PAL.stumpWhite);
+  // Stumps (3 at each end)
+  for (const sx of [6, 8, 10]) {
+    pixel(ctx, 9, 2, sx, 1, PAL.stumpWhite);
+    pixel(ctx, 9, 2, sx, 2, PAL.stumpWhite);
+    pixel(ctx, 9, 2, sx, 13, PAL.stumpWhite);
+    pixel(ctx, 9, 2, sx, 14, PAL.stumpWhite);
+  }
+
+  // Tile 42: Stadium scoreboard (electronic display)
+  fillTile(ctx, 10, 2, PAL.stadConcrete);
+  // Support structure
+  rect(ctx, 10, 2, 1, 10, 14, 6, PAL.stadConcrete);
+  vline(ctx, 10, 2, 1, 10, 6, PAL.stadConcreteDk);
+  vline(ctx, 10, 2, 14, 10, 6, PAL.stadConcreteDk);
+  // Screen housing
+  rect(ctx, 10, 2, 0, 0, 16, 11, PAL.scoreBg);
+  hline(ctx, 10, 2, 0, 0, 16, PAL.floodGrey); // frame top
+  hline(ctx, 10, 2, 0, 10, 16, PAL.floodGrey); // frame bottom
+  vline(ctx, 10, 2, 0, 0, 11, PAL.floodGrey);
+  vline(ctx, 10, 2, 15, 0, 11, PAL.floodGrey);
+  // Score display - bright segments
+  rect(ctx, 10, 2, 2, 2, 5, 3, PAL.scoreGreen);
+  rect(ctx, 10, 2, 9, 2, 5, 3, PAL.scoreGreen);
+  // Overs display
+  rect(ctx, 10, 2, 2, 6, 4, 2, PAL.scoreOrange);
+  rect(ctx, 10, 2, 7, 6, 7, 2, PAL.scoreGreen);
+  // Separator
+  hline(ctx, 10, 2, 2, 5, 12, PAL.floodGrey);
+
+  // Tile 43: Stadium wall corner (curved, with concrete band)
+  fillTile(ctx, 11, 2, PAL.stadBrick);
+  // Concrete coping
+  rect(ctx, 11, 2, 0, 0, 16, 3, PAL.stadConcrete);
+  hline(ctx, 11, 2, 0, 0, 16, PAL.roofSteelLt);
+  hline(ctx, 11, 2, 0, 2, 16, PAL.stadConcreteDk);
+  // Brick courses with corner shading
+  for (let y = 3; y < 15; y += 3) {
+    hline(ctx, 11, 2, 0, y + 2, 16, PAL.stadBrickDk);
+    const off = ((y - 3) / 3 % 2 === 0) ? 0 : 4;
+    for (let x = off; x < 16; x += 8) {
+      vline(ctx, 11, 2, x, y, 2, PAL.stadBrickDk);
+    }
+  }
+  // Corner shadow gradient (darker at edges for curved look)
+  for (let y = 3; y < 16; y++) {
+    pixel(ctx, 11, 2, 0, y, PAL.stadBrickDk);
+    pixel(ctx, 11, 2, 1, y, PAL.stadBrickDk);
+    pixel(ctx, 11, 2, 14, y, PAL.stadBrickDk);
+    pixel(ctx, 11, 2, 15, y, PAL.stadBrickDk);
+  }
+  hline(ctx, 11, 2, 0, 15, 16, PAL.shadow);
+
+  // Tile 44: Direction signboard (blue board with white text/arrows)
+  fillTile(ctx, 12, 2, PAL.transparent);
+  // Board body
+  rect(ctx, 12, 2, 0, 2, 16, 8, PAL.signNavy);
+  hline(ctx, 12, 2, 0, 2, 16, PAL.roofSteelLt); // top edge
+  hline(ctx, 12, 2, 0, 9, 16, PAL.roofSteelLt); // bottom edge
+  // Upper text "Chinnaswamy"
+  rect(ctx, 12, 2, 2, 3, 9, 1, PAL.signWhite);
+  rect(ctx, 12, 2, 2, 4, 7, 1, PAL.signWhite);
+  // "Stadium" text
+  rect(ctx, 12, 2, 2, 6, 6, 1, PAL.signWhite);
+  // Arrow pointing right
+  rect(ctx, 12, 2, 11, 7, 3, 1, PAL.signWhite);
+  pixel(ctx, 12, 2, 13, 6, PAL.signWhite);
+  pixel(ctx, 12, 2, 13, 8, PAL.signWhite);
+  pixel(ctx, 12, 2, 14, 7, PAL.signWhite);
+  // Support pole
+  rect(ctx, 12, 2, 7, 10, 2, 6, PAL.flagPole);
+
+  // Tile 45: Stadium concourse pavement (decorative stone tiles)
+  fillTile(ctx, 13, 2, PAL.sidewalk);
+  // Larger stone tile pattern
+  for (let ty = 0; ty < 2; ty++) {
+    for (let tx = 0; tx < 2; tx++) {
+      const ox = tx * 8, oy = ty * 8;
+      rect(ctx, 13, 2, ox, oy, 8, 8, PAL.sidewalkLight);
+      // Inner border
+      rect(ctx, 13, 2, ox + 1, oy + 1, 6, 6, PAL.sidewalk);
+      // Center diamond pattern
+      pixel(ctx, 13, 2, ox + 3, oy + 2, PAL.sidewalkLight);
+      pixel(ctx, 13, 2, ox + 4, oy + 2, PAL.sidewalkLight);
+      pixel(ctx, 13, 2, ox + 2, oy + 3, PAL.sidewalkLight);
+      pixel(ctx, 13, 2, ox + 5, oy + 3, PAL.sidewalkLight);
+      pixel(ctx, 13, 2, ox + 3, oy + 5, PAL.sidewalkLight);
+      pixel(ctx, 13, 2, ox + 4, oy + 5, PAL.sidewalkLight);
+      pixel(ctx, 13, 2, ox + 2, oy + 4, PAL.sidewalkLight);
+      pixel(ctx, 13, 2, ox + 5, oy + 4, PAL.sidewalkLight);
+    }
+  }
+
+  // Tile 46: Country flag on pole (India tricolor)
+  fillTile(ctx, 14, 2, PAL.transparent);
+  // Pole (thinner, more realistic)
+  vline(ctx, 14, 2, 7, 0, 16, PAL.flagPole);
+  // Flag waving slightly
+  rect(ctx, 14, 2, 8, 1, 7, 2, '#f08020'); // Saffron
+  rect(ctx, 14, 2, 8, 3, 7, 2, PAL.white);  // White
+  pixel(ctx, 14, 2, 11, 3, '#2040a0'); // Ashoka Chakra hint
+  rect(ctx, 14, 2, 8, 5, 7, 2, '#30a040'); // Green
+  // Flag tip wave
+  pixel(ctx, 14, 2, 14, 1, '#f08020');
+  pixel(ctx, 14, 2, 14, 5, '#30a040');
+
+  // Tile 47: Turnstile / entry gate (metallic)
+  fillTile(ctx, 15, 2, PAL.transparent);
+  // Gate post pillars
+  rect(ctx, 15, 2, 1, 1, 3, 14, PAL.stadConcrete);
+  rect(ctx, 15, 2, 12, 1, 3, 14, PAL.stadConcrete);
+  vline(ctx, 15, 2, 1, 1, 14, PAL.stadConcreteDk);
+  vline(ctx, 15, 2, 14, 1, 14, PAL.stadConcreteDk);
+  // Top beam
+  rect(ctx, 15, 2, 1, 1, 14, 2, PAL.railing);
+  hline(ctx, 15, 2, 1, 1, 14, PAL.railingLight);
+  // Turnstile horizontal bars
+  hline(ctx, 15, 2, 4, 5, 8, PAL.railing);
+  hline(ctx, 15, 2, 4, 6, 8, PAL.railingLight);
+  hline(ctx, 15, 2, 4, 9, 8, PAL.railing);
+  hline(ctx, 15, 2, 4, 10, 8, PAL.railingLight);
+  // Central axis
+  vline(ctx, 15, 2, 8, 3, 12, PAL.railing);
+
+  // ── Row 4: Additional stadium field and boundary tiles ──
+  // Tile 48: Inner field with white boundary line (top edge)
+  fillTile(ctx, 0, 3, PAL.grass3);
+  for (let y = 0; y < 16; y += 8) {
+    rect(ctx, 0, 3, 0, y, 16, 4, PAL.lawn);
+  }
+  for (let i = 0; i < 8; i++) {
+    pixel(ctx, 0, 3, (i*7+2)%16, (i*5+1)%16, PAL.grass2);
+  }
+  // White boundary line at top
+  hline(ctx, 0, 3, 0, 1, 16, PAL.white);
+  hline(ctx, 0, 3, 0, 2, 16, PAL.white);
+
+  // Tile 49: Inner field with white boundary line (bottom edge)
+  fillTile(ctx, 1, 3, PAL.grass3);
+  for (let y = 0; y < 16; y += 8) {
+    rect(ctx, 1, 3, 0, y, 16, 4, PAL.lawn);
+  }
+  for (let i = 0; i < 8; i++) {
+    pixel(ctx, 1, 3, (i*5+3)%16, (i*3+2)%16, PAL.grass2);
+  }
+  // White boundary line at bottom
+  hline(ctx, 1, 3, 0, 13, 16, PAL.white);
+  hline(ctx, 1, 3, 0, 14, 16, PAL.white);
+
+  // Tile 50: Inner field with white boundary line (left edge)
+  fillTile(ctx, 2, 3, PAL.grass3);
+  for (let y = 0; y < 16; y += 8) {
+    rect(ctx, 2, 3, 0, y, 16, 4, PAL.lawn);
+  }
+  for (let i = 0; i < 8; i++) {
+    pixel(ctx, 2, 3, (i*7+1)%16, (i*5+4)%16, PAL.grass2);
+  }
+  // White boundary line at left
+  vline(ctx, 2, 3, 1, 0, 16, PAL.white);
+  vline(ctx, 2, 3, 2, 0, 16, PAL.white);
+
+  // Tile 51: Inner field with white boundary line (right edge)
+  fillTile(ctx, 3, 3, PAL.grass3);
+  for (let y = 0; y < 16; y += 8) {
+    rect(ctx, 3, 3, 0, y, 16, 4, PAL.lawn);
+  }
+  for (let i = 0; i < 8; i++) {
+    pixel(ctx, 3, 3, (i*3+5)%16, (i*7+3)%16, PAL.grass2);
+  }
+  // White boundary line at right
+  vline(ctx, 3, 3, 13, 0, 16, PAL.white);
+  vline(ctx, 3, 3, 14, 0, 16, PAL.white);
+
+  // Tile 52: Inner walkway / concourse between seats and field
+  fillTile(ctx, 4, 3, PAL.stadConcrete);
+  // Concrete walkway texture
+  hline(ctx, 4, 3, 0, 0, 16, PAL.stadConcreteDk);
+  hline(ctx, 4, 3, 0, 15, 16, PAL.stadConcreteDk);
+  for (let i = 0; i < 6; i++) {
+    pixel(ctx, 4, 3, (i*5+3)%16, (i*3+2)%16, PAL.stadConcreteDk);
+  }
+  // Railing line
+  hline(ctx, 4, 3, 0, 7, 16, PAL.railing);
+  hline(ctx, 4, 3, 0, 8, 16, PAL.railingLight);
+
+  // Tile 53: Blue seating with structural support (stand top edge)
+  fillTile(ctx, 5, 3, PAL.stadConcrete);
+  // Structural beam at top
+  rect(ctx, 5, 3, 0, 0, 16, 3, PAL.roofSteel);
+  hline(ctx, 5, 3, 0, 0, 16, PAL.roofSteelLt);
+  hline(ctx, 5, 3, 0, 2, 16, PAL.roofSteelDk);
+  // Seats below
+  for (let row = 0; row < 4; row++) {
+    const y = 3 + row * 3;
+    if (y + 3 > 16) break;
+    hline(ctx, 5, 3, 0, y, 16, PAL.stadConcreteDk);
+    hline(ctx, 5, 3, 0, y + 1, 16, PAL.seatBlueDk);
+    hline(ctx, 5, 3, 0, y + 2, 16, PAL.seatBlue);
+    for (let x = 0; x < 16; x += 3) {
+      pixel(ctx, 5, 3, x, y + 1, PAL.stadConcreteDk);
+      pixel(ctx, 5, 3, x, y + 2, PAL.stadConcreteDk);
+    }
+  }
+  hline(ctx, 5, 3, 0, 15, 16, PAL.stadConcreteDk);
+
+  // Tile 54: Red seating with structural support (stand top edge)
+  fillTile(ctx, 6, 3, PAL.stadConcrete);
+  rect(ctx, 6, 3, 0, 0, 16, 3, PAL.roofSteel);
+  hline(ctx, 6, 3, 0, 0, 16, PAL.roofSteelLt);
+  hline(ctx, 6, 3, 0, 2, 16, PAL.roofSteelDk);
+  for (let row = 0; row < 4; row++) {
+    const y = 3 + row * 3;
+    if (y + 3 > 16) break;
+    hline(ctx, 6, 3, 0, y, 16, PAL.stadConcreteDk);
+    hline(ctx, 6, 3, 0, y + 1, 16, PAL.seatRedDk);
+    hline(ctx, 6, 3, 0, y + 2, 16, PAL.seatRed);
+    for (let x = 0; x < 16; x += 3) {
+      pixel(ctx, 6, 3, x, y + 1, PAL.stadConcreteDk);
+      pixel(ctx, 6, 3, x, y + 2, PAL.stadConcreteDk);
+    }
+  }
+  hline(ctx, 6, 3, 0, 15, 16, PAL.stadConcreteDk);
+
+  // Tile 55: Palm tree (for stadium surroundings)
+  fillTile(ctx, 7, 3, PAL.transparent);
+  // Trunk
+  rect(ctx, 7, 3, 6, 4, 4, 12, PAL.coconutTrunk);
+  for (let y = 5; y < 15; y += 3) {
+    hline(ctx, 7, 3, 6, y, 4, '#806038');
+  }
+  // Leaf fronds
+  rect(ctx, 7, 3, 3, 0, 10, 6, PAL.palmLeaf);
+  rect(ctx, 7, 3, 1, 2, 14, 3, PAL.palmLeaf);
+  pixel(ctx, 7, 3, 0, 3, PAL.palmLeaf);
+  pixel(ctx, 7, 3, 15, 3, PAL.palmLeaf);
+  // Coconuts
+  pixel(ctx, 7, 3, 7, 4, '#906838');
+  pixel(ctx, 7, 3, 9, 4, '#906838');
+
+  // Fill remaining row 4 tiles transparent
+  for (let x = 8; x < 16; x++) {
+    fillTile(ctx, x, 3, PAL.transparent);
   }
 
   savePNG(canvas, 'buildings.png');

@@ -100,6 +100,16 @@ export class BootScene extends Phaser.Scene {
     this.load.image(ASSETS.TILESET_NATURE, 'assets/tilesets/nature.png');
     this.load.image(ASSETS.TILESET_DECORATIONS, 'assets/tilesets/decorations.png');
 
+    // Auto-rickshaw spritesheet (ambient traffic)
+    this.load.spritesheet(ASSETS.SPRITE_AUTO_RICKSHAW, 'assets/sprites/auto-rickshaw.png', {
+      frameWidth: PLAYER_FRAME_WIDTH,
+      frameHeight: PLAYER_FRAME_HEIGHT,
+    });
+
+    // Chinnaswamy Stadium composite sprites
+    this.load.image(ASSETS.SPRITE_CHINNASWAMY, 'assets/sprites/chinnaswamy-stadium.png');
+    this.load.image(ASSETS.SPRITE_CHINNASWAMY_ROOF, 'assets/sprites/chinnaswamy-roof.png');
+
     // UI assets (touch controls)
     this.load.image(ASSETS.UI_JOYSTICK_BASE, 'assets/ui/joystick-base.png');
     this.load.image(ASSETS.UI_JOYSTICK_THUMB, 'assets/ui/joystick-thumb.png');

@@ -14,8 +14,8 @@
     {
       "id": "chinnaswamy-stadium",
       "name": "Chinnaswamy Stadium",
-      "position": { "x": 4, "y": 42 },
-      "size": { "width": 8, "height": 8 }
+      "position": { "x": 3, "y": 41 },
+      "size": { "width": 10, "height": 13 }
     },
     {
       "id": "ub-city",
