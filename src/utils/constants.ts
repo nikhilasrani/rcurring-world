@@ -33,6 +33,15 @@ export const EVENTS = {
   RUN_BUTTON_UP: 'run-button-up',
   SCENE_READY: 'scene-ready',
   GAME_STARTED: 'game-started',
+  DIALOGUE_OPEN: 'dialogue-open',
+  DIALOGUE_CLOSE: 'dialogue-close',
+  DIALOGUE_ADVANCE: 'dialogue-advance',
+  NPC_INTERACT: 'npc-interact',
+  SIGN_INTERACT: 'sign-interact',
+  ZONE_ENTER: 'zone-enter',
+  MOVEMENT_FREEZE: 'movement-freeze',
+  BUILDING_ENTER: 'building-enter',
+  BUILDING_EXIT: 'building-exit',
 } as const;
 
 // Player sprite dimensions
@@ -52,6 +61,16 @@ export const ASSETS = {
   UI_JOYSTICK_THUMB: 'joystick-thumb',
   UI_BUTTON_A: 'button-a',
   UI_BUTTON_B: 'button-b',
+  SPRITE_NPC_CHAI_WALLA: 'npc-chai-walla',
+  SPRITE_NPC_AUTO_DRIVER: 'npc-auto-driver',
+  SPRITE_NPC_JOGGER: 'npc-jogger',
+  SPRITE_NPC_SHOPKEEPER: 'npc-shopkeeper',
+  SPRITE_NPC_GUARD: 'npc-guard',
+  TILESET_INTERIOR: 'tileset-interior',
+  TILEMAP_INTERIOR_METRO: 'tilemap-interior-metro',
+  TILEMAP_INTERIOR_COFFEE: 'tilemap-interior-coffee',
+  TILEMAP_INTERIOR_UBCITY: 'tilemap-interior-ubcity',
+  TILEMAP_INTERIOR_LIBRARY: 'tilemap-interior-library',
 } as const;
 
 // Tilemap layer names (must match Tiled export)
@@ -63,4 +82,11 @@ export const LAYERS = {
   COLLISION: 'collision',
   SPAWN_POINTS: 'spawn-points',
   ZONES: 'zones',
+  DECORATIONS: 'decorations',
+  INTERACTABLES: 'interactables',
+  DOORS: 'doors',
 } as const;
+
+// NPC sprite dimensions (same as player)
+export const NPC_FRAME_WIDTH = 16;
+export const NPC_FRAME_HEIGHT = 24;
