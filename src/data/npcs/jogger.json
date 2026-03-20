@@ -1,0 +1,18 @@
+{
+  "id": "npc-jogger",
+  "name": "Priya",
+  "spriteKey": "npc-jogger",
+  "position": { "x": 8, "y": 15 },
+  "facing": "right",
+  "patrolRadius": 3,
+  "patrolDelay": 1200,
+  "speed": 3,
+  "dialogue": {
+    "name": "Priya",
+    "pages": [
+      "Good morning! These rain trees are more than 100 years old, you know?",
+      "Cubbon Park is the best place in Bengaluru. Every morning I come for jogging.",
+      "Oota aitha? Have you eaten? There's a nice darshini near the park gate."
+    ]
+  }
+}

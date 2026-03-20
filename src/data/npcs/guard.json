@@ -1,0 +1,18 @@
+{
+  "id": "npc-guard",
+  "name": "Siddappa",
+  "spriteKey": "npc-guard",
+  "position": { "x": 12, "y": 6 },
+  "facing": "down",
+  "patrolRadius": 2,
+  "patrolDelay": 2500,
+  "speed": 1,
+  "dialogue": {
+    "name": "Siddappa",
+    "pages": [
+      "Welcome, saar. This is Vidhana Soudha. Very grand building, no?",
+      "Dravidian style architecture. Built in 1956. Government work happens here.",
+      "No photos inside, saar. Outside photos okay. Banni, see the garden side also."
+    ]
+  }
+}

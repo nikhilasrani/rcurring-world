@@ -1,0 +1,38 @@
+[
+  {
+    "id": "sign-mg-road",
+    "type": "road-sign",
+    "position": { "x": 35, "y": 33 },
+    "dialogue": { "pages": ["M.G. Road -- Mahatma Gandhi Road"] }
+  },
+  {
+    "id": "sign-cubbon-park",
+    "type": "notice-board",
+    "position": { "x": 3, "y": 10 },
+    "dialogue": { "pages": ["Cubbon Park -- Established 1870.", "Please do not litter. Maintained by BBMP."] }
+  },
+  {
+    "id": "sign-vidhana-soudha",
+    "type": "landmark-plaque",
+    "position": { "x": 10, "y": 8 },
+    "dialogue": { "pages": ["Vidhana Soudha -- Seat of the Karnataka State Legislature.", "Built in Neo-Dravidian style. Completed 1956."] }
+  },
+  {
+    "id": "sign-chinnaswamy",
+    "type": "landmark-plaque",
+    "position": { "x": 6, "y": 44 },
+    "dialogue": { "pages": ["M. Chinnaswamy Stadium -- Home of Karnataka cricket.", "Capacity: 40,000. Hosted many memorable matches."] }
+  },
+  {
+    "id": "sign-ub-city",
+    "type": "shop-front",
+    "position": { "x": 26, "y": 38 },
+    "dialogue": { "pages": ["UB City -- Bengaluru's premier luxury destination.", "Shopping, dining, and entertainment."] }
+  },
+  {
+    "id": "sign-metro-station",
+    "type": "road-sign",
+    "position": { "x": 45, "y": 33 },
+    "dialogue": { "pages": ["MG Road Metro Station -- Namma Metro Purple Line.", "Towards Mysuru Road <-> Towards Baiyappanahalli."] }
+  }
+]

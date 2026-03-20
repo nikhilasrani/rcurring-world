@@ -1,0 +1,18 @@
+{
+  "id": "npc-auto-driver",
+  "name": "Manju",
+  "spriteKey": "npc-auto-driver",
+  "position": { "x": 44, "y": 35 },
+  "facing": "left",
+  "patrolRadius": 2,
+  "patrolDelay": 2000,
+  "speed": 2,
+  "dialogue": {
+    "name": "Manju",
+    "pages": [
+      "Aye guru, you want auto? Traffic is very bad today on MG Road side.",
+      "Thirty years I'm driving in this city. Every road I know, every shortcut also.",
+      "Metro is there no, but auto feeling is different, saar. Wind in the hair!"
+    ]
+  }
+}

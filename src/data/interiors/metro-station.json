@@ -1,0 +1,12 @@
+{
+  "id": "interior-metro",
+  "name": "metro-station",
+  "displayName": "Metro Station",
+  "tilemapKey": "tilemap-interior-metro",
+  "tilesetKey": "tileset-interior",
+  "doorPosition": { "x": 45, "y": 34 },
+  "playerSpawn": { "x": 7, "y": 8 },
+  "exitPosition": { "x": 7, "y": 9 },
+  "returnPosition": { "x": 45, "y": 35 },
+  "size": { "width": 15, "height": 10 }
+}

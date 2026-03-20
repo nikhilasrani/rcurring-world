@@ -1,0 +1,18 @@
+{
+  "id": "npc-chai-walla",
+  "name": "Raju",
+  "spriteKey": "npc-chai-walla",
+  "position": { "x": 40, "y": 36 },
+  "facing": "down",
+  "patrolRadius": 2,
+  "patrolDelay": 1500,
+  "speed": 2,
+  "dialogue": {
+    "name": "Raju",
+    "pages": [
+      "Namaskara! Best filter coffee on MG Road, saar! Twenty rupees only.",
+      "Fresh decoction, none of that instant-instant business. My grandfather started this stall in 1985.",
+      "You want strong or light? Banni, banni -- come, I'll make fresh for you!"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "npc-shopkeeper",
+  "name": "Venkatesh",
+  "spriteKey": "npc-shopkeeper",
+  "position": { "x": 27, "y": 37 },
+  "facing": "down",
+  "patrolRadius": 2,
+  "patrolDelay": 1800,
+  "speed": 2,
+  "dialogue": {
+    "name": "Venkatesh",
+    "pages": [
+      "Namaskara! Welcome to UB City side. Very posh area, no?",
+      "This area used to be all gardens and old bungalows. Now all malls only.",
+      "My father had a small shop here. Now see -- glass buildings everywhere. Bengaluru is changing, saar."
+    ]
+  }
+}
