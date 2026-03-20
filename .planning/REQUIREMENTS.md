@@ -25,10 +25,10 @@ Requirements for initial release. Each maps to roadmap phases.
 ### NPC
 
 - [x] **NPC-01**: 3-5 interactive NPCs are placed in the world (chai-walla, auto driver, local guide, shopkeeper, park visitor)
-- [ ] **NPC-02**: Player can walk up to an NPC and press action button to talk
-- [ ] **NPC-03**: NPCs face toward the player when spoken to
-- [ ] **NPC-04**: Dialogue appears in a bottom-of-screen box with typewriter text reveal and tap-to-advance
-- [ ] **NPC-05**: Dialogue supports multi-page messages and displays the NPC's name
+- [x] **NPC-02**: Player can walk up to an NPC and press action button to talk
+- [x] **NPC-03**: NPCs face toward the player when spoken to
+- [x] **NPC-04**: Dialogue appears in a bottom-of-screen box with typewriter text reveal and tap-to-advance
+- [x] **NPC-05**: Dialogue supports multi-page messages and displays the NPC's name
 - [x] **NPC-06**: NPC dialogue uses culturally authentic language (English with Kannada words/phrases mixed in)
 
 ### Signs
@@ -140,10 +140,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLAT-02 | Phase 1 | Complete |
 | PLAT-03 | Phase 1 | Complete |
 | NPC-01 | Phase 2 | Complete |
-| NPC-02 | Phase 2 | Pending |
-| NPC-03 | Phase 2 | Pending |
-| NPC-04 | Phase 2 | Pending |
-| NPC-05 | Phase 2 | Pending |
+| NPC-02 | Phase 2 | Complete |
+| NPC-03 | Phase 2 | Complete |
+| NPC-04 | Phase 2 | Complete |
+| NPC-05 | Phase 2 | Complete |
 | NPC-06 | Phase 2 | Complete |
 | SIGN-01 | Phase 2 | Complete |
 | SIGN-02 | Phase 2 | Complete |
