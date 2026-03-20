@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import {
   SCENES,
   ASSETS,
+  GAME_HEIGHT,
   PLAYER_FRAME_WIDTH,
   PLAYER_FRAME_HEIGHT,
   NPC_FRAME_WIDTH,
@@ -11,10 +12,30 @@ import {
 /**
  * BootScene: First scene to run. Loads all game assets and shows a loading progress bar.
  * Transitions to TitleScene when loading is complete.
+ *
+ * On init, resizes the game canvas width to match the viewport aspect ratio.
+ * This eliminates letterboxing while keeping FIT mode (no cropping).
+ * Height stays fixed at GAME_HEIGHT (320) so UI anchored to bottom always works.
  */
 export class BootScene extends Phaser.Scene {
   constructor() {
     super({ key: SCENES.BOOT });
+  }
+
+  init(): void {
+    // Match game aspect ratio to viewport — eliminates letterbox bars
+    this.matchViewportAspectRatio();
+    this.scale.on('resize', () => this.matchViewportAspectRatio());
+  }
+
+  private matchViewportAspectRatio(): void {
+    const parent = this.scale.parent as HTMLElement;
+    if (!parent || !parent.clientWidth || !parent.clientHeight) return;
+    const ratio = parent.clientWidth / parent.clientHeight;
+    const newWidth = Math.round(GAME_HEIGHT * ratio);
+    if (newWidth !== this.scale.gameSize.width) {
+      this.scale.resize(newWidth, GAME_HEIGHT);
+    }
   }
 
   preload(): void {

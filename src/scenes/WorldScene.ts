@@ -14,8 +14,6 @@ import {
   TILE_SIZE,
   COLLISION_PROPERTY,
   EVENTS,
-  GAME_WIDTH,
-  GAME_HEIGHT,
 } from '../utils/constants';
 import type { PlayerState, NPCDef, SignDef, InteriorDef, LandmarkDef } from '../utils/types';
 
@@ -393,7 +391,8 @@ export class WorldScene extends Phaser.Scene {
     const interiorPixelH = tilemap.heightInPixels;
 
     // Zoom to fill viewport, follow player freely (walls contain movement)
-    const zoom = Math.max(GAME_WIDTH / interiorPixelW, GAME_HEIGHT / interiorPixelH);
+    const { width: viewW, height: viewH } = this.scale.gameSize;
+    const zoom = Math.max(viewW / interiorPixelW, viewH / interiorPixelH);
     this.cameras.main.setZoom(zoom);
     this.cameras.main.removeBounds();
     this.cameras.main.startFollow(this.player.sprite, true);
