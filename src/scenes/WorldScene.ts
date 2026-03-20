@@ -276,7 +276,11 @@ export class WorldScene extends Phaser.Scene {
       this.movementFrozen = true;
     });
     eventsCenter.on(EVENTS.DIALOGUE_CLOSE, () => {
-      this.movementFrozen = false;
+      // Defer unfreeze by one frame so the closing keypress doesn't
+      // immediately re-trigger handleAction() on the same interactable
+      this.time.delayedCall(1, () => {
+        this.movementFrozen = false;
+      });
       // Resume NPC patrol if one was stopped
       const lastInteractedNPC = this.registry.get('lastInteractedNPC') as
         | string
