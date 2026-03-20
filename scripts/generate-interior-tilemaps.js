@@ -343,11 +343,12 @@ function generateMetro() {
   // Trash bins
   set(collision, 1, 7, COLL, W);
   set(collision, 13, 7, COLL, W);
-  // Platform edge blocks
-  fill(collision, 0, 8, W - 1, 8, COLL, W);
+  // Platform edge blocks (gap at x=7 for exit path)
+  fill(collision, 0, 8, 6, 8, COLL, W);
+  fill(collision, 8, 8, W - 1, 8, COLL, W);
 
   // Objects
-  const spawnPoints = [makeSpawnPoint(1, 7, 8)];
+  const spawnPoints = [makeSpawnPoint(1, 7, 6)];
   const zones = [makeZone(2, 'interior-metro', 'Metro Station', W, H)];
   const doors = [makeExitDoor(3, 7, 9, 'mg-road', 45, 36)];
 
