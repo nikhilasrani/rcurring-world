@@ -120,6 +120,18 @@ export class TransitionManager {
   }
 
   /**
+   * Set return state for when already inside an interior (after scene restart).
+   * Unlike enterBuilding(), this does NOT freeze movement or trigger a fade.
+   */
+  setReturnState(interiorDef: InteriorDef): void {
+    this.currentInterior = interiorDef;
+    this.outdoorState = {
+      tilemapKey: ASSETS.TILEMAP_MG_ROAD,
+      returnPosition: interiorDef.returnPosition,
+    };
+  }
+
+  /**
    * Reset state to outdoor mode.
    * Clears currentInterior and outdoorState.
    */

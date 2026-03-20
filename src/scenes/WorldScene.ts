@@ -412,21 +412,19 @@ export class WorldScene extends Phaser.Scene {
 
     // --- Transition Manager for exit handling ---
     this.transitionManager = new TransitionManager(this);
-    // Set the outdoor return state so exitBuilding() works
-    this.transitionManager.enterBuilding({
+    // Set return state so exitBuilding() knows where to go back to
+    this.transitionManager.setReturnState({
       id: mode.interiorId!,
       name: mode.interiorId!,
       displayName: mode.interiorDisplayName!,
       tilemapKey: mode.interiorKey!,
       tilesetKey: mode.tilesetKey!,
-      doorPosition: { x: 0, y: 0 }, // not needed for exit
+      doorPosition: { x: 0, y: 0 },
       playerSpawn: mode.playerSpawn!,
-      exitPosition: { x: 0, y: 0 }, // not needed here
+      exitPosition: { x: 0, y: 0 },
       returnPosition: mode.returnPosition!,
       size: mode.interiorSize!,
-    } as any);
-    // Immediately clear the transitioning flag since we're already in the interior
-    this.transitionManager.setTransitionComplete();
+    } as InteriorDef);
 
     // Movement freeze listener
     eventsCenter.on(EVENTS.MOVEMENT_FREEZE, (freeze: boolean) => {
