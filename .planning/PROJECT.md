@@ -12,19 +12,18 @@ The city must *feel* like Bengaluru — recognizable landmarks, authentic intera
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] GBA-style tile-based exploration in MG Road / CBD area — Validated in Phase 1: Foundation and Movement
+- [x] Recognizable pixel art landmarks (Chinnaswamy, UB City, Cubbon Park, Vidhana Soudha) — Validated in Phase 1: Foundation and Movement
+- [x] Cross-platform: web + iOS/Android via Capacitor — Validated in Phase 1: touch controls + GitHub Pages deployment
+- [x] Automated testing with Playwright — Validated in Phase 1: 29 unit tests + 5 E2E test suites
 
 ### Active
 
-- [ ] GBA-style tile-based exploration in MG Road / CBD area
-- [ ] Recognizable pixel art landmarks (Chinnaswamy, UB City, Cubbon Park, Vidhana Soudha)
 - [ ] NPC interactions (buy chai, browse shops, talk to locals)
 - [ ] Simple quest system (e.g., "find the best filter coffee on MG Road")
 - [ ] Inventory system for collected items
 - [ ] Metro as fast-travel mechanic between zones
 - [ ] Ambient sound design (city sounds, metro announcements, market noise)
-- [ ] Cross-platform: web + iOS/Android via Capacitor
-- [ ] Automated testing with Playwright
 
 ### Out of Scope
 
@@ -68,4 +67,4 @@ The city must *feel* like Bengaluru — recognizable landmarks, authentic intera
 | AI asset pipeline | Scale art/sound creation across multiple AI agents with discrete tasks | — Pending |
 
 ---
-*Last updated: 2026-03-19 after initialization*
+*Last updated: 2026-03-20 — Phase 1 complete: walkable MG Road tilemap with movement, collision, camera, touch controls, and deployment*
