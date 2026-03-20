@@ -64,6 +64,7 @@ interface SceneModeData {
 export class WorldScene extends Phaser.Scene {
   private player!: Player;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private wasdKeys!: Record<'W' | 'A' | 'S' | 'D', Phaser.Input.Keyboard.Key>;
   private gridEngine!: any; // Grid Engine plugin (typed via scene mapping)
   private touchDirection: Direction | null = null;
   private runButtonHeld = false;
@@ -222,6 +223,7 @@ export class WorldScene extends Phaser.Scene {
 
     // --- Keyboard Input ---
     this.cursors = this.input.keyboard!.createCursorKeys();
+    this.wasdKeys = this.input.keyboard!.addKeys('W,A,S,D') as Record<'W' | 'A' | 'S' | 'D', Phaser.Input.Keyboard.Key>;
 
     // --- Touch Input (from UIScene via EventsCenter) ---
     eventsCenter.on(EVENTS.TOUCH_DIRECTION, (dir: Direction | null) => {
@@ -402,6 +404,7 @@ export class WorldScene extends Phaser.Scene {
 
     // --- Keyboard Input ---
     this.cursors = this.input.keyboard!.createCursorKeys();
+    this.wasdKeys = this.input.keyboard!.addKeys('W,A,S,D') as Record<'W' | 'A' | 'S' | 'D', Phaser.Input.Keyboard.Key>;
 
     // --- Touch Input ---
     eventsCenter.on(EVENTS.TOUCH_DIRECTION, (dir: Direction | null) => {
@@ -590,12 +593,13 @@ export class WorldScene extends Phaser.Scene {
       );
     }
 
-    // Determine direction from keyboard
+    // Determine direction from keyboard (arrow keys + WASD)
+    const wasd = this.wasdKeys;
     const keyDirection = getMovementDirection({
-      left: this.cursors.left.isDown,
-      right: this.cursors.right.isDown,
-      up: this.cursors.up.isDown,
-      down: this.cursors.down.isDown,
+      left: this.cursors.left.isDown || wasd.A.isDown,
+      right: this.cursors.right.isDown || wasd.D.isDown,
+      up: this.cursors.up.isDown || wasd.W.isDown,
+      down: this.cursors.down.isDown || wasd.S.isDown,
     });
 
     // Touch direction takes precedence if active, otherwise use keyboard
