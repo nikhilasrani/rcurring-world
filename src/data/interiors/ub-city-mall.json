@@ -4,9 +4,9 @@
   "displayName": "UB City Mall",
   "tilemapKey": "tilemap-interior-ubcity",
   "tilesetKey": "tileset-interior",
-  "doorPosition": { "x": 27, "y": 35 },
+  "doorPosition": { "x": 27, "y": 41 },
   "playerSpawn": { "x": 7, "y": 10 },
   "exitPosition": { "x": 7, "y": 11 },
-  "returnPosition": { "x": 27, "y": 36 },
+  "returnPosition": { "x": 27, "y": 42 },
   "size": { "width": 15, "height": 12 }
 }

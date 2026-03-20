@@ -4,9 +4,9 @@
   "displayName": "Cubbon Park Library",
   "tilemapKey": "tilemap-interior-library",
   "tilesetKey": "tileset-interior",
-  "doorPosition": { "x": 5, "y": 12 },
+  "doorPosition": { "x": 15, "y": 17 },
   "playerSpawn": { "x": 5, "y": 8 },
   "exitPosition": { "x": 5, "y": 9 },
-  "returnPosition": { "x": 5, "y": 13 },
+  "returnPosition": { "x": 15, "y": 18 },
   "size": { "width": 12, "height": 10 }
 }

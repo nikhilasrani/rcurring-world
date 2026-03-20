@@ -4,9 +4,9 @@
   "displayName": "Raju's Filter Coffee",
   "tilemapKey": "tilemap-interior-coffee",
   "tilesetKey": "tileset-interior",
-  "doorPosition": { "x": 39, "y": 37 },
+  "doorPosition": { "x": 40, "y": 36 },
   "playerSpawn": { "x": 5, "y": 8 },
   "exitPosition": { "x": 5, "y": 9 },
-  "returnPosition": { "x": 39, "y": 38 },
+  "returnPosition": { "x": 40, "y": 37 },
   "size": { "width": 12, "height": 10 }
 }

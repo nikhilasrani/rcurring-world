@@ -347,6 +347,12 @@ fill(buildings, 1, 5, 1, 27, B.PARK_WALL);
 fill(buildings, 18, 5, 18, 27, B.PARK_WALL);
 fill(buildings, 1, 5, 18, 5, B.PARK_WALL);
 
+// ── Cubbon Park Library (x=13..16, y=16..17) ────────────────────────────
+// Small library building south of the horizontal path in Cubbon Park
+fill(buildings, 13, 16, 16, 16, B.ROOF);      // Roof/top row
+fill(buildings, 13, 17, 16, 17, B.CONCRETE);   // Front row with door
+set(buildings, 15, 17, B.DOOR);                 // Library door
+
 // ── Chinnaswamy Stadium (x=4..11, y=42..49) ────────────────────────────
 // Walls
 fill(buildings, 4, 42, 4, 49, B.CHINNA_WALL);
@@ -380,6 +386,7 @@ fill(buildings, 43, 33, 47, 33, B.CONCRETE);
 fill(buildings, 43, 34, 43, 36, B.CONCRETE);
 fill(buildings, 47, 34, 47, 36, B.CONCRETE);
 set(buildings, 43, 33, B.METRO_ENTER);
+set(buildings, 44, 33, B.DOOR); // Metro door -- player faces this from (44, 34)
 // Metro signage
 set(buildings, 45, 33, B.METRO_SIGN);
 // Railings along elevated platform
@@ -515,6 +522,12 @@ fill(collision, 18, 5, 18, 27, COLL);
 fill(collision, 1, 5, 18, 5, COLL);
 // Gate passable at x=5 and x=10
 
+// Cubbon Park Library building
+fill(collision, 13, 16, 16, 16, COLL); // Roof row
+fill(collision, 13, 17, 14, 17, COLL); // Front left of door
+set(collision, 15, 17, COLL);          // Door tile (player faces from south)
+set(collision, 16, 17, COLL);          // Front right of door
+
 // Water in park
 fill(collision, 14, 19, 17, 23, COLL);
 
@@ -531,9 +544,8 @@ fill(collision, 5, 48, 10, 48, COLL);
 
 // UB City building
 fill(collision, 25, 34, 30, 40, COLL);
-// Entrance at y=41 partially passable
-fill(collision, 25, 41, 26, 41, COLL);
-fill(collision, 29, 41, 30, 41, COLL);
+// Entrance at y=41 -- door tiles with collision so player faces them to enter
+fill(collision, 25, 41, 30, 41, COLL);
 
 // Metro Station walls
 fill(collision, 43, 33, 47, 33, COLL);
@@ -548,7 +560,12 @@ set(collision, 12, 40, COLL);
 
 // Shop/building blocks along roads
 fill(collision, 38, 34, 42, 35, COLL);
+// Door tiles: collision so player faces them from adjacent tile to interact
+set(collision, 40, 36, COLL); // Coffee shop door
+fill(collision, 38, 36, 39, 36, COLL); // Coffee shop front wall (non-door)
+fill(collision, 41, 36, 42, 36, COLL); // Coffee shop front wall (non-door)
 fill(collision, 23, 34, 24, 35, COLL);
+fill(collision, 23, 36, 24, 36, COLL); // West shop front wall + door
 fill(collision, 23, 26, 30, 27, COLL);
 fill(collision, 23, 10, 27, 13, COLL);
 fill(collision, 38, 10, 42, 13, COLL);
@@ -596,7 +613,10 @@ set(buildings, 50, 33, D.BMTC_SIGN);
 // Lampposts along MG Road
 for (let x = 5; x < 58; x += 8) {
   set(buildings, x, 28, D.LAMPPOST);
-  set(buildings, x, 33, D.LAMPPOST);
+  // Skip x=45 on south sidewalk (metro station area, would overwrite METRO_SIGN)
+  if (x !== 45) {
+    set(buildings, x, 33, D.LAMPPOST);
+  }
 }
 
 // Traffic lights at intersections
