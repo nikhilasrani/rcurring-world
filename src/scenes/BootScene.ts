@@ -4,6 +4,8 @@ import {
   ASSETS,
   PLAYER_FRAME_WIDTH,
   PLAYER_FRAME_HEIGHT,
+  NPC_FRAME_WIDTH,
+  NPC_FRAME_HEIGHT,
 } from '../utils/constants.ts';
 
 /**
@@ -80,6 +82,30 @@ export class BootScene extends Phaser.Scene {
     this.load.image(ASSETS.UI_JOYSTICK_THUMB, 'assets/ui/joystick-thumb.png');
     this.load.image(ASSETS.UI_BUTTON_A, 'assets/ui/button-a.png');
     this.load.image(ASSETS.UI_BUTTON_B, 'assets/ui/button-b.png');
+
+    // NPC spritesheets (same frame size as player)
+    this.load.spritesheet(ASSETS.SPRITE_NPC_CHAI_WALLA, 'assets/sprites/npc-chai-walla.png', {
+      frameWidth: NPC_FRAME_WIDTH, frameHeight: NPC_FRAME_HEIGHT,
+    });
+    this.load.spritesheet(ASSETS.SPRITE_NPC_AUTO_DRIVER, 'assets/sprites/npc-auto-driver.png', {
+      frameWidth: NPC_FRAME_WIDTH, frameHeight: NPC_FRAME_HEIGHT,
+    });
+    this.load.spritesheet(ASSETS.SPRITE_NPC_JOGGER, 'assets/sprites/npc-jogger.png', {
+      frameWidth: NPC_FRAME_WIDTH, frameHeight: NPC_FRAME_HEIGHT,
+    });
+    this.load.spritesheet(ASSETS.SPRITE_NPC_SHOPKEEPER, 'assets/sprites/npc-shopkeeper.png', {
+      frameWidth: NPC_FRAME_WIDTH, frameHeight: NPC_FRAME_HEIGHT,
+    });
+    this.load.spritesheet(ASSETS.SPRITE_NPC_GUARD, 'assets/sprites/npc-guard.png', {
+      frameWidth: NPC_FRAME_WIDTH, frameHeight: NPC_FRAME_HEIGHT,
+    });
+
+    // Interior tileset and tilemaps
+    this.load.image(ASSETS.TILESET_INTERIOR, 'assets/tilesets/interior.png');
+    this.load.tilemapTiledJSON(ASSETS.TILEMAP_INTERIOR_METRO, 'assets/tilemaps/interior-metro.json');
+    this.load.tilemapTiledJSON(ASSETS.TILEMAP_INTERIOR_COFFEE, 'assets/tilemaps/interior-coffee.json');
+    this.load.tilemapTiledJSON(ASSETS.TILEMAP_INTERIOR_UBCITY, 'assets/tilemaps/interior-ubcity.json');
+    this.load.tilemapTiledJSON(ASSETS.TILEMAP_INTERIOR_LIBRARY, 'assets/tilemaps/interior-library.json');
 
     // Zone metadata
     this.load.json('zone-mg-road', 'data/zones/mg-road.json');
