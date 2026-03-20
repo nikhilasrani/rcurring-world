@@ -36,7 +36,7 @@ export class Player {
    * OR it can auto-play from spritesheet rows. However, idle animations require
    * explicit registration since Grid Engine only handles walk animations.
    *
-   * Spritesheet layout (3 cols x 4 rows, 16x24 frames):
+   * Spritesheet layout (3 cols x 4 rows, 16x16 frames):
    *   Row 0 (frames 0,1,2): walk-down  (left-foot, idle, right-foot)
    *   Row 1 (frames 3,4,5): walk-left
    *   Row 2 (frames 6,7,8): walk-right
@@ -124,7 +124,7 @@ export class Player {
       startPosition: { x: this.state.position.x, y: this.state.position.y },
       speed: WALK_SPEED,
       facingDirection: this.state.facing,
-      offsetY: -4, // Adjust for 16x24 sprite on 16x16 grid (sprite is taller)
+      offsetY: 0, // 16x16 sprite fits exactly on 16x16 grid
     };
   }
 

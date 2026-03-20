@@ -46,7 +46,7 @@ export const EVENTS = {
 
 // Player sprite dimensions
 export const PLAYER_FRAME_WIDTH = 16;
-export const PLAYER_FRAME_HEIGHT = 24; // Chibi style: taller than wide
+export const PLAYER_FRAME_HEIGHT = 16; // Pokemon FR/E chibi: fits one tile
 
 // Asset keys
 export const ASSETS = {
@@ -89,4 +89,4 @@ export const LAYERS = {
 
 // NPC sprite dimensions (same as player)
 export const NPC_FRAME_WIDTH = 16;
-export const NPC_FRAME_HEIGHT = 24;
+export const NPC_FRAME_HEIGHT = 16;

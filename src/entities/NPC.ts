@@ -5,7 +5,7 @@ import type { NPCDef } from '../utils/types';
  * NPC entity wrapping a Phaser sprite with Grid Engine integration.
  *
  * Follows the same animation pattern as Player.ts:
- * - Spritesheet layout: 3 cols x 4 rows of 16x24 frames
+ * - Spritesheet layout: 3 cols x 4 rows of 16x16 frames
  * - Walk animations (8 FPS) + Idle animations (2 FPS)
  * - walkingAnimationMapping: 0 for Grid Engine auto walk animation
  */
@@ -29,7 +29,7 @@ export class NPC {
   /**
    * Register walk and idle animations with Phaser's AnimationManager.
    *
-   * Spritesheet layout (3 cols x 4 rows, 16x24 frames):
+   * Spritesheet layout (3 cols x 4 rows, 16x16 frames):
    *   Row 0 (frames 0,1,2): walk-down  (left-foot, idle, right-foot)
    *   Row 1 (frames 3,4,5): walk-left
    *   Row 2 (frames 6,7,8): walk-right
@@ -93,7 +93,7 @@ export class NPC {
       startPosition: this.def.position,
       speed: this.def.speed,
       facingDirection: this.def.facing,
-      offsetY: -4, // Adjust for 16x24 sprite on 16x16 grid
+      offsetY: 0, // 16x16 sprite fits exactly on 16x16 grid
       collides: true,
     };
   }
