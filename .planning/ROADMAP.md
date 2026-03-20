@@ -12,7 +12,7 @@ Four phases take this project from empty repo to a playable 5-minute Bengaluru w
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation and Movement** - Phaser project scaffold with pixel art rendering, tile movement, collision, camera, touch controls, and a walkable MG Road / CBD map
+- [x] **Phase 1: Foundation and Movement** - Phaser project scaffold with pixel art rendering, tile movement, collision, camera, touch controls, and a walkable MG Road / CBD map (completed 2026-03-20)
 - [ ] **Phase 2: World Interaction** - NPCs with dialogue, readable signs, building interiors, zone banners, and landmark discovery
 - [ ] **Phase 3: Game Systems** - Quest loop, inventory, journal, metro fast-travel, save/load persistence, and pause menu
 - [ ] **Phase 4: Audio and Polish** - Sound effects, background music, and ambient city sounds
@@ -36,8 +36,8 @@ Plans:
 - [x] 01-01-PLAN.md -- Project scaffold, Phaser config, shared utilities, test infrastructure
 - [x] 01-02-PLAN.md -- Player spritesheets and opening sequence (Boot, Title, Name Entry scenes)
 - [x] 01-03-PLAN.md -- GBA pixel art tilesets and MG Road / CBD tilemap creation
-- [ ] 01-04-PLAN.md -- WorldScene with Grid Engine movement, collision, camera, and speed toggle
-- [ ] 01-05-PLAN.md -- Touch controls (UIScene), GitHub Pages deployment, E2E tests, and final verification
+- [x] 01-04-PLAN.md -- WorldScene with Grid Engine movement, collision, camera, and speed toggle
+- [x] 01-05-PLAN.md -- Touch controls (UIScene), GitHub Pages deployment, E2E tests, and final verification
 
 ### Phase 2: World Interaction
 **Goal**: The world feels alive -- player can talk to NPCs, read signs, enter buildings, and discover landmarks
@@ -93,7 +93,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Movement | 1/5 | In Progress | - |
+| 1. Foundation and Movement | 5/5 | Complete   | 2026-03-20 |
 | 2. World Interaction | 0/? | Not started | - |
 | 3. Game Systems | 0/? | Not started | - |
 | 4. Audio and Polish | 0/? | Not started | - |
