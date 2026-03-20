@@ -343,14 +343,14 @@ export class WorldScene extends Phaser.Scene {
     // --- Create Interior Tilemap ---
     const tilemap = this.make.tilemap({ key: mode.interiorKey! });
 
-    // Add interior tileset with extrusion margins (margin: 1, spacing: 2)
+    // Interior tileset has no extrusion (unlike outdoor tilesets)
     const interiorTileset = tilemap.addTilesetImage(
       'interior',
       ASSETS.TILESET_INTERIOR,
       TILE_SIZE,
       TILE_SIZE,
-      1,
-      2
+      0,
+      0
     );
 
     const tilesets = [interiorTileset].filter(
