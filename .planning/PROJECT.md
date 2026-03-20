@@ -19,7 +19,7 @@ The city must *feel* like Bengaluru — recognizable landmarks, authentic intera
 
 ### Active
 
-- [ ] NPC interactions (buy chai, browse shops, talk to locals)
+- [x] NPC interactions (buy chai, browse shops, talk to locals) — Validated in Phase 2: World Interaction
 - [ ] Simple quest system (e.g., "find the best filter coffee on MG Road")
 - [ ] Inventory system for collected items
 - [ ] Metro as fast-travel mechanic between zones
@@ -67,4 +67,4 @@ The city must *feel* like Bengaluru — recognizable landmarks, authentic intera
 | AI asset pipeline | Scale art/sound creation across multiple AI agents with discrete tasks | — Pending |
 
 ---
-*Last updated: 2026-03-20 — Phase 1 complete: walkable MG Road tilemap with movement, collision, camera, touch controls, and deployment*
+*Last updated: 2026-03-20 — Phase 2 complete: NPC dialogue with Kannada phrases, sign reading, 4 building interiors with fade transitions, zone discovery banners, fullscreen mobile viewport with responsive UI*
