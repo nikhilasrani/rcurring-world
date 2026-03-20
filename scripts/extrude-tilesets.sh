@@ -25,4 +25,12 @@ for tileset in ground buildings nature decorations; do
     --output "$OUT_DIR/$tileset.png"
 done
 
+# Interior tileset (generated directly to output dir, not from raw-tilesets)
+echo "Extruding interior..."
+npx tile-extruder \
+  --tileWidth $TILE_W \
+  --tileHeight $TILE_H \
+  --input "$OUT_DIR/interior.png" \
+  --output "$OUT_DIR/interior.png"
+
 echo "All tilesets extruded successfully."
