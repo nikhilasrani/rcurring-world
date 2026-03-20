@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { DialogueController } from '../../src/ui/DialogBox';
+import { DialogueController } from '../../src/ui/DialogueController';
 
 describe('DialogueController', () => {
   it('reports hasMorePages=true on page 0 of 3-page dialogue', () => {
