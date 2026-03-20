@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import {
   SCENES,
   ASSETS,
+  GAME_WIDTH,
   GAME_HEIGHT,
   PLAYER_FRAME_WIDTH,
   PLAYER_FRAME_HEIGHT,
@@ -32,7 +33,8 @@ export class BootScene extends Phaser.Scene {
     const parent = this.scale.parent as HTMLElement;
     if (!parent || !parent.clientWidth || !parent.clientHeight) return;
     const ratio = parent.clientWidth / parent.clientHeight;
-    const newWidth = Math.round(GAME_HEIGHT * ratio);
+    // Only expand width beyond base — never shrink (portrait phones keep 480x320 with FIT)
+    const newWidth = Math.max(GAME_WIDTH, Math.round(GAME_HEIGHT * ratio));
     if (newWidth !== this.scale.gameSize.width) {
       this.scale.resize(newWidth, GAME_HEIGHT);
     }

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { SCENES, GAME_WIDTH, GAME_HEIGHT } from '../utils/constants.ts';
+import { SCENES } from '../utils/constants.ts';
 
 /**
  * TitleScene: Shows the game title over a pixel art Bengaluru skyline.
@@ -15,12 +15,14 @@ export class TitleScene extends Phaser.Scene {
   create(): void {
     this.started = false;
 
+    const { width, height } = this.scale.gameSize;
+
     // Title background image (pixel art Bengaluru skyline)
-    const bg = this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'title-bg');
+    const bg = this.add.image(width / 2, height / 2, 'title-bg');
     bg.setOrigin(0.5, 0.5);
 
     // Game title text
-    this.add.text(GAME_WIDTH / 2, 80, 'RECURRING WORLD', {
+    this.add.text(width / 2, 80, 'RECURRING WORLD', {
       fontFamily: 'monospace',
       fontSize: '24px',
       color: '#ffffff',
@@ -29,7 +31,7 @@ export class TitleScene extends Phaser.Scene {
     }).setOrigin(0.5, 0.5);
 
     // Subtitle
-    this.add.text(GAME_WIDTH / 2, 108, 'Bengaluru Explorer', {
+    this.add.text(width / 2, 108, 'Bengaluru Explorer', {
       fontFamily: 'monospace',
       fontSize: '12px',
       color: '#c8c8c8',
@@ -38,7 +40,7 @@ export class TitleScene extends Phaser.Scene {
     }).setOrigin(0.5, 0.5);
 
     // "Press Start" prompt with blinking animation
-    const pressStart = this.add.text(GAME_WIDTH / 2, 240, 'PRESS START', {
+    const pressStart = this.add.text(width / 2, 240, 'PRESS START', {
       fontFamily: 'monospace',
       fontSize: '14px',
       color: '#ffffff',
@@ -60,10 +62,8 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private startGame(): void {
-    // Prevent double transitions
     if (this.started) return;
     this.started = true;
-
     this.scene.start(SCENES.NAME_ENTRY);
   }
 }
