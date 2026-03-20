@@ -18,23 +18,23 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Exploration
 
 - [x] **EXPL-01**: MG Road / CBD zone is explorable with recognizable pixel art of Chinnaswamy Stadium, UB City, Cubbon Park entrance, Vidhana Soudha, and MG Road Metro station
-- [ ] **EXPL-02**: Player can enter and exit 2-3 building interiors (metro station, shop, landmark) via door tiles
+- [x] **EXPL-02**: Player can enter and exit 2-3 building interiors (metro station, shop, landmark) via door tiles
 - [ ] **EXPL-03**: Area name banner slides in when player enters a new zone or building (e.g., "MG Road", "Cubbon Park")
 - [ ] **EXPL-04**: Player can discover and visit all major landmarks in the MG Road / CBD area
 
 ### NPC
 
-- [ ] **NPC-01**: 3-5 interactive NPCs are placed in the world (chai-walla, auto driver, local guide, shopkeeper, park visitor)
+- [x] **NPC-01**: 3-5 interactive NPCs are placed in the world (chai-walla, auto driver, local guide, shopkeeper, park visitor)
 - [ ] **NPC-02**: Player can walk up to an NPC and press action button to talk
 - [ ] **NPC-03**: NPCs face toward the player when spoken to
 - [ ] **NPC-04**: Dialogue appears in a bottom-of-screen box with typewriter text reveal and tap-to-advance
 - [ ] **NPC-05**: Dialogue supports multi-page messages and displays the NPC's name
-- [ ] **NPC-06**: NPC dialogue uses culturally authentic language (English with Kannada words/phrases mixed in)
+- [x] **NPC-06**: NPC dialogue uses culturally authentic language (English with Kannada words/phrases mixed in)
 
 ### Signs
 
-- [ ] **SIGN-01**: Player can interact with signs, notice boards, and plaques to read text
-- [ ] **SIGN-02**: Sign text uses the same dialogue box system as NPC dialogue
+- [x] **SIGN-01**: Player can interact with signs, notice boards, and plaques to read text
+- [x] **SIGN-02**: Sign text uses the same dialogue box system as NPC dialogue
 
 ### Quest
 
@@ -139,15 +139,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLAT-01 | Phase 1 | Complete |
 | PLAT-02 | Phase 1 | Complete |
 | PLAT-03 | Phase 1 | Complete |
-| NPC-01 | Phase 2 | Pending |
+| NPC-01 | Phase 2 | Complete |
 | NPC-02 | Phase 2 | Pending |
 | NPC-03 | Phase 2 | Pending |
 | NPC-04 | Phase 2 | Pending |
 | NPC-05 | Phase 2 | Pending |
-| NPC-06 | Phase 2 | Pending |
-| SIGN-01 | Phase 2 | Pending |
-| SIGN-02 | Phase 2 | Pending |
-| EXPL-02 | Phase 2 | Pending |
+| NPC-06 | Phase 2 | Complete |
+| SIGN-01 | Phase 2 | Complete |
+| SIGN-02 | Phase 2 | Complete |
+| EXPL-02 | Phase 2 | Complete |
 | EXPL-03 | Phase 2 | Pending |
 | EXPL-04 | Phase 2 | Pending |
 | QUST-01 | Phase 3 | Pending |
