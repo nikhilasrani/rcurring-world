@@ -11,7 +11,7 @@ export { DialogueController } from './DialogueController';
 /**
  * DialogBox: GBA-style dialogue box with typewriter text and multi-page paging.
  *
- * Position: bottom of screen (y=244), 472x72px with 4px inset from edges.
+ * Positioned at the bottom of the visible viewport (adapts to ENVELOP cropping).
  * Background: #F8F8F8 at 0.95 alpha with #222222 2px border.
  * NPC name in bold monospace, content in regular monospace with word wrap.
  * Page indicator (down-triangle) when more pages exist.
@@ -31,21 +31,21 @@ export class DialogBox {
   private controller: DialogueController;
   private isTypingComplete: boolean = true;
 
+  // Layout constants
+  private static readonly BOX_HEIGHT = 72;
+  private static readonly BOX_MARGIN = 4;
+  private static readonly TEXT_PADDING = 8;
+
   constructor(scene: Phaser.Scene) {
     this.controller = new DialogueController([]);
 
-    // Background: filled rect with stroke border
+    // Create elements at origin — reposition() sets actual positions
     this.background = scene.add.graphics();
-    this.background.fillStyle(0xF8F8F8, 0.95);
-    this.background.fillRect(4, 244, 472, 72);
-    this.background.lineStyle(2, 0x222222, 1);
-    this.background.strokeRect(4, 244, 472, 72);
     this.background.setDepth(60);
     this.background.setScrollFactor(0);
     this.background.setVisible(false);
 
-    // NPC name text
-    this.nameText = scene.add.text(12, 248, '', {
+    this.nameText = scene.add.text(0, 0, '', {
       fontFamily: 'monospace',
       fontSize: '12px',
       color: '#333333',
@@ -55,8 +55,7 @@ export class DialogBox {
     this.nameText.setScrollFactor(0);
     this.nameText.setVisible(false);
 
-    // Content text with word wrap
-    this.contentText = scene.add.text(12, 264, '', {
+    this.contentText = scene.add.text(0, 0, '', {
       fontFamily: 'monospace',
       fontSize: '10px',
       color: '#111111',
@@ -66,8 +65,7 @@ export class DialogBox {
     this.contentText.setScrollFactor(0);
     this.contentText.setVisible(false);
 
-    // Page indicator (down-triangle unicode)
-    this.pageIndicator = scene.add.text(460, 304, '', {
+    this.pageIndicator = scene.add.text(0, 0, '', {
       fontFamily: 'monospace',
       fontSize: '10px',
       color: '#666666',
@@ -76,11 +74,32 @@ export class DialogBox {
     this.pageIndicator.setScrollFactor(0);
     this.pageIndicator.setVisible(false);
 
-    // TextTyping plugin for typewriter effect
     this.typing = new TextTyping(this.contentText, { speed: 30 });
     this.typing.on('complete', () => {
       this.isTypingComplete = true;
     });
+  }
+
+  /**
+   * Reposition all elements relative to the visible viewport bounds.
+   * Called by UIScene on create and on resize.
+   */
+  reposition(bounds: { x: number; y: number; width: number; height: number }): void {
+    const m = DialogBox.BOX_MARGIN;
+    const boxW = bounds.width - m * 2;
+    const boxX = bounds.x + m;
+    const boxY = bounds.y + bounds.height - DialogBox.BOX_HEIGHT - m;
+
+    this.background.clear();
+    this.background.fillStyle(0xF8F8F8, 0.95);
+    this.background.fillRect(boxX, boxY, boxW, DialogBox.BOX_HEIGHT);
+    this.background.lineStyle(2, 0x222222, 1);
+    this.background.strokeRect(boxX, boxY, boxW, DialogBox.BOX_HEIGHT);
+
+    this.nameText.setPosition(boxX + DialogBox.TEXT_PADDING, boxY + 4);
+    this.contentText.setPosition(boxX + DialogBox.TEXT_PADDING, boxY + 20);
+    this.contentText.setWordWrapWidth(boxW - DialogBox.TEXT_PADDING * 2);
+    this.pageIndicator.setPosition(boxX + boxW - 16, boxY + DialogBox.BOX_HEIGHT - 16);
   }
 
   /** Show dialogue box with NPC/sign dialogue data */
@@ -107,40 +126,34 @@ export class DialogBox {
 
     if (this.controller.hasMorePages()) {
       this.controller.nextPage();
-      this.typePage(0); // argument unused, uses controller state
+      this.typePage(0);
       return;
     }
 
-    // Last page, typing complete -> close
     this.hide();
     eventsCenter.emit(EVENTS.DIALOGUE_CLOSE);
   }
 
-  /** Type the current page with typewriter effect */
   private typePage(_pageIndex: number): void {
     this.isTypingComplete = false;
     this.typing.start(this.controller.getCurrentPage());
-    // Update page indicator
     if (this.controller.shouldShowPageIndicator()) {
-      this.pageIndicator.setText('\u25BC'); // Down-pointing triangle
+      this.pageIndicator.setText('\u25BC');
       this.pageIndicator.setVisible(true);
     } else {
       this.pageIndicator.setText('');
-      this.pageIndicator.setVisible(this.background.visible); // keep consistent
+      this.pageIndicator.setVisible(this.background.visible);
     }
   }
 
-  /** Hide the dialogue box */
   hide(): void {
     this.setAllVisible(false);
   }
 
-  /** Check if dialogue box is currently visible/active */
   isActive(): boolean {
     return this.background.visible;
   }
 
-  /** Set visibility on all dialogue elements */
   private setAllVisible(visible: boolean): void {
     this.background.setVisible(visible);
     this.nameText.setVisible(visible);
@@ -148,7 +161,6 @@ export class DialogBox {
     this.pageIndicator.setVisible(visible);
   }
 
-  /** Clean up all game objects */
   destroy(): void {
     this.background.destroy();
     this.nameText.destroy();

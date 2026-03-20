@@ -1,48 +1,38 @@
 import Phaser from 'phaser';
 import { Direction } from 'grid-engine';
 import { eventsCenter } from '../utils/EventsCenter';
-import { EVENTS, ASSETS, GAME_WIDTH, GAME_HEIGHT } from '../utils/constants';
+import { EVENTS, ASSETS } from '../utils/constants';
 
 /**
  * TouchControls: Fullscreen mobile overlay with floating joystick + A/B buttons.
  *
- * Layout (positioned relative to game canvas edges):
- * - Joystick: bottom-left corner, fixed position
- * - A button: bottom-right, primary action (interact/confirm)
- * - B button: bottom-right, offset left+up from A (run/cancel)
+ * Layout adapts to the visible viewport (accounts for ENVELOP cropping):
+ * - Joystick: bottom-left of visible area
+ * - A button: bottom-right of visible area (interact/confirm)
+ * - B button: offset left+up from A (run/cancel)
  *
  * Auto-shows on touch devices, hidden on desktop (toggle with T key).
- * Semi-transparent so the map is always visible underneath.
  */
 export class TouchControls {
-  private joystick: any; // rexrainbow VirtualJoystick instance
+  private joystick: any;
   private buttonA: Phaser.GameObjects.Image;
   private buttonB: Phaser.GameObjects.Image;
   private isVisible = false;
   private previousDirection: Direction | null = null;
 
-  // Button layout constants (relative to game canvas edges)
-  private static readonly JOYSTICK_X = 60;
-  private static readonly JOYSTICK_Y = GAME_HEIGHT - 60;
-  private static readonly BTN_A_X = GAME_WIDTH - 36;
-  private static readonly BTN_A_Y = GAME_HEIGHT - 48;
-  private static readonly BTN_B_X = GAME_WIDTH - 80;
-  private static readonly BTN_B_Y = GAME_HEIGHT - 28;
   private static readonly BTN_SIZE = 40;
   private static readonly JOYSTICK_BASE_SIZE = 80;
   private static readonly JOYSTICK_THUMB_SIZE = 32;
 
   constructor(scene: Phaser.Scene) {
-
-    // --- Fixed Joystick (bottom-left) ---
     const joystickBase = scene.add
-      .image(TouchControls.JOYSTICK_X, TouchControls.JOYSTICK_Y, ASSETS.UI_JOYSTICK_BASE)
+      .image(0, 0, ASSETS.UI_JOYSTICK_BASE)
       .setDisplaySize(TouchControls.JOYSTICK_BASE_SIZE, TouchControls.JOYSTICK_BASE_SIZE)
       .setAlpha(0.4)
       .setScrollFactor(0)
       .setDepth(100);
     const joystickThumb = scene.add
-      .image(TouchControls.JOYSTICK_X, TouchControls.JOYSTICK_Y, ASSETS.UI_JOYSTICK_THUMB)
+      .image(0, 0, ASSETS.UI_JOYSTICK_THUMB)
       .setDisplaySize(TouchControls.JOYSTICK_THUMB_SIZE, TouchControls.JOYSTICK_THUMB_SIZE)
       .setAlpha(0.6)
       .setScrollFactor(0)
@@ -51,8 +41,8 @@ export class TouchControls {
     this.joystick = (scene.plugins.get('rexVirtualJoystick') as any).add(
       scene,
       {
-        x: TouchControls.JOYSTICK_X,
-        y: TouchControls.JOYSTICK_Y,
+        x: -100,
+        y: -100,
         radius: 40,
         base: joystickBase,
         thumb: joystickThumb,
@@ -63,9 +53,8 @@ export class TouchControls {
       }
     );
 
-    // --- A Button (interact/confirm) — bottom-right ---
     this.buttonA = scene.add
-      .image(TouchControls.BTN_A_X, TouchControls.BTN_A_Y, ASSETS.UI_BUTTON_A)
+      .image(0, 0, ASSETS.UI_BUTTON_A)
       .setDisplaySize(TouchControls.BTN_SIZE, TouchControls.BTN_SIZE)
       .setAlpha(0.5)
       .setScrollFactor(0)
@@ -85,9 +74,8 @@ export class TouchControls {
       this.buttonA.setAlpha(0.5);
     });
 
-    // --- B Button (cancel/run) — left+up of A ---
     this.buttonB = scene.add
-      .image(TouchControls.BTN_B_X, TouchControls.BTN_B_Y, ASSETS.UI_BUTTON_B)
+      .image(0, 0, ASSETS.UI_BUTTON_B)
       .setDisplaySize(TouchControls.BTN_SIZE, TouchControls.BTN_SIZE)
       .setAlpha(0.5)
       .setScrollFactor(0)
@@ -107,16 +95,27 @@ export class TouchControls {
       this.buttonB.setAlpha(0.5);
     });
 
-    // Auto-show on touch devices
     if (scene.sys.game.device.input.touch) {
       this.showControls();
     }
 
-    // Start hidden — all elements invisible until shown
     this.setVisibility(this.isVisible);
   }
 
-  /** Show all touch controls. */
+  /**
+   * Reposition controls relative to the visible viewport bounds.
+   */
+  reposition(bounds: { x: number; y: number; width: number; height: number }): void {
+    const jx = bounds.x + 60;
+    const jy = bounds.y + bounds.height - 60;
+    this.joystick.setPosition(jx, jy);
+    this.joystick.base.setPosition(jx, jy);
+    this.joystick.thumb.setPosition(jx, jy);
+
+    this.buttonA.setPosition(bounds.x + bounds.width - 36, bounds.y + bounds.height - 48);
+    this.buttonB.setPosition(bounds.x + bounds.width - 80, bounds.y + bounds.height - 28);
+  }
+
   showControls(): void {
     if (this.isVisible) return;
     this.isVisible = true;
@@ -130,10 +129,6 @@ export class TouchControls {
     this.buttonB.setVisible(visible);
   }
 
-  /**
-   * Poll joystick direction each frame and emit via EventsCenter.
-   * Only emits when direction changes to reduce event spam.
-   */
   update(): void {
     if (!this.isVisible) return;
 
@@ -151,7 +146,6 @@ export class TouchControls {
     }
   }
 
-  /** Toggle visibility (desktop dev shortcut T key). */
   toggle(): void {
     if (this.isVisible) {
       this.isVisible = false;
