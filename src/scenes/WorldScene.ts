@@ -212,6 +212,7 @@ export class WorldScene extends Phaser.Scene {
     this.gridEngine.create(tilemap, gridEngineConfig);
 
     // --- Camera Setup ---
+    this.cameras.main.setZoom(1); // Reset zoom from interior scenes
     this.cameras.main.startFollow(this.player.sprite, true);
     this.cameras.main.setBounds(
       0,
@@ -391,16 +392,12 @@ export class WorldScene extends Phaser.Scene {
     const interiorPixelW = tilemap.widthInPixels;
     const interiorPixelH = tilemap.heightInPixels;
 
+    // Zoom to fill viewport (no black edges), follow player within bounds
+    const zoom = Math.max(GAME_WIDTH / interiorPixelW, GAME_HEIGHT / interiorPixelH);
+    this.cameras.main.setZoom(zoom);
     this.cameras.main.setBounds(0, 0, interiorPixelW, interiorPixelH);
+    this.cameras.main.startFollow(this.player.sprite, true);
     this.cameras.main.setRoundPixels(true);
-
-    // For small interiors that fit on screen, center the camera instead of following
-    if (interiorPixelW <= GAME_WIDTH && interiorPixelH <= GAME_HEIGHT) {
-      this.cameras.main.stopFollow();
-      this.cameras.main.centerOn(interiorPixelW / 2, interiorPixelH / 2);
-    } else {
-      this.cameras.main.startFollow(this.player.sprite, true);
-    }
 
     // --- Keyboard Input ---
     this.cursors = this.input.keyboard!.createCursorKeys();
