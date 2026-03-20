@@ -49,11 +49,14 @@ Plans:
   3. Player can interact with signs and notice boards using the same dialogue box system
   4. Player can enter and exit 2-3 building interiors through door tiles, with a zone name banner sliding in on each transition
   5. Player can discover and visit all major landmarks in the MG Road / CBD area
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Phase 2 types, constants, NPC dialogue data, sign data, and interior metadata
+- [ ] 02-02-PLAN.md -- NPC spritesheets, interior tileset, and interior tilemaps (asset generation)
+- [ ] 02-03-PLAN.md -- DialogBox, InteractionPrompt, NPC entity, NPCManager, and InteractionSystem
+- [ ] 02-04-PLAN.md -- ZoneBanner, ZoneManager, and TransitionManager for zones and building transitions
+- [ ] 02-05-PLAN.md -- Integration wiring into WorldScene/UIScene/BootScene, tests, and verification
 
 ### Phase 3: Game Systems
 **Goal**: Exploration has purpose -- player can accept quests, collect items, track progress in a journal, fast-travel via metro, and save their game
@@ -94,6 +97,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation and Movement | 5/5 | Complete   | 2026-03-20 |
-| 2. World Interaction | 0/? | Not started | - |
+| 2. World Interaction | 0/5 | Not started | - |
 | 3. Game Systems | 0/? | Not started | - |
 | 4. Audio and Polish | 0/? | Not started | - |
