@@ -392,10 +392,10 @@ export class WorldScene extends Phaser.Scene {
     const interiorPixelW = tilemap.widthInPixels;
     const interiorPixelH = tilemap.heightInPixels;
 
-    // Zoom to fill viewport (no black edges), follow player within bounds
+    // Zoom to fill viewport, follow player freely (walls contain movement)
     const zoom = Math.max(GAME_WIDTH / interiorPixelW, GAME_HEIGHT / interiorPixelH);
     this.cameras.main.setZoom(zoom);
-    this.cameras.main.setBounds(0, 0, interiorPixelW, interiorPixelH);
+    this.cameras.main.removeBounds();
     this.cameras.main.startFollow(this.player.sprite, true);
     this.cameras.main.setRoundPixels(true);
 
