@@ -109,6 +109,9 @@ export class WorldScene extends Phaser.Scene {
   private npcsMetIds: Set<string> = new Set();
   private collectedPickupIds: Set<string> = new Set();
 
+  // Bound event handlers (stored so shutdown can remove only OUR listeners)
+  private boundHandlers: Record<string, (...args: any[]) => void> = {};
+
   constructor() {
     super({ key: SCENES.WORLD });
   }
@@ -134,6 +137,13 @@ export class WorldScene extends Phaser.Scene {
   create(): void {
     // Reset state for scene restart
     this.movementFrozen = false;
+    this.touchDirection = null;
+    this.runButtonHeld = false;
+
+    // Clear any lingering camera fade/flash effects from the previous scene
+    // lifecycle. Phaser recreates the camera on restart, but some versions
+    // carry effect state across shutdown/start when using scene.restart().
+    this.cameras.main.resetFX();
 
     if (this.sceneMode.mode === 'interior') {
       this.createInterior();
@@ -268,15 +278,61 @@ export class WorldScene extends Phaser.Scene {
     this.wasdKeys = this.input.keyboard!.addKeys('W,A,S,D') as Record<'W' | 'A' | 'S' | 'D', Phaser.Input.Keyboard.Key>;
 
     // --- Touch Input (from UIScene via EventsCenter) ---
-    eventsCenter.on(EVENTS.TOUCH_DIRECTION, (dir: Direction | null) => {
-      this.touchDirection = dir;
-    });
-    eventsCenter.on(EVENTS.RUN_BUTTON_DOWN, () => {
-      this.runButtonHeld = true;
-    });
-    eventsCenter.on(EVENTS.RUN_BUTTON_UP, () => {
-      this.runButtonHeld = false;
-    });
+    // Store handler references so shutdown() removes only OUR listeners,
+    // not UIScene's listeners on the same global eventsCenter.
+    this.boundHandlers = {};
+    this.boundHandlers.touchDirection = (dir: Direction | null) => { this.touchDirection = dir; };
+    this.boundHandlers.runButtonDown = () => { this.runButtonHeld = true; };
+    this.boundHandlers.runButtonUp = () => { this.runButtonHeld = false; };
+    this.boundHandlers.movementFreeze = (freeze: boolean) => { this.movementFrozen = freeze; };
+    this.boundHandlers.dialogueOpen = () => { this.movementFrozen = true; };
+    this.boundHandlers.dialogueClose = () => {
+      // Defer unfreeze by one frame so the closing keypress doesn't
+      // immediately re-trigger handleAction() on the same interactable
+      this.time.delayedCall(1, () => {
+        this.movementFrozen = false;
+      });
+      // Resume NPC patrol if one was stopped
+      const lastInteractedNPC = this.registry.get('lastInteractedNPC') as
+        | string
+        | undefined;
+      if (lastInteractedNPC) {
+        this.npcManager.resumeNPCPatrol(this.gridEngine, lastInteractedNPC);
+        this.registry.remove('lastInteractedNPC');
+      }
+      // Resume auto-rickshaw if one was stopped
+      const lastInteractedAuto = this.registry.get('lastInteractedAuto') as
+        | string
+        | undefined;
+      if (lastInteractedAuto) {
+        this.autoRickshawManager?.resumeAuto(lastInteractedAuto);
+        this.registry.remove('lastInteractedAuto');
+      }
+    };
+    this.boundHandlers.touchAction = () => { this.handleAction(); };
+    this.boundHandlers.dialogueChoice = ({ choiceIndex }: { choiceIndex: number }) => {
+      if (choiceIndex === 0) {
+        if (!this.questManager.hasActiveQuest()) {
+          this.questManager.acceptQuest(questData.id);
+          eventsCenter.emit(EVENTS.QUEST_ACCEPTED, { questId: questData.id });
+        }
+      } else {
+        eventsCenter.emit(EVENTS.QUEST_DECLINED, { questId: questData.id });
+      }
+    };
+    this.boundHandlers.npcInteract = () => {
+      const lastNPC = this.registry.get('lastInteractedNPC') as string | undefined;
+      if (lastNPC && !this.npcsMetIds.has(lastNPC)) {
+        this.npcsMetIds.add(lastNPC);
+        eventsCenter.emit(EVENTS.NPC_MET, { npcId: lastNPC });
+      }
+    };
+    this.boundHandlers.buildingEnter = () => { this.performAutoSave(); };
+    this.boundHandlers.buildingExit = () => { this.performAutoSave(); };
+
+    eventsCenter.on(EVENTS.TOUCH_DIRECTION, this.boundHandlers.touchDirection);
+    eventsCenter.on(EVENTS.RUN_BUTTON_DOWN, this.boundHandlers.runButtonDown);
+    eventsCenter.on(EVENTS.RUN_BUTTON_UP, this.boundHandlers.runButtonUp);
 
     // === Phase 2: NPC, Interaction, Zone, and Transition Systems ===
 
@@ -371,75 +427,26 @@ export class WorldScene extends Phaser.Scene {
     this.interactionSystem.setPickupDefs(pickupsData, [...this.collectedPickupIds]);
 
     // Quest event listeners
-    eventsCenter.on(EVENTS.DIALOGUE_CHOICE, ({ choiceIndex }: { choiceIndex: number }) => {
-      if (choiceIndex === 0) {
-        // Accept quest
-        if (!this.questManager.hasActiveQuest()) {
-          this.questManager.acceptQuest(questData.id);
-          eventsCenter.emit(EVENTS.QUEST_ACCEPTED, { questId: questData.id });
-        }
-      } else {
-        // Decline quest
-        eventsCenter.emit(EVENTS.QUEST_DECLINED, { questId: questData.id });
-      }
-    });
+    eventsCenter.on(EVENTS.DIALOGUE_CHOICE, this.boundHandlers.dialogueChoice);
 
     // Track NPC meetings for journal
-    eventsCenter.on(EVENTS.NPC_INTERACT, () => {
-      const lastNPC = this.registry.get('lastInteractedNPC') as string | undefined;
-      if (lastNPC && !this.npcsMetIds.has(lastNPC)) {
-        this.npcsMetIds.add(lastNPC);
-        eventsCenter.emit(EVENTS.NPC_MET, { npcId: lastNPC });
-      }
-    });
+    eventsCenter.on(EVENTS.NPC_INTERACT, this.boundHandlers.npcInteract);
 
     // Auto-save on building transitions
-    eventsCenter.on(EVENTS.BUILDING_ENTER, () => {
-      this.performAutoSave();
-    });
-    eventsCenter.on(EVENTS.BUILDING_EXIT, () => {
-      this.performAutoSave();
-    });
+    eventsCenter.on(EVENTS.BUILDING_ENTER, this.boundHandlers.buildingEnter);
+    eventsCenter.on(EVENTS.BUILDING_EXIT, this.boundHandlers.buildingExit);
 
     // Movement freeze listener
-    eventsCenter.on(EVENTS.MOVEMENT_FREEZE, (freeze: boolean) => {
-      this.movementFrozen = freeze;
-    });
-    eventsCenter.on(EVENTS.DIALOGUE_OPEN, () => {
-      this.movementFrozen = true;
-    });
-    eventsCenter.on(EVENTS.DIALOGUE_CLOSE, () => {
-      // Defer unfreeze by one frame so the closing keypress doesn't
-      // immediately re-trigger handleAction() on the same interactable
-      this.time.delayedCall(1, () => {
-        this.movementFrozen = false;
-      });
-      // Resume NPC patrol if one was stopped
-      const lastInteractedNPC = this.registry.get('lastInteractedNPC') as
-        | string
-        | undefined;
-      if (lastInteractedNPC) {
-        this.npcManager.resumeNPCPatrol(this.gridEngine, lastInteractedNPC);
-        this.registry.remove('lastInteractedNPC');
-      }
-      // Resume auto-rickshaw if one was stopped
-      const lastInteractedAuto = this.registry.get('lastInteractedAuto') as
-        | string
-        | undefined;
-      if (lastInteractedAuto) {
-        this.autoRickshawManager?.resumeAuto(lastInteractedAuto);
-        this.registry.remove('lastInteractedAuto');
-      }
-    });
+    eventsCenter.on(EVENTS.MOVEMENT_FREEZE, this.boundHandlers.movementFreeze);
+    eventsCenter.on(EVENTS.DIALOGUE_OPEN, this.boundHandlers.dialogueOpen);
+    eventsCenter.on(EVENTS.DIALOGUE_CLOSE, this.boundHandlers.dialogueClose);
 
     // Action button handler (keyboard)
     this.input.keyboard?.on('keydown-ENTER', () => this.handleAction());
     this.input.keyboard?.on('keydown-SPACE', () => this.handleAction());
 
     // Action button handler (touch -- from EventsCenter)
-    eventsCenter.on(EVENTS.TOUCH_ACTION, () => {
-      this.handleAction();
-    });
+    eventsCenter.on(EVENTS.TOUCH_ACTION, this.boundHandlers.touchAction);
 
     // Zone detection + interaction prompt update on player movement
     this.gridEngine.positionChangeFinished().subscribe(
@@ -543,15 +550,18 @@ export class WorldScene extends Phaser.Scene {
     this.wasdKeys = this.input.keyboard!.addKeys('W,A,S,D') as Record<'W' | 'A' | 'S' | 'D', Phaser.Input.Keyboard.Key>;
 
     // --- Touch Input ---
-    eventsCenter.on(EVENTS.TOUCH_DIRECTION, (dir: Direction | null) => {
-      this.touchDirection = dir;
-    });
-    eventsCenter.on(EVENTS.RUN_BUTTON_DOWN, () => {
-      this.runButtonHeld = true;
-    });
-    eventsCenter.on(EVENTS.RUN_BUTTON_UP, () => {
-      this.runButtonHeld = false;
-    });
+    // Reuse bound handlers from createOutdoor or create fresh ones for interior-first entry
+    if (!this.boundHandlers.touchDirection) {
+      this.boundHandlers = {};
+      this.boundHandlers.touchDirection = (dir: Direction | null) => { this.touchDirection = dir; };
+      this.boundHandlers.runButtonDown = () => { this.runButtonHeld = true; };
+      this.boundHandlers.runButtonUp = () => { this.runButtonHeld = false; };
+      this.boundHandlers.touchAction = () => { this.handleAction(); };
+      this.boundHandlers.movementFreeze = (freeze: boolean) => { this.movementFrozen = freeze; };
+    }
+    eventsCenter.on(EVENTS.TOUCH_DIRECTION, this.boundHandlers.touchDirection);
+    eventsCenter.on(EVENTS.RUN_BUTTON_DOWN, this.boundHandlers.runButtonDown);
+    eventsCenter.on(EVENTS.RUN_BUTTON_UP, this.boundHandlers.runButtonUp);
 
     // --- Transition Manager for exit handling ---
     this.transitionManager = new TransitionManager(this);
@@ -589,14 +599,10 @@ export class WorldScene extends Phaser.Scene {
     // Action button handler for interior interactions
     this.input.keyboard?.on('keydown-ENTER', () => this.handleAction());
     this.input.keyboard?.on('keydown-SPACE', () => this.handleAction());
-    eventsCenter.on(EVENTS.TOUCH_ACTION, () => {
-      this.handleAction();
-    });
+    eventsCenter.on(EVENTS.TOUCH_ACTION, this.boundHandlers.touchAction);
 
     // Movement freeze listener
-    eventsCenter.on(EVENTS.MOVEMENT_FREEZE, (freeze: boolean) => {
-      this.movementFrozen = freeze;
-    });
+    eventsCenter.on(EVENTS.MOVEMENT_FREEZE, this.boundHandlers.movementFreeze);
 
     // Exit door detection: when player reaches exit position, trigger exit
     const exitPos = this.findExitPosition(tilemap, mode);
@@ -901,17 +907,21 @@ export class WorldScene extends Phaser.Scene {
 
   shutdown(): void {
     // Clean up event listeners to prevent memory leaks
-    eventsCenter.off(EVENTS.TOUCH_DIRECTION);
-    eventsCenter.off(EVENTS.RUN_BUTTON_DOWN);
-    eventsCenter.off(EVENTS.RUN_BUTTON_UP);
-    eventsCenter.off(EVENTS.MOVEMENT_FREEZE);
-    eventsCenter.off(EVENTS.DIALOGUE_OPEN);
-    eventsCenter.off(EVENTS.DIALOGUE_CLOSE);
-    eventsCenter.off(EVENTS.TOUCH_ACTION);
-    eventsCenter.off(EVENTS.DIALOGUE_CHOICE);
-    eventsCenter.off(EVENTS.NPC_INTERACT);
-    eventsCenter.off(EVENTS.BUILDING_ENTER);
-    eventsCenter.off(EVENTS.BUILDING_EXIT);
+    // Remove only OUR event handlers -- do NOT use eventsCenter.off(EVENT)
+    // without a handler reference, as that removes ALL listeners (including UIScene's).
+    const h = this.boundHandlers;
+    if (h.touchDirection) eventsCenter.off(EVENTS.TOUCH_DIRECTION, h.touchDirection);
+    if (h.runButtonDown) eventsCenter.off(EVENTS.RUN_BUTTON_DOWN, h.runButtonDown);
+    if (h.runButtonUp) eventsCenter.off(EVENTS.RUN_BUTTON_UP, h.runButtonUp);
+    if (h.movementFreeze) eventsCenter.off(EVENTS.MOVEMENT_FREEZE, h.movementFreeze);
+    if (h.dialogueOpen) eventsCenter.off(EVENTS.DIALOGUE_OPEN, h.dialogueOpen);
+    if (h.dialogueClose) eventsCenter.off(EVENTS.DIALOGUE_CLOSE, h.dialogueClose);
+    if (h.touchAction) eventsCenter.off(EVENTS.TOUCH_ACTION, h.touchAction);
+    if (h.dialogueChoice) eventsCenter.off(EVENTS.DIALOGUE_CHOICE, h.dialogueChoice);
+    if (h.npcInteract) eventsCenter.off(EVENTS.NPC_INTERACT, h.npcInteract);
+    if (h.buildingEnter) eventsCenter.off(EVENTS.BUILDING_ENTER, h.buildingEnter);
+    if (h.buildingExit) eventsCenter.off(EVENTS.BUILDING_EXIT, h.buildingExit);
+    this.boundHandlers = {};
     this.npcManager?.destroy();
     this.autoRickshawManager?.destroy();
     this.interactionPrompt?.destroy();
