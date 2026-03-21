@@ -6,6 +6,11 @@ import { PauseMenu } from '../ui/PauseMenu';
 import { QuestHUD } from '../ui/QuestHUD';
 import { ItemNotification } from '../ui/ItemNotification';
 import { MetroMap } from '../ui/MetroMap';
+import { InventoryPanel } from '../ui/InventoryPanel';
+import { QuestPanel } from '../ui/QuestPanel';
+import { JournalPanel } from '../ui/JournalPanel';
+import { SavePanel } from '../ui/SavePanel';
+import { SettingsPanel } from '../ui/SettingsPanel';
 import { eventsCenter } from '../utils/EventsCenter';
 import { SCENES, EVENTS, ASSETS } from '../utils/constants';
 import type { DialogueData } from '../utils/types';
@@ -49,6 +54,15 @@ export class UIScene extends Phaser.Scene {
     this.questHUD = new QuestHUD(this);
     this.itemNotification = new ItemNotification(this);
     this.metroMap = new MetroMap(this);
+
+    // Create tab panels and wire them to the pause menu
+    const pb = this.pauseMenu.getPanelBounds();
+    const questPanel = new QuestPanel(this, pb.x, pb.y, pb.width, pb.height);
+    const inventoryPanel = new InventoryPanel(this, pb.x, pb.y, pb.width, pb.height);
+    const journalPanel = new JournalPanel(this, pb.x, pb.y, pb.width, pb.height);
+    const savePanel = new SavePanel(this, pb.x, pb.y, pb.width, pb.height);
+    const settingsPanel = new SettingsPanel(this, pb.x, pb.y, pb.width, pb.height);
+    this.pauseMenu.setPanels(questPanel, inventoryPanel, journalPanel, savePanel, settingsPanel);
 
     // Save icon sprite (bottom-right corner, hidden until save event)
     this.saveIconSprite = this.add.sprite(0, 0, ASSETS.SPRITE_SAVE_ICON);
