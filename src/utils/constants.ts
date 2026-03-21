@@ -42,6 +42,29 @@ export const EVENTS = {
   MOVEMENT_FREEZE: 'movement-freeze',
   BUILDING_ENTER: 'building-enter',
   BUILDING_EXIT: 'building-exit',
+  // Quest events
+  QUEST_OFFERED: 'quest-offered',
+  QUEST_ACCEPTED: 'quest-accepted',
+  QUEST_OBJECTIVE_COMPLETE: 'quest-objective-complete',
+  QUEST_COMPLETE: 'quest-complete',
+  QUEST_DECLINED: 'quest-declined',
+  // Inventory events
+  ITEM_COLLECTED: 'item-collected',
+  ITEM_PICKUP_INTERACT: 'item-pickup-interact',
+  // Journal events
+  NPC_MET: 'npc-met',
+  // Menu events
+  PAUSE_MENU_OPEN: 'pause-menu-open',
+  PAUSE_MENU_CLOSE: 'pause-menu-close',
+  // Save events
+  GAME_SAVED: 'game-saved',
+  GAME_LOADED: 'game-loaded',
+  SAVE_ICON_SHOW: 'save-icon-show',
+  // Dialogue choice
+  DIALOGUE_CHOICE: 'dialogue-choice',
+  // Metro
+  METRO_MAP_OPEN: 'metro-map-open',
+  METRO_TRAVEL_START: 'metro-travel-start',
 } as const;
 
 // Player sprite dimensions
@@ -74,6 +97,11 @@ export const ASSETS = {
   TILEMAP_INTERIOR_COFFEE: 'tilemap-interior-coffee',
   TILEMAP_INTERIOR_UBCITY: 'tilemap-interior-ubcity',
   TILEMAP_INTERIOR_LIBRARY: 'tilemap-interior-library',
+  SPRITE_ITEM_ICONS: 'item-icons',
+  SPRITE_SPARKLE: 'sparkle',
+  SPRITE_SAVE_ICON: 'save-icon',
+  SPRITE_HAMBURGER: 'hamburger-icon',
+  SPRITE_NPC_PARK_COFFEE: 'npc-park-coffee-vendor',
 } as const;
 
 // Tilemap layer names (must match Tiled export)

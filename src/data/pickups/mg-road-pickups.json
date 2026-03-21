@@ -1,0 +1,7 @@
+[
+  { "id": "pickup-jasmine", "itemId": "jasmine-flowers", "position": { "x": 10, "y": 15 }, "zone": "mg-road" },
+  { "id": "pickup-metro-token", "itemId": "metro-token", "position": { "x": 9, "y": 7 }, "zone": "mg-road" },
+  { "id": "pickup-dosa", "itemId": "masala-dosa", "position": { "x": 38, "y": 35 }, "zone": "mg-road" },
+  { "id": "pickup-leaf", "itemId": "park-leaf", "position": { "x": 5, "y": 12 }, "zone": "mg-road" },
+  { "id": "pickup-bag", "itemId": "shopping-bag", "position": { "x": 28, "y": 38 }, "zone": "mg-road" }
+]

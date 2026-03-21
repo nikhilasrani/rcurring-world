@@ -74,7 +74,7 @@ export interface InteriorDef {
 
 /** Target found by interaction system */
 export interface InteractionTarget {
-  type: 'npc' | 'sign' | 'door';
+  type: 'npc' | 'sign' | 'door' | 'pickup' | 'metro-map';
   id: string;
   position: { x: number; y: number };
 }
@@ -85,4 +85,99 @@ export interface DiscoveryState {
   discoveredLandmarks: string[];
   currentZone: string | null;
   currentInterior: string | null;
+}
+
+// ── Phase 3: Game Systems ──────────────────────────────────────────
+
+export type QuestStatus = 'not-started' | 'offered' | 'accepted' | 'in-progress' | 'complete';
+
+export interface QuestState {
+  id: string;
+  status: QuestStatus;
+  objectivesCompleted: string[];
+  objectivesTotal: number;
+}
+
+export interface InventoryItem {
+  id: string;
+  name: string;
+  description: string;
+  iconKey: string;
+  source: 'quest-reward' | 'npc-gift' | 'world-pickup';
+}
+
+export interface QuestDef {
+  id: string;
+  name: string;
+  description: string;
+  giverNpcId: string;
+  objectives: QuestObjective[];
+  reward: {
+    itemId: string;
+    dialogueUnlock?: string;
+  };
+}
+
+export interface QuestObjective {
+  id: string;
+  description: string;
+  type: 'interact-npc' | 'visit-location' | 'collect-item';
+  targetId: string;
+}
+
+export interface ItemDef {
+  id: string;
+  name: string;
+  description: string;
+  iconKey: string;
+}
+
+export interface PickupDef {
+  id: string;
+  itemId: string;
+  position: { x: number; y: number };
+  zone: string;
+}
+
+export interface JournalDiscoveries {
+  zone: string;
+  places: { id: string; name: string }[];
+  npcs: { id: string; name: string }[];
+  items: { id: string; name: string }[];
+}
+
+export interface GameState {
+  version: number;
+  timestamp: number;
+  player: {
+    name: string;
+    gender: 'male' | 'female';
+    position: { x: number; y: number };
+    facing: string;
+    isRunning: boolean;
+    currentZone: string;
+    isInInterior: boolean;
+    interiorId?: string;
+  };
+  quests: Record<string, QuestState>;
+  inventory: InventoryItem[];
+  discovery: {
+    zones: string[];
+    landmarks: string[];
+    npcsMetIds: string[];
+    collectedPickupIds: string[];
+  };
+  settings: {
+    musicVolume: number;
+    sfxVolume: number;
+    runDefault: boolean;
+  };
+}
+
+/** Interior interactable definition (for coffee counter, metro map wall, etc.) */
+export interface InteriorInteractable {
+  id: string;
+  type: 'counter' | 'metro-map' | 'object';
+  position: { x: number; y: number };
+  dialogue?: DialogueData;
 }

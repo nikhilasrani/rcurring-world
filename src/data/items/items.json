@@ -1,0 +1,10 @@
+[
+  { "id": "filter-coffee", "name": "Filter Coffee", "description": "Steel tumbler, strong decoction", "iconKey": "item-filter-coffee" },
+  { "id": "masala-dosa", "name": "Masala Dosa", "description": "Crispy, with coconut chutney", "iconKey": "item-masala-dosa" },
+  { "id": "jasmine-flowers", "name": "Jasmine Flowers", "description": "Malli hoo for the hair", "iconKey": "item-jasmine-flowers" },
+  { "id": "metro-token", "name": "Namma Metro Token", "description": "Namma Metro Purple Line", "iconKey": "item-metro-token" },
+  { "id": "park-leaf", "name": "Cubbon Park Leaf", "description": "From a 100-year rain tree", "iconKey": "item-park-leaf" },
+  { "id": "shopping-bag", "name": "UB City Shopping Bag", "description": "UB City premium retail", "iconKey": "item-shopping-bag" },
+  { "id": "old-bengaluru-photo", "name": "Old Bengaluru Photo", "description": "A faded glimpse of the garden city", "iconKey": "item-old-photo" },
+  { "id": "best-filter-coffee", "name": "Best Filter Coffee", "description": "The pride of MG Road", "iconKey": "item-best-coffee" }
+]

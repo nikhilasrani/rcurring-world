@@ -1,0 +1,28 @@
+{
+  "zone": "mg-road",
+  "places": [
+    { "id": "chinnaswamy-stadium", "name": "Chinnaswamy Stadium" },
+    { "id": "ub-city", "name": "UB City" },
+    { "id": "cubbon-park", "name": "Cubbon Park" },
+    { "id": "vidhana-soudha", "name": "Vidhana Soudha" },
+    { "id": "mg-road-metro", "name": "MG Road Metro Station" }
+  ],
+  "npcs": [
+    { "id": "npc-chai-walla", "name": "Raju" },
+    { "id": "npc-auto-driver", "name": "Auto Driver" },
+    { "id": "npc-jogger", "name": "Jogger" },
+    { "id": "npc-shopkeeper", "name": "Shopkeeper" },
+    { "id": "npc-guard", "name": "Guard" },
+    { "id": "npc-park-coffee-vendor", "name": "Park Coffee Vendor" }
+  ],
+  "items": [
+    { "id": "filter-coffee", "name": "Filter Coffee" },
+    { "id": "masala-dosa", "name": "Masala Dosa" },
+    { "id": "jasmine-flowers", "name": "Jasmine Flowers" },
+    { "id": "metro-token", "name": "Namma Metro Token" },
+    { "id": "park-leaf", "name": "Cubbon Park Leaf" },
+    { "id": "shopping-bag", "name": "UB City Shopping Bag" },
+    { "id": "old-bengaluru-photo", "name": "Old Bengaluru Photo" },
+    { "id": "best-filter-coffee", "name": "Best Filter Coffee" }
+  ]
+}
