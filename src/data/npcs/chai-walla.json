@@ -14,5 +14,38 @@
       "Fresh decoction, none of that instant-instant business. My grandfather started this stall in 1985.",
       "You want strong or light? Banni, banni -- come, I'll make fresh for you!"
     ]
+  },
+  "questDialogue": {
+    "questId": "best-filter-coffee",
+    "offer": {
+      "name": "Raju",
+      "pages": [
+        "You like filter coffee? I tell you what -- go try coffee at three places.",
+        "Try mine here, try at the coffee shop inside, and try at Cubbon Park stall.",
+        "Then come back and tell me whose is best!"
+      ],
+      "choicePage": 3,
+      "choices": ["Accept: Okay, challenge accepted!", "Decline: Maybe later, Raju."]
+    },
+    "active": {
+      "name": "Raju",
+      "pages": [
+        "Still trying the coffees? Come back when you've tried all three, saar!"
+      ]
+    },
+    "complete": {
+      "name": "Raju",
+      "pages": [
+        "So? Whose coffee is best?",
+        "Haha! I knew it! My grandfather's recipe is unbeatable!",
+        "Here, take this -- my special tumbler. Best Filter Coffee, saar!"
+      ]
+    },
+    "done": {
+      "name": "Raju",
+      "pages": [
+        "Ah, my favorite customer! Come back anytime for a fresh cup, saar."
+      ]
+    }
   }
 }

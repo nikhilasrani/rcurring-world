@@ -14,5 +14,22 @@
       "This area used to be all gardens and old bungalows. Now all malls only.",
       "My father had a small shop here. Now see -- glass buildings everywhere. Bengaluru is changing, saar."
     ]
+  },
+  "questDialogue": {
+    "questId": "best-filter-coffee",
+    "questObjectiveId": "taste-coffee-shop",
+    "active": {
+      "name": "Venkatesh",
+      "pages": [
+        "Raju's coffee challenge? Go inside the coffee shop and try their filter coffee.",
+        "The counter inside has very good coffee -- different style from Raju's."
+      ]
+    },
+    "afterObjective": {
+      "name": "Venkatesh",
+      "pages": [
+        "Already tried the coffee inside? Good, good. Now go complete Raju's challenge!"
+      ]
+    }
   }
 }

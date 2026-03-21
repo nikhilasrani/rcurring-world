@@ -1,0 +1,34 @@
+{
+  "id": "npc-park-coffee-vendor",
+  "name": "Park Coffee Vendor",
+  "spriteKey": "npc-park-coffee-vendor",
+  "position": { "x": 8, "y": 18 },
+  "facing": "down",
+  "patrolRadius": 1,
+  "patrolDelay": 2000,
+  "speed": 2,
+  "dialogue": {
+    "name": "Lakshmi",
+    "pages": [
+      "Filter coffee! Fresh filter coffee! Best in Cubbon Park!",
+      "I've been selling coffee here for fifteen years. Morning walkers love it!"
+    ]
+  },
+  "questDialogue": {
+    "questId": "best-filter-coffee",
+    "questObjectiveId": "taste-park-stall",
+    "active": {
+      "name": "Lakshmi",
+      "pages": [
+        "Oh, Raju sent you? That old rascal thinks his coffee is best!",
+        "Here, try mine -- I use special Chikmagalur beans!"
+      ]
+    },
+    "afterObjective": {
+      "name": "Lakshmi",
+      "pages": [
+        "You already tried mine! Go tell Raju the verdict, haha!"
+      ]
+    }
+  }
+}

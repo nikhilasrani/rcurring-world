@@ -1,0 +1,30 @@
+{
+  "id": "best-filter-coffee",
+  "name": "Find the Best Filter Coffee",
+  "description": "Raju challenges you to try filter coffee at three spots on MG Road and decide whose is best.",
+  "giverNpcId": "npc-chai-walla",
+  "objectives": [
+    {
+      "id": "taste-chai-walla",
+      "description": "Try Raju's filter coffee",
+      "type": "interact-npc",
+      "targetId": "npc-chai-walla"
+    },
+    {
+      "id": "taste-coffee-shop",
+      "description": "Try coffee at the coffee shop",
+      "type": "visit-location",
+      "targetId": "interior-coffee-counter"
+    },
+    {
+      "id": "taste-park-stall",
+      "description": "Try coffee at the park stall",
+      "type": "interact-npc",
+      "targetId": "npc-park-coffee-vendor"
+    }
+  ],
+  "reward": {
+    "itemId": "best-filter-coffee",
+    "dialogueUnlock": "done"
+  }
+}
