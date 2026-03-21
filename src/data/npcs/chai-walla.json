@@ -24,7 +24,7 @@
         "Try mine here, try at the coffee shop inside, and try at Cubbon Park stall.",
         "Then come back and tell me whose is best!"
       ],
-      "choicePage": 3,
+      "choicePage": 2,
       "choices": ["Accept: Okay, challenge accepted!", "Decline: Maybe later, Raju."]
     },
     "active": {
