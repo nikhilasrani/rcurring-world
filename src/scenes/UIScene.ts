@@ -13,8 +13,12 @@ import { SavePanel } from '../ui/SavePanel';
 import { SettingsPanel } from '../ui/SettingsPanel';
 import { eventsCenter } from '../utils/EventsCenter';
 import { SCENES, EVENTS, ASSETS } from '../utils/constants';
-import type { DialogueData } from '../utils/types';
+import type { DialogueData, GameState, InventoryItem } from '../utils/types';
 import type { QuestManager } from '../systems/QuestManager';
+import type { InventoryManager } from '../systems/InventoryManager';
+import type { JournalManager } from '../systems/JournalManager';
+import type { SaveManager } from '../systems/SaveManager';
+import questData from '../data/quests/best-filter-coffee.json';
 
 /**
  * UIScene: Parallel overlay scene for touch controls, dialogue box, zone banner,
@@ -34,6 +38,12 @@ export class UIScene extends Phaser.Scene {
   private itemNotification!: ItemNotification;
   private metroMap!: MetroMap;
   private saveIconSprite!: Phaser.GameObjects.Sprite;
+
+  // Tab panel references (for data refresh)
+  private inventoryPanel!: InventoryPanel;
+  private questPanel!: QuestPanel;
+  private journalPanel!: JournalPanel;
+  private savePanel!: SavePanel;
 
   constructor() {
     super({ key: SCENES.UI });
@@ -57,12 +67,46 @@ export class UIScene extends Phaser.Scene {
 
     // Create tab panels and wire them to the pause menu
     const pb = this.pauseMenu.getPanelBounds();
-    const questPanel = new QuestPanel(this, pb.x, pb.y, pb.width, pb.height);
-    const inventoryPanel = new InventoryPanel(this, pb.x, pb.y, pb.width, pb.height);
-    const journalPanel = new JournalPanel(this, pb.x, pb.y, pb.width, pb.height);
-    const savePanel = new SavePanel(this, pb.x, pb.y, pb.width, pb.height);
+    this.questPanel = new QuestPanel(this, pb.x, pb.y, pb.width, pb.height);
+    this.inventoryPanel = new InventoryPanel(this, pb.x, pb.y, pb.width, pb.height);
+    this.journalPanel = new JournalPanel(this, pb.x, pb.y, pb.width, pb.height);
+    this.savePanel = new SavePanel(this, pb.x, pb.y, pb.width, pb.height);
     const settingsPanel = new SettingsPanel(this, pb.x, pb.y, pb.width, pb.height);
-    this.pauseMenu.setPanels(questPanel, inventoryPanel, journalPanel, savePanel, settingsPanel);
+    this.pauseMenu.setPanels(this.questPanel, this.inventoryPanel, this.journalPanel, this.savePanel, settingsPanel);
+
+    // Wire save button callback
+    this.savePanel.onSave = () => {
+      const sm = this.registry.get('saveManager') as SaveManager | undefined;
+      const qm = this.registry.get('questManager') as QuestManager | undefined;
+      const im = this.registry.get('inventoryManager') as InventoryManager | undefined;
+      const npcsMetIds = this.registry.get('npcsMetIds') as Set<string> | undefined;
+      const collectedPickupIds = this.registry.get('collectedPickupIds') as Set<string> | undefined;
+      const playerState = this.registry.get('playerState');
+      if (!sm || !qm || !im || !playerState) {
+        this.savePanel.showFeedback(false);
+        return;
+      }
+      const gameState: GameState = {
+        version: 1,
+        timestamp: Date.now(),
+        player: playerState as GameState['player'],
+        quests: qm.getState(),
+        inventory: im.getState(),
+        discovery: {
+          zones: ['mg-road'],
+          landmarks: [],
+          npcsMetIds: [...(npcsMetIds ?? [])],
+          collectedPickupIds: [...(collectedPickupIds ?? [])],
+        },
+        settings: { musicVolume: 100, sfxVolume: 100, runDefault: false },
+      };
+      const success = sm.save(gameState);
+      this.savePanel.showFeedback(success);
+      if (success) {
+        this.savePanel.update(gameState.timestamp);
+        eventsCenter.emit(EVENTS.SAVE_ICON_SHOW);
+      }
+    };
 
     // Save icon sprite (bottom-right corner, hidden until save event)
     this.saveIconSprite = this.add.sprite(0, 0, ASSETS.SPRITE_SAVE_ICON);
@@ -112,6 +156,7 @@ export class UIScene extends Phaser.Scene {
     // Pause menu open/close
     eventsCenter.on(EVENTS.PAUSE_MENU_OPEN, () => {
       if (!this.pauseMenu.isMenuOpen() && !this.dialogBox.isActive() && !this.metroMap.isMapOpen()) {
+        this.refreshPanelData();
         this.pauseMenu.open();
       }
     });
@@ -210,6 +255,42 @@ export class UIScene extends Phaser.Scene {
       yoyo: true,
       onComplete: () => this.saveIconSprite.setVisible(false),
     });
+  }
+
+  /** Refresh all panel data from registry managers before showing the pause menu. */
+  private refreshPanelData(): void {
+    // Inventory
+    const im = this.registry.get('inventoryManager') as InventoryManager | undefined;
+    if (im) this.inventoryPanel.update([...im.getItems()] as InventoryItem[]);
+
+    // Quests
+    const qm = this.registry.get('questManager') as QuestManager | undefined;
+    if (qm) {
+      const activeId = qm.getActiveQuestId();
+      const state = activeId ? qm.getQuestState(activeId) ?? null : null;
+      this.questPanel.update(state, questData.name);
+    }
+
+    // Journal
+    const jm = this.registry.get('journalManager') as JournalManager | undefined;
+    const npcsMetIds = this.registry.get('npcsMetIds') as Set<string> | undefined;
+    if (jm) {
+      const npcIds = [...(npcsMetIds ?? [])];
+      const itemIds = im ? im.getItems().map(i => i.id) : [];
+      this.journalPanel.update({
+        completion: jm.getCompletionPercentage([], npcIds, itemIds),
+        places: jm.getPlacesDiscovered([]),
+        npcs: jm.getNPCsMet(npcIds),
+        items: jm.getItemsFound(itemIds),
+      });
+    }
+
+    // Save
+    const sm = this.registry.get('saveManager') as SaveManager | undefined;
+    if (sm) {
+      const existing = sm.load();
+      this.savePanel.update(existing?.timestamp ?? null);
+    }
   }
 
   private repositionUI(): void {

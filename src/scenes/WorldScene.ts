@@ -390,11 +390,13 @@ export class WorldScene extends Phaser.Scene {
     // Connect quest manager to NPC manager for quest-state dialogue
     this.npcManager.setQuestManager(this.questManager);
 
-    // Store managers in registry for UIScene and persistence across scene restarts
+    // Store managers and discovery state in registry for UIScene access
     this.registry.set('questManager', this.questManager);
     this.registry.set('inventoryManager', this.inventoryManager);
     this.registry.set('journalManager', this.journalManager);
     this.registry.set('saveManager', this.saveManager);
+    this.registry.set('npcsMetIds', this.npcsMetIds);
+    this.registry.set('collectedPickupIds', this.collectedPickupIds);
 
     // Restore state from loaded game if present
     const loadedGameState = this.registry.get('loadedGameState') as GameState | undefined;
