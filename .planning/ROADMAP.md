@@ -72,7 +72,7 @@ Plans:
 
 Plans:
 - [ ] 03-01-PLAN.md -- Types, constants, data files (items/pickups/journal), pure-logic managers (Quest, Inventory, Journal, Save) with unit tests
-- [ ] 03-02-PLAN.md -- Programmatic asset generation (item icons, sparkle, save icon, hamburger icon, park coffee vendor NPC sprite)
+- [x] 03-02-PLAN.md -- Programmatic asset generation (item icons, sparkle, save icon, hamburger icon, park coffee vendor NPC sprite)
 - [ ] 03-03-PLAN.md -- DialogBox choice mechanic, NPCManager quest-state dialogue, coffee quest data, NPC dialogue extensions
 - [ ] 03-04-PLAN.md -- PauseMenu with 5 tab panels (Inventory, Quests, Journal, Save, Settings), QuestHUD, ItemNotification
 - [ ] 03-05-PLAN.md -- MetroMap overlay with travel transition, ItemPickup entity, interior interactable data

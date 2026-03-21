@@ -46,7 +46,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Inventory
 
 - [ ] **INVT-01**: Player can collect items into an inventory
-- [ ] **INVT-02**: Player can view collected items with pixel art icons and flavor text descriptions
+- [x] **INVT-02**: Player can view collected items with pixel art icons and flavor text descriptions
 - [ ] **INVT-03**: Collectible items include Bengaluru-specific local items (masala dosa, filter coffee, jasmine flowers, etc.)
 
 ### Journal
@@ -155,7 +155,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | QUST-03 | Phase 3 | Pending |
 | QUST-04 | Phase 3 | Pending |
 | INVT-01 | Phase 3 | Pending |
-| INVT-02 | Phase 3 | Pending |
+| INVT-02 | Phase 3 | Complete |
 | INVT-03 | Phase 3 | Pending |
 | JRNL-01 | Phase 3 | Pending |
 | JRNL-02 | Phase 3 | Pending |
