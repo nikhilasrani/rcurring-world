@@ -38,22 +38,22 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Quest
 
-- [ ] **QUST-01**: Player can accept a quest from an NPC through dialogue
-- [ ] **QUST-02**: Player can track quest objectives (accepted -> in-progress -> complete)
+- [x] **QUST-01**: Player can accept a quest from an NPC through dialogue
+- [x] **QUST-02**: Player can track quest objectives (accepted -> in-progress -> complete)
 - [ ] **QUST-03**: At least 1 complete quest exists: "Find the best filter coffee on MG Road" or equivalent city-specific quest
-- [ ] **QUST-04**: Quest completion triggers a reward (item, NPC reaction, or new dialogue)
+- [x] **QUST-04**: Quest completion triggers a reward (item, NPC reaction, or new dialogue)
 
 ### Inventory
 
-- [ ] **INVT-01**: Player can collect items into an inventory
+- [x] **INVT-01**: Player can collect items into an inventory
 - [x] **INVT-02**: Player can view collected items with pixel art icons and flavor text descriptions
-- [ ] **INVT-03**: Collectible items include Bengaluru-specific local items (masala dosa, filter coffee, jasmine flowers, etc.)
+- [x] **INVT-03**: Collectible items include Bengaluru-specific local items (masala dosa, filter coffee, jasmine flowers, etc.)
 
 ### Journal
 
-- [ ] **JRNL-01**: Player has a discovery journal that records landmarks visited
-- [ ] **JRNL-02**: Journal tracks NPCs met and items collected
-- [ ] **JRNL-03**: Journal shows completion percentage for the current zone
+- [x] **JRNL-01**: Player has a discovery journal that records landmarks visited
+- [x] **JRNL-02**: Journal tracks NPCs met and items collected
+- [x] **JRNL-03**: Journal shows completion percentage for the current zone
 
 ### Metro
 
@@ -70,10 +70,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Save
 
-- [ ] **SAVE-01**: Player can manually save their game from the pause menu
-- [ ] **SAVE-02**: Game auto-saves on zone transitions
-- [ ] **SAVE-03**: Saved state includes player position, quest progress, inventory, visited landmarks, and journal entries
-- [ ] **SAVE-04**: Player can load their saved game and resume from where they left off
+- [x] **SAVE-01**: Player can manually save their game from the pause menu
+- [x] **SAVE-02**: Game auto-saves on zone transitions
+- [x] **SAVE-03**: Saved state includes player position, quest progress, inventory, visited landmarks, and journal entries
+- [x] **SAVE-04**: Player can load their saved game and resume from where they left off
 
 ### Platform
 
@@ -150,23 +150,23 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXPL-02 | Phase 2 | Complete |
 | EXPL-03 | Phase 2 | Complete |
 | EXPL-04 | Phase 2 | Complete |
-| QUST-01 | Phase 3 | Pending |
-| QUST-02 | Phase 3 | Pending |
+| QUST-01 | Phase 3 | Complete |
+| QUST-02 | Phase 3 | Complete |
 | QUST-03 | Phase 3 | Pending |
-| QUST-04 | Phase 3 | Pending |
-| INVT-01 | Phase 3 | Pending |
+| QUST-04 | Phase 3 | Complete |
+| INVT-01 | Phase 3 | Complete |
 | INVT-02 | Phase 3 | Complete |
-| INVT-03 | Phase 3 | Pending |
-| JRNL-01 | Phase 3 | Pending |
-| JRNL-02 | Phase 3 | Pending |
-| JRNL-03 | Phase 3 | Pending |
+| INVT-03 | Phase 3 | Complete |
+| JRNL-01 | Phase 3 | Complete |
+| JRNL-02 | Phase 3 | Complete |
+| JRNL-03 | Phase 3 | Complete |
 | MTRO-01 | Phase 3 | Pending |
 | MTRO-02 | Phase 3 | Pending |
 | MTRO-03 | Phase 3 | Pending |
-| SAVE-01 | Phase 3 | Pending |
-| SAVE-02 | Phase 3 | Pending |
-| SAVE-03 | Phase 3 | Pending |
-| SAVE-04 | Phase 3 | Pending |
+| SAVE-01 | Phase 3 | Complete |
+| SAVE-02 | Phase 3 | Complete |
+| SAVE-03 | Phase 3 | Complete |
+| SAVE-04 | Phase 3 | Complete |
 | PLAT-04 | Phase 3 | Pending |
 | AUDO-01 | Phase 4 | Pending |
 | AUDO-02 | Phase 4 | Pending |
