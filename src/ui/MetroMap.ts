@@ -165,10 +165,11 @@ export class MetroMap {
       onComplete: () => {
         this.overlay.setVisible(false);
         this.container.setVisible(false);
+        // Unfreeze movement AFTER fade completes so held keys don't
+        // walk the player away from the metro map wall immediately
+        eventsCenter.emit(EVENTS.MOVEMENT_FREEZE, false);
       },
     });
-
-    eventsCenter.emit(EVENTS.MOVEMENT_FREEZE, false);
   }
 
   /** Select a station by index. Shows tooltip if locked. */
