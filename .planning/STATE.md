@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-05-PLAN.md
-last_updated: "2026-03-21T04:06:37.298Z"
+stopped_at: Completed 03-06-PLAN.md
+last_updated: "2026-03-21T04:15:09.326Z"
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 17
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-19)
 ## Current Position
 
 Phase: 03 (game-systems) — EXECUTING
-Plan: 6 of 7
+Plan: 7 of 7
 
 ## Performance Metrics
 
@@ -59,6 +59,7 @@ Plan: 6 of 7
 | Phase 03 P03 | 4min | 2 tasks | 9 files |
 | Phase 03 P04 | 5min | 2 tasks | 8 files |
 | Phase 03 P05 | 2min | 2 tasks | 4 files |
+| Phase 03 P06 | 5min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -112,6 +113,10 @@ Recent decisions affecting current work:
 - [Phase 03]: MetroMap uses same overlay pattern as PauseMenu (depth 70, container-based, fade in/out)
 - [Phase 03]: Travel transition door panels at depth 80 above all UI for visual stacking
 - [Phase 03]: ItemPickup sprite at depth 2 matching NPC sprite depth for consistent world rendering
+- [Phase 03]: Managers stored in Phaser registry for persistence across scene restarts (outdoor/interior)
+- [Phase 03]: Quest offered at WorldScene creation via offerQuest() idempotent call for first-encounter dialogue
+- [Phase 03]: InteractionTarget type extended with counter/object for interior interactable type safety
+- [Phase 03]: TitleScene defaults to NEW GAME selection when no save exists, CONTINUE greyed out
 
 ### Pending Todos
 
@@ -123,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T04:06:37.296Z
-Stopped at: Completed 03-05-PLAN.md
+Last session: 2026-03-21T04:15:09.325Z
+Stopped at: Completed 03-06-PLAN.md
 Resume file: None
