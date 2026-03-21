@@ -244,7 +244,12 @@ export class UIScene extends Phaser.Scene {
     if (qm) {
       const activeId = qm.getActiveQuestId();
       const state = activeId ? qm.getQuestState(activeId) ?? null : null;
-      this.questPanel.update(state, questData.name);
+      const objectives = questData.objectives.map(o => ({
+        id: o.id,
+        description: o.description,
+        completed: state?.objectivesCompleted.includes(o.id) ?? false,
+      }));
+      this.questPanel.update(state, questData.name, activeId ? objectives : undefined);
     }
 
     // Journal
