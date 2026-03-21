@@ -40,7 +40,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **QUST-01**: Player can accept a quest from an NPC through dialogue
 - [x] **QUST-02**: Player can track quest objectives (accepted -> in-progress -> complete)
-- [ ] **QUST-03**: At least 1 complete quest exists: "Find the best filter coffee on MG Road" or equivalent city-specific quest
+- [x] **QUST-03**: At least 1 complete quest exists: "Find the best filter coffee on MG Road" or equivalent city-specific quest
 - [x] **QUST-04**: Quest completion triggers a reward (item, NPC reaction, or new dialogue)
 
 ### Inventory
@@ -152,7 +152,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXPL-04 | Phase 2 | Complete |
 | QUST-01 | Phase 3 | Complete |
 | QUST-02 | Phase 3 | Complete |
-| QUST-03 | Phase 3 | Pending |
+| QUST-03 | Phase 3 | Complete |
 | QUST-04 | Phase 3 | Complete |
 | INVT-01 | Phase 3 | Complete |
 | INVT-02 | Phase 3 | Complete |
