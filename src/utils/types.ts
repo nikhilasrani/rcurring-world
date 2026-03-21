@@ -48,6 +48,8 @@ export interface NPCDef {
 export interface DialogueData {
   name?: string;      // NPC name shown in dialogue box (omit for signs)
   pages: string[];    // Each string is one page of text (2 lines per page)
+  choicePage?: number; // Index of the page that triggers choice mode (optional)
+  choices?: string[];  // Choice texts to display on the choice page (optional)
 }
 
 /** Sign definition for interactable signs/plaques */

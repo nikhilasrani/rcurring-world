@@ -63,4 +63,68 @@ describe('DialogueController', () => {
     ctrl.nextPage();
     expect(ctrl.shouldShowPageIndicator()).toBe(false);
   });
+
+  // ── Choice page tests ──────────────────────────────────────────
+
+  describe('choice page support', () => {
+    it('isChoicePage returns false when no choice data is set', () => {
+      const ctrl = new DialogueController(['A', 'B']);
+      expect(ctrl.isChoicePage()).toBe(false);
+    });
+
+    it('isChoicePage returns true on the designated choice page', () => {
+      const ctrl = new DialogueController(['Intro', 'Details', 'Choose']);
+      ctrl.setChoiceData(2, ['Accept', 'Decline']);
+      ctrl.nextPage(); // page 1
+      ctrl.nextPage(); // page 2 (choice page)
+      expect(ctrl.isChoicePage()).toBe(true);
+    });
+
+    it('isChoicePage returns false on non-choice pages', () => {
+      const ctrl = new DialogueController(['Intro', 'Details', 'Choose']);
+      ctrl.setChoiceData(2, ['Accept', 'Decline']);
+      expect(ctrl.isChoicePage()).toBe(false); // page 0
+      ctrl.nextPage();
+      expect(ctrl.isChoicePage()).toBe(false); // page 1
+    });
+
+    it('setChoiceData stores choices correctly', () => {
+      const ctrl = new DialogueController(['A', 'B']);
+      ctrl.setChoiceData(1, ['Yes', 'No']);
+      expect(ctrl.getChoices()).toEqual(['Yes', 'No']);
+    });
+
+    it('getChoices returns empty array when no choice data set', () => {
+      const ctrl = new DialogueController(['A', 'B']);
+      expect(ctrl.getChoices()).toEqual([]);
+    });
+
+    it('getChoiceCount returns correct count', () => {
+      const ctrl = new DialogueController(['A', 'B']);
+      ctrl.setChoiceData(1, ['Option 1', 'Option 2']);
+      expect(ctrl.getChoiceCount()).toBe(2);
+    });
+
+    it('hasMorePages returns false when on choice page', () => {
+      const ctrl = new DialogueController(['Intro', 'Choose']);
+      ctrl.setChoiceData(1, ['Accept', 'Decline']);
+      ctrl.nextPage(); // page 1 (choice page)
+      expect(ctrl.hasMorePages()).toBe(false);
+    });
+
+    it('selectChoice returns selected choice text', () => {
+      const ctrl = new DialogueController(['A', 'B']);
+      ctrl.setChoiceData(1, ['Accept', 'Decline']);
+      expect(ctrl.selectChoice(0)).toBe('Accept');
+      expect(ctrl.selectChoice(1)).toBe('Decline');
+    });
+
+    it('reset clears choice data', () => {
+      const ctrl = new DialogueController(['A', 'B']);
+      ctrl.setChoiceData(1, ['Accept', 'Decline']);
+      ctrl.reset(['X', 'Y']);
+      expect(ctrl.isChoicePage()).toBe(false);
+      expect(ctrl.getChoices()).toEqual([]);
+    });
+  });
 });

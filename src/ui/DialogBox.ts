@@ -31,12 +31,20 @@ export class DialogBox {
   private controller: DialogueController;
   private isTypingComplete: boolean = true;
 
+  // Choice mechanic
+  private choiceTexts: Phaser.GameObjects.Text[] = [];
+  private cursorText!: Phaser.GameObjects.Text;
+  private choiceIndex: number = 0;
+  private isInChoiceMode: boolean = false;
+  private scene: Phaser.Scene;
+
   // Layout constants
   private static readonly BOX_HEIGHT = 72;
   private static readonly BOX_MARGIN = 4;
   private static readonly TEXT_PADDING = 8;
 
   constructor(scene: Phaser.Scene) {
+    this.scene = scene;
     this.controller = new DialogueController([]);
 
     // Create elements at origin — reposition() sets actual positions
@@ -77,7 +85,21 @@ export class DialogBox {
     this.typing = new TextTyping(this.contentText, { speed: 30 });
     this.typing.on('complete', () => {
       this.isTypingComplete = true;
+      // If this page is a choice page, show choices after typing completes
+      if (this.controller.isChoicePage()) {
+        this.showChoices();
+      }
     });
+
+    // Choice cursor ">" indicator (hidden until choice mode)
+    this.cursorText = scene.add.text(0, 0, '>', {
+      fontFamily: 'monospace',
+      fontSize: '10px',
+      color: '#E8B830',
+    });
+    this.cursorText.setDepth(62);
+    this.cursorText.setScrollFactor(0);
+    this.cursorText.setVisible(false);
   }
 
   /**
@@ -105,6 +127,10 @@ export class DialogBox {
   /** Show dialogue box with NPC/sign dialogue data */
   show(dialogue: DialogueData): void {
     this.controller.reset(dialogue.pages, dialogue.name);
+    // Set up choice data if present
+    if (dialogue.choicePage !== undefined && dialogue.choices) {
+      this.controller.setChoiceData(dialogue.choicePage, dialogue.choices);
+    }
     this.nameText.setText(dialogue.name || '');
     this.setAllVisible(true);
     this.typePage(0);
@@ -121,6 +147,24 @@ export class DialogBox {
     if (!this.isTypingComplete) {
       this.typing.stop(true);
       this.isTypingComplete = true;
+      // After fast-completing text, check for choice page
+      if (this.controller.isChoicePage()) {
+        this.showChoices();
+      }
+      return;
+    }
+
+    // If in choice mode, emit choice event and continue
+    if (this.isInChoiceMode) {
+      const choiceText = this.controller.selectChoice(this.choiceIndex);
+      eventsCenter.emit(EVENTS.DIALOGUE_CHOICE, {
+        choiceIndex: this.choiceIndex,
+        choiceText,
+      });
+      this.hideChoices();
+      // Continue to close dialogue (choice page is always last effective page)
+      this.hide();
+      eventsCenter.emit(EVENTS.DIALOGUE_CLOSE);
       return;
     }
 
@@ -132,6 +176,81 @@ export class DialogBox {
 
     this.hide();
     eventsCenter.emit(EVENTS.DIALOGUE_CLOSE);
+  }
+
+  /** Display choice options with cursor indicator */
+  private showChoices(): void {
+    const choices = this.controller.getChoices();
+    this.contentText.setVisible(false);
+    this.pageIndicator.setVisible(false);
+
+    const baseX = this.nameText.x + 8;
+    const baseY = this.nameText.y + 20;
+
+    // Create or reuse choice text objects
+    for (let i = 0; i < choices.length; i++) {
+      if (this.choiceTexts[i]) {
+        this.choiceTexts[i].setText(choices[i]);
+        this.choiceTexts[i].setPosition(baseX, baseY + i * 14);
+        this.choiceTexts[i].setVisible(true);
+      } else {
+        const choiceText = this.scene.add.text(baseX, baseY + i * 14, choices[i], {
+          fontFamily: 'monospace',
+          fontSize: '10px',
+          color: i === 0 ? '#111111' : '#666666',
+        });
+        choiceText.setDepth(61);
+        choiceText.setScrollFactor(0);
+        this.choiceTexts.push(choiceText);
+      }
+    }
+
+    // Position cursor at first choice
+    this.choiceIndex = 0;
+    this.cursorText.setPosition(baseX - 8, baseY);
+    this.cursorText.setVisible(true);
+    this.updateChoiceColors();
+
+    this.isInChoiceMode = true;
+  }
+
+  /** Hide choice elements and reset state */
+  private hideChoices(): void {
+    for (const ct of this.choiceTexts) {
+      ct.setVisible(false);
+    }
+    this.cursorText.setVisible(false);
+    this.isInChoiceMode = false;
+    this.choiceIndex = 0;
+  }
+
+  /** Move choice cursor up or down */
+  moveChoiceCursor(direction: 'up' | 'down'): void {
+    if (!this.isInChoiceMode) return;
+
+    const count = this.controller.getChoiceCount();
+    if (direction === 'up' && this.choiceIndex > 0) {
+      this.choiceIndex--;
+    } else if (direction === 'down' && this.choiceIndex < count - 1) {
+      this.choiceIndex++;
+    }
+
+    // Update cursor position
+    const baseY = this.nameText.y + 20;
+    this.cursorText.setY(baseY + this.choiceIndex * 14);
+    this.updateChoiceColors();
+  }
+
+  /** Update choice text colors based on current selection */
+  private updateChoiceColors(): void {
+    for (let i = 0; i < this.choiceTexts.length; i++) {
+      this.choiceTexts[i].setColor(i === this.choiceIndex ? '#111111' : '#666666');
+    }
+  }
+
+  /** Returns true if the dialogue is currently in choice selection mode */
+  isChoiceActive(): boolean {
+    return this.isInChoiceMode;
   }
 
   private typePage(_pageIndex: number): void {
@@ -147,6 +266,7 @@ export class DialogBox {
   }
 
   hide(): void {
+    this.hideChoices();
     this.setAllVisible(false);
   }
 
@@ -166,5 +286,10 @@ export class DialogBox {
     this.nameText.destroy();
     this.contentText.destroy();
     this.pageIndicator.destroy();
+    for (const ct of this.choiceTexts) {
+      ct.destroy();
+    }
+    this.choiceTexts = [];
+    this.cursorText.destroy();
   }
 }
