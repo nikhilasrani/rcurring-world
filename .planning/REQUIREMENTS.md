@@ -80,7 +80,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **PLAT-01**: Game runs in a web browser (Chrome, Safari, Firefox)
 - [x] **PLAT-02**: Virtual D-pad and action button overlay appears on touch devices
 - [x] **PLAT-03**: Touch controls do not obscure the gameplay area
-- [ ] **PLAT-04**: Pause menu is accessible via menu button/key with sections: Inventory, Quests, Journal, Save, Settings
+- [x] **PLAT-04**: Pause menu is accessible via menu button/key with sections: Inventory, Quests, Journal, Save, Settings
 
 ## v2 Requirements
 
@@ -167,7 +167,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SAVE-02 | Phase 3 | Complete |
 | SAVE-03 | Phase 3 | Complete |
 | SAVE-04 | Phase 3 | Complete |
-| PLAT-04 | Phase 3 | Pending |
+| PLAT-04 | Phase 3 | Complete |
 | AUDO-01 | Phase 4 | Pending |
 | AUDO-02 | Phase 4 | Pending |
 | AUDO-03 | Phase 4 | Pending |
