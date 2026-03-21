@@ -6,6 +6,11 @@ import { InteractionSystem } from '../systems/InteractionSystem';
 import { ZoneManager } from '../systems/ZoneManager';
 import { TransitionManager } from '../systems/TransitionManager';
 import { AutoRickshawManager } from '../systems/AutoRickshawManager';
+import { QuestManager } from '../systems/QuestManager';
+import { InventoryManager } from '../systems/InventoryManager';
+import { JournalManager } from '../systems/JournalManager';
+import { SaveManager } from '../systems/SaveManager';
+import { ItemPickup } from '../entities/ItemPickup';
 import { InteractionPrompt } from '../ui/InteractionPrompt';
 import { eventsCenter } from '../utils/EventsCenter';
 import {
@@ -16,7 +21,16 @@ import {
   COLLISION_PROPERTY,
   EVENTS,
 } from '../utils/constants';
-import type { PlayerState, NPCDef, SignDef, InteriorDef, LandmarkDef } from '../utils/types';
+import type {
+  PlayerState,
+  NPCDef,
+  SignDef,
+  InteriorDef,
+  LandmarkDef,
+  InventoryItem,
+  GameState,
+  InteriorInteractable,
+} from '../utils/types';
 
 // NPC data (imported as JSON modules via Vite)
 import chaiWallaData from '../data/npcs/chai-walla.json';
@@ -24,6 +38,7 @@ import autoDriverData from '../data/npcs/auto-driver.json';
 import joggerData from '../data/npcs/jogger.json';
 import shopkeeperData from '../data/npcs/shopkeeper.json';
 import guardData from '../data/npcs/guard.json';
+import parkCoffeeVendorData from '../data/npcs/park-coffee-vendor.json';
 
 // Sign data
 import signsData from '../data/signs/signs.json';
@@ -36,6 +51,12 @@ import libraryInterior from '../data/interiors/cubbon-library.json';
 
 // Zone data
 import zoneData from '../data/zones/mg-road.json';
+
+// Phase 3 data
+import pickupsData from '../data/pickups/mg-road-pickups.json';
+import itemsData from '../data/items/items.json';
+import questData from '../data/quests/best-filter-coffee.json';
+import journalData from '../data/journal/mg-road-discoveries.json';
 
 /** Scene mode data passed via scene restart for interior/outdoor transitions */
 interface SceneModeData {
@@ -78,6 +99,15 @@ export class WorldScene extends Phaser.Scene {
   private movementFrozen = false;
   private isInInterior = false;
   private sceneMode: SceneModeData = { mode: 'outdoor' };
+
+  // Phase 3 game systems
+  private questManager!: QuestManager;
+  private inventoryManager!: InventoryManager;
+  private journalManager!: JournalManager;
+  private saveManager!: SaveManager;
+  private itemPickups: ItemPickup[] = [];
+  private npcsMetIds: Set<string> = new Set();
+  private collectedPickupIds: Set<string> = new Set();
 
   constructor() {
     super({ key: SCENES.WORLD });
@@ -250,13 +280,14 @@ export class WorldScene extends Phaser.Scene {
 
     // === Phase 2: NPC, Interaction, Zone, and Transition Systems ===
 
-    // Spawn NPCs
+    // Spawn NPCs (including Phase 3 park coffee vendor)
     const npcDefs = [
       chaiWallaData,
       autoDriverData,
       joggerData,
       shopkeeperData,
       guardData,
+      parkCoffeeVendorData,
     ] as NPCDef[];
     this.npcManager = new NPCManager();
     this.npcManager.spawnAll(this, this.gridEngine, npcDefs);
@@ -285,6 +316,90 @@ export class WorldScene extends Phaser.Scene {
 
     // Interaction prompt (renders in WorldScene -- scrolls with world)
     this.interactionPrompt = new InteractionPrompt(this);
+
+    // === Phase 3: Game Systems (Quest, Inventory, Journal, Save) ===
+
+    // Initialize managers
+    this.questManager = new QuestManager((questId, state) => {
+      eventsCenter.emit(EVENTS.QUEST_OBJECTIVE_COMPLETE, { questId, state });
+      if (state.status === 'complete') {
+        eventsCenter.emit(EVENTS.QUEST_COMPLETE, { questId, state });
+      }
+    });
+    this.inventoryManager = new InventoryManager();
+    this.journalManager = new JournalManager(journalData);
+    this.saveManager = new SaveManager();
+
+    // Connect quest manager to NPC manager for quest-state dialogue
+    this.npcManager.setQuestManager(this.questManager);
+
+    // Store managers in registry for UIScene and persistence across scene restarts
+    this.registry.set('questManager', this.questManager);
+    this.registry.set('inventoryManager', this.inventoryManager);
+    this.registry.set('journalManager', this.journalManager);
+    this.registry.set('saveManager', this.saveManager);
+
+    // Restore state from loaded game if present
+    const loadedGameState = this.registry.get('loadedGameState') as GameState | undefined;
+    if (loadedGameState) {
+      this.questManager.loadState(loadedGameState.quests);
+      this.inventoryManager.loadState(loadedGameState.inventory);
+      this.npcsMetIds = new Set(loadedGameState.discovery.npcsMetIds);
+      this.collectedPickupIds = new Set(loadedGameState.discovery.collectedPickupIds);
+      this.registry.remove('loadedGameState'); // consume once
+    }
+
+    // Offer the filter coffee quest if not yet encountered
+    this.questManager.offerQuest(questData.id, questData.objectives.length);
+
+    // Spawn item pickups (skip collected ones)
+    pickupsData.forEach((pickup) => {
+      if (!this.collectedPickupIds.has(pickup.id)) {
+        const entity = new ItemPickup(
+          this,
+          pickup.id,
+          pickup.itemId,
+          pickup.position.x,
+          pickup.position.y,
+          ASSETS.SPRITE_SPARKLE,
+        );
+        this.itemPickups.push(entity);
+      }
+    });
+
+    // Set pickup defs on InteractionSystem
+    this.interactionSystem.setPickupDefs(pickupsData, [...this.collectedPickupIds]);
+
+    // Quest event listeners
+    eventsCenter.on(EVENTS.DIALOGUE_CHOICE, ({ choiceIndex }: { choiceIndex: number }) => {
+      if (choiceIndex === 0) {
+        // Accept quest
+        if (!this.questManager.hasActiveQuest()) {
+          this.questManager.acceptQuest(questData.id);
+          eventsCenter.emit(EVENTS.QUEST_ACCEPTED, { questId: questData.id });
+        }
+      } else {
+        // Decline quest
+        eventsCenter.emit(EVENTS.QUEST_DECLINED, { questId: questData.id });
+      }
+    });
+
+    // Track NPC meetings for journal
+    eventsCenter.on(EVENTS.NPC_INTERACT, () => {
+      const lastNPC = this.registry.get('lastInteractedNPC') as string | undefined;
+      if (lastNPC && !this.npcsMetIds.has(lastNPC)) {
+        this.npcsMetIds.add(lastNPC);
+        eventsCenter.emit(EVENTS.NPC_MET, { npcId: lastNPC });
+      }
+    });
+
+    // Auto-save on building transitions
+    eventsCenter.on(EVENTS.BUILDING_ENTER, () => {
+      this.performAutoSave();
+    });
+    eventsCenter.on(EVENTS.BUILDING_EXIT, () => {
+      this.performAutoSave();
+    });
 
     // Movement freeze listener
     eventsCenter.on(EVENTS.MOVEMENT_FREEZE, (freeze: boolean) => {
@@ -454,6 +569,30 @@ export class WorldScene extends Phaser.Scene {
       size: mode.interiorSize!,
     } as InteriorDef);
 
+    // --- Phase 3: Interior interaction system ---
+    // Find matching interior def to check for interactables
+    const interiorDefs = [metroInterior, coffeeInterior, ubcityInterior, libraryInterior];
+    const matchedInterior = interiorDefs.find(i => i.tilemapKey === mode.interiorKey);
+    if (matchedInterior && (matchedInterior as any).interactables) {
+      this.interactionSystem = new InteractionSystem([], []);
+      this.interactionSystem.setInteriorInteractables(
+        (matchedInterior as any).interactables as InteriorInteractable[],
+      );
+    }
+
+    // Restore managers from registry (persisted from outdoor scene)
+    this.questManager = this.registry.get('questManager') as QuestManager;
+    this.inventoryManager = this.registry.get('inventoryManager') as InventoryManager;
+    this.journalManager = this.registry.get('journalManager') as JournalManager;
+    this.saveManager = this.registry.get('saveManager') as SaveManager;
+
+    // Action button handler for interior interactions
+    this.input.keyboard?.on('keydown-ENTER', () => this.handleAction());
+    this.input.keyboard?.on('keydown-SPACE', () => this.handleAction());
+    eventsCenter.on(EVENTS.TOUCH_ACTION, () => {
+      this.handleAction();
+    });
+
     // Movement freeze listener
     eventsCenter.on(EVENTS.MOVEMENT_FREEZE, (freeze: boolean) => {
       this.movementFrozen = freeze;
@@ -528,7 +667,29 @@ export class WorldScene extends Phaser.Scene {
   private handleAction(): void {
     // If dialogue is active, advance is handled by UIScene. Do nothing here.
     if (this.movementFrozen) return;
-    if (this.isInInterior) return;
+
+    // Interior interaction handling
+    if (this.isInInterior) {
+      if (!this.interactionSystem) return;
+      const target = this.interactionSystem.checkInteraction(this.gridEngine, 'player');
+      if (!target) return;
+
+      if (target.type === 'metro-map') {
+        eventsCenter.emit(EVENTS.METRO_MAP_OPEN);
+      } else if (target.type === 'counter' || target.type === 'object') {
+        const interactable = this.interactionSystem.getInteractableData(target.id);
+        if (interactable?.dialogue) {
+          // Check quest state for objective completion
+          if (this.questManager?.hasActiveQuest()) {
+            const questId = this.questManager.getActiveQuestId()!;
+            this.questManager.completeObjective(questId, target.id);
+          }
+          eventsCenter.emit(EVENTS.SIGN_INTERACT, interactable.dialogue);
+        }
+      }
+      return;
+    }
+
     if (!this.interactionSystem) return;
 
     const target = this.interactionSystem.checkInteraction(
@@ -561,8 +722,20 @@ export class WorldScene extends Phaser.Scene {
       this.gridEngine.turnTowards(target.id, oppositeDir);
       this.registry.set('lastInteractedNPC', target.id);
 
-      // Trigger dialogue in UIScene
-      eventsCenter.emit(EVENTS.NPC_INTERACT, npcData.dialogue);
+      // Use quest-state-aware dialogue if available
+      const dialogue = this.npcManager.getDialogueForNPC(target.id);
+      if (dialogue) {
+        // Check quest objective completion for NPC interactions
+        if (this.questManager?.hasActiveQuest()) {
+          const questId = this.questManager.getActiveQuestId()!;
+          // Try to complete an objective matching this NPC
+          const objective = questData.objectives.find(o => o.targetId === target.id);
+          if (objective) {
+            this.questManager.completeObjective(questId, objective.id);
+          }
+        }
+        eventsCenter.emit(EVENTS.NPC_INTERACT, dialogue);
+      }
     } else if (target.type === 'sign') {
       const signData = this.interactionSystem.getSignData(target.id);
       if (!signData) return;
@@ -571,6 +744,27 @@ export class WorldScene extends Phaser.Scene {
       const interiorData = this.interactionSystem.getInteriorData(target.id);
       if (!interiorData) return;
       this.transitionManager.enterBuilding(interiorData);
+    } else if (target.type === 'pickup') {
+      const pickupDef = this.interactionSystem.getPickupData(target.id);
+      if (!pickupDef) return;
+      const itemDef = itemsData.find(i => i.id === pickupDef.itemId);
+      if (!itemDef) return;
+      const item: InventoryItem = {
+        id: itemDef.id,
+        name: itemDef.name,
+        description: itemDef.description,
+        iconKey: itemDef.iconKey,
+        source: 'world-pickup',
+      };
+      if (this.inventoryManager.addItem(item)) {
+        // Remove pickup from world
+        const pickupEntity = this.itemPickups.find(p => p.pickupId === target.id);
+        pickupEntity?.destroy();
+        this.itemPickups = this.itemPickups.filter(p => p.pickupId !== target.id);
+        this.collectedPickupIds.add(target.id);
+        this.interactionSystem.markPickupCollected(target.id);
+        eventsCenter.emit(EVENTS.ITEM_COLLECTED, { item, source: 'world-pickup' });
+      }
     }
   }
 
@@ -657,6 +851,54 @@ export class WorldScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Build current GameState and auto-save. Emits SAVE_ICON_SHOW on success.
+   */
+  private performAutoSave(): void {
+    if (!this.saveManager || !this.questManager || !this.inventoryManager) return;
+
+    const playerState = this.registry.get('playerState') as PlayerState;
+    if (!playerState) return;
+
+    const currentPos = this.gridEngine
+      ? this.gridEngine.getPosition('player')
+      : playerState.position;
+
+    const gameState: GameState = {
+      version: 1,
+      timestamp: Date.now(),
+      player: {
+        name: playerState.name,
+        gender: playerState.gender,
+        position: currentPos,
+        facing: this.gridEngine
+          ? this.gridEngine.getFacingDirection('player')
+          : playerState.facing,
+        isRunning: playerState.isRunning,
+        currentZone: 'mg-road',
+        isInInterior: this.isInInterior,
+        interiorId: this.isInInterior ? this.sceneMode.interiorId : undefined,
+      },
+      quests: this.questManager.getState(),
+      inventory: this.inventoryManager.getState(),
+      discovery: {
+        zones: ['mg-road'],
+        landmarks: [],
+        npcsMetIds: [...this.npcsMetIds],
+        collectedPickupIds: [...this.collectedPickupIds],
+      },
+      settings: {
+        musicVolume: 100,
+        sfxVolume: 100,
+        runDefault: false,
+      },
+    };
+
+    if (this.saveManager.save(gameState)) {
+      eventsCenter.emit(EVENTS.SAVE_ICON_SHOW);
+    }
+  }
+
   shutdown(): void {
     // Clean up event listeners to prevent memory leaks
     eventsCenter.off(EVENTS.TOUCH_DIRECTION);
@@ -666,9 +908,18 @@ export class WorldScene extends Phaser.Scene {
     eventsCenter.off(EVENTS.DIALOGUE_OPEN);
     eventsCenter.off(EVENTS.DIALOGUE_CLOSE);
     eventsCenter.off(EVENTS.TOUCH_ACTION);
+    eventsCenter.off(EVENTS.DIALOGUE_CHOICE);
+    eventsCenter.off(EVENTS.NPC_INTERACT);
+    eventsCenter.off(EVENTS.BUILDING_ENTER);
+    eventsCenter.off(EVENTS.BUILDING_EXIT);
     this.npcManager?.destroy();
     this.autoRickshawManager?.destroy();
     this.interactionPrompt?.destroy();
     this.player?.destroy();
+    // Destroy item pickups
+    for (const pickup of this.itemPickups) {
+      pickup.destroy();
+    }
+    this.itemPickups = [];
   }
 }

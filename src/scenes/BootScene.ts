@@ -143,6 +143,19 @@ export class BootScene extends Phaser.Scene {
     // Zone metadata
     this.load.json('zone-mg-road', 'data/zones/mg-road.json');
 
+    // Phase 3 game system assets
+    this.load.spritesheet(ASSETS.SPRITE_ITEM_ICONS, 'assets/sprites/item-icons.png', {
+      frameWidth: 16, frameHeight: 16,
+    });
+    this.load.spritesheet(ASSETS.SPRITE_SPARKLE, 'assets/sprites/sparkle.png', {
+      frameWidth: 16, frameHeight: 16,
+    });
+    this.load.image(ASSETS.SPRITE_SAVE_ICON, 'assets/sprites/save-icon.png');
+    this.load.image(ASSETS.SPRITE_HAMBURGER, 'assets/sprites/hamburger-icon.png');
+    this.load.spritesheet(ASSETS.SPRITE_NPC_PARK_COFFEE, 'assets/sprites/npc-park-coffee-vendor.png', {
+      frameWidth: NPC_FRAME_WIDTH, frameHeight: NPC_FRAME_HEIGHT,
+    });
+
     // Handle load errors gracefully (missing assets are expected until later plans)
     this.load.on('loaderror', (fileObj: Phaser.Loader.File) => {
       console.warn(`[BootScene] Failed to load: ${fileObj.key} (${fileObj.url}) -- may not exist yet`);

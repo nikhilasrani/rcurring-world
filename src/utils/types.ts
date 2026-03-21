@@ -76,7 +76,7 @@ export interface InteriorDef {
 
 /** Target found by interaction system */
 export interface InteractionTarget {
-  type: 'npc' | 'sign' | 'door' | 'pickup' | 'metro-map';
+  type: 'npc' | 'sign' | 'door' | 'pickup' | 'metro-map' | 'counter' | 'object';
   id: string;
   position: { x: number; y: number };
 }

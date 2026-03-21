@@ -17,6 +17,7 @@ export class TouchControls {
   private joystick: any;
   private buttonA: Phaser.GameObjects.Image;
   private buttonB: Phaser.GameObjects.Image;
+  private menuButton: Phaser.GameObjects.Image;
   private isVisible = false;
   private previousDirection: Direction | null = null;
 
@@ -95,6 +96,18 @@ export class TouchControls {
       this.buttonB.setAlpha(0.5);
     });
 
+    // Hamburger menu button (top-right, always visible on touch devices)
+    this.menuButton = scene.add
+      .image(0, 0, ASSETS.SPRITE_HAMBURGER)
+      .setDisplaySize(24, 24)
+      .setAlpha(0.6)
+      .setScrollFactor(0)
+      .setDepth(100)
+      .setInteractive();
+    this.menuButton.on('pointerdown', () => {
+      eventsCenter.emit(EVENTS.PAUSE_MENU_OPEN);
+    });
+
     if (scene.sys.game.device.input.touch) {
       this.showControls();
     }
@@ -114,6 +127,9 @@ export class TouchControls {
 
     this.buttonA.setPosition(bounds.x + bounds.width - 36, bounds.y + bounds.height - 48);
     this.buttonB.setPosition(bounds.x + bounds.width - 80, bounds.y + bounds.height - 28);
+
+    // Hamburger menu button: top-right with 8px margin
+    this.menuButton.setPosition(bounds.x + bounds.width - 20, bounds.y + 20);
   }
 
   showControls(): void {
@@ -127,6 +143,7 @@ export class TouchControls {
     this.joystick.thumb.setVisible(visible);
     this.buttonA.setVisible(visible);
     this.buttonB.setVisible(visible);
+    this.menuButton.setVisible(visible);
   }
 
   update(): void {
@@ -161,5 +178,6 @@ export class TouchControls {
     this.joystick.destroy();
     this.buttonA.destroy();
     this.buttonB.destroy();
+    this.menuButton.destroy();
   }
 }
