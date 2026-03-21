@@ -138,7 +138,6 @@ export class PauseMenu {
       // Panels are separate containers, just show them
     }
 
-    eventsCenter.emit(EVENTS.PAUSE_MENU_OPEN);
     eventsCenter.emit(EVENTS.MOVEMENT_FREEZE, true);
   }
 
