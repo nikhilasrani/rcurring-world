@@ -57,9 +57,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Metro
 
-- [ ] **MTRO-01**: Player can enter a metro station and access a metro map UI
-- [ ] **MTRO-02**: Player can select a destination station and fast-travel to it
-- [ ] **MTRO-03**: Metro travel includes a transition animation (doors close, brief ride, doors open)
+- [x] **MTRO-01**: Player can enter a metro station and access a metro map UI
+- [x] **MTRO-02**: Player can select a destination station and fast-travel to it
+- [x] **MTRO-03**: Metro travel includes a transition animation (doors close, brief ride, doors open)
 
 ### Audio
 
@@ -160,9 +160,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | JRNL-01 | Phase 3 | Complete |
 | JRNL-02 | Phase 3 | Complete |
 | JRNL-03 | Phase 3 | Complete |
-| MTRO-01 | Phase 3 | Pending |
-| MTRO-02 | Phase 3 | Pending |
-| MTRO-03 | Phase 3 | Pending |
+| MTRO-01 | Phase 3 | Complete |
+| MTRO-02 | Phase 3 | Complete |
+| MTRO-03 | Phase 3 | Complete |
 | SAVE-01 | Phase 3 | Complete |
 | SAVE-02 | Phase 3 | Complete |
 | SAVE-03 | Phase 3 | Complete |

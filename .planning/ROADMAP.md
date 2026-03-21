@@ -75,7 +75,7 @@ Plans:
 - [x] 03-02-PLAN.md -- Programmatic asset generation (item icons, sparkle, save icon, hamburger icon, park coffee vendor NPC sprite)
 - [x] 03-03-PLAN.md -- DialogBox choice mechanic, NPCManager quest-state dialogue, coffee quest data, NPC dialogue extensions
 - [x] 03-04-PLAN.md -- PauseMenu with 5 tab panels (Inventory, Quests, Journal, Save, Settings), QuestHUD, ItemNotification
-- [ ] 03-05-PLAN.md -- MetroMap overlay with travel transition, ItemPickup entity, interior interactable data
+- [x] 03-05-PLAN.md -- MetroMap overlay with travel transition, ItemPickup entity, interior interactable data
 - [ ] 03-06-PLAN.md -- Scene integration (WorldScene, UIScene, TitleScene, BootScene, TouchControls, InteractionSystem)
 - [ ] 03-07-PLAN.md -- E2E tests and human verification of all game systems
 
