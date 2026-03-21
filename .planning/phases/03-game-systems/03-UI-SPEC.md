@@ -35,13 +35,15 @@ All spacing values use the 16px tile grid as the base unit. The game viewport is
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| xs | 2px | Icon-text gaps, fine label offsets, border strokes |
+| xs | 2px | Stroke widths, border offsets, fine label offsets only (NOT structural layout spacing) |
 | sm | 4px | Dialog box margin, compact padding (established: `BOX_MARGIN = 4`) |
 | md | 8px | Default element padding (established: `TEXT_PADDING = 8`) |
 | lg | 16px | Tile-sized spacing, tab header height, panel inner padding |
 | xl | 24px | Section gaps within pause menu panels |
 | 2xl | 32px | Banner height (established: ZoneBanner 32px), major layout spacing |
 | 3xl | 48px | Pause menu outer margin from viewport edge |
+
+**Note on `xs` (2px):** This token is an exception to the standard 4px-minimum spacing set. It is strictly reserved for stroke widths (panel borders, selection highlights) and sub-pixel visual offsets (icon-text alignment nudges). It MUST NOT be used for structural layout spacing such as margins, padding, or gaps between components.
 
 Exceptions:
 - Touch button sizes are 40px (established: `BTN_SIZE = 40`) -- non-standard but required for 44px-adjacent touch target accessibility.
@@ -61,6 +63,8 @@ All text uses `fontFamily: 'monospace'`. No additional fonts. Weights are contro
 | Body | 10px | normal (400) | 1.4 | Dialogue content, inventory flavor text, journal entries, panel body text |
 | Label | 12px | bold (700) | 1.2 | NPC name in dialogue, zone banner text, tab headers, panel headings, item names |
 | Display | 14px | normal (400) | 1.2 | Title screen menu options ("Continue", "New Game"), notification text |
+
+**Note on size scale (8/10/12/14):** These 2px increments are constrained by the existing codebase (Phases 1-2 established 8px, 10px, 12px, and 14px as the working type sizes) and by the GBA-style 480x320 canvas resolution, where larger jumps would produce visually disproportionate text. At this pixel density, 2px steps provide meaningful visual hierarchy while remaining legible.
 
 **Constraints:**
 - No anti-aliased fonts -- `monospace` at these sizes renders crisply on the 480x320 canvas, which is the desired GBA aesthetic.
@@ -163,7 +167,7 @@ All colors are hex values used in Phaser `fillStyle()`, `lineStyle()`, or Phaser
 | New Game overwrite: confirm | `Yes, start new` |
 | New Game overwrite: cancel | `No, go back` |
 | Corrupt save warning | `Save data couldn't be loaded. Starting a new game.` |
-| Corrupt save: acknowledge | `OK` |
+| Corrupt save: acknowledge | `GOT IT, START NEW GAME` |
 
 ### Settings Copywriting
 
@@ -208,6 +212,8 @@ All colors are hex values used in Phaser `fillStyle()`, `lineStyle()`, or Phaser
 | DialogBox | Add choice mechanic | Choice pages show 2 options with `>` cursor, up/down to select, A to confirm |
 | TouchControls | Add hamburger button | 24x24 menu icon in top-right corner, opens pause menu on tap |
 | ZoneBanner | Reuse pattern | Quest complete fanfare uses same slide-in/hold/slide-out animation |
+
+**Accessibility note on icon-only elements:** The auto-save floppy disk icon (Save Icon Flash) and the hamburger menu button (TouchControls) are icon-only with no text label. These elements are canvas-rendered Phaser GameObjects -- there is no HTML accessibility layer; ARIA attributes are not applicable. Both icons use universally recognized visual metaphors (floppy disk = save, three horizontal bars = menu) and are supplemented by keyboard alternatives (Escape key opens pause menu; save status is also shown as text in the Save panel).
 
 ### Depth Map (complete, including existing)
 
@@ -368,7 +374,8 @@ Bottom-right corner of viewport (offset 8px from right edge, 8px from bottom):
 
   [floppy]   <- 12x12 pixel art sprite, programmatically generated
                Fades in 200ms, holds 1500ms, fades out 300ms
-               No text label
+               Canvas-rendered -- no HTML accessibility layer; ARIA not applicable
+               No text label (keyboard users see "Game saved!" text in Save panel)
 ```
 
 ### Title Screen Menu (extended from current)
@@ -452,12 +459,14 @@ All new assets follow the established pngjs/canvas pipeline (Phase 1-2 pattern).
 ### Save Icon (12x12, single frame, generated via pngjs)
 
 - Classic floppy disk silhouette: `#666666` body, `#999999` metal slider, `#444444` label area
+- Canvas-rendered Phaser Sprite -- no HTML accessibility layer; ARIA not applicable
 
 ### Hamburger Menu Icon (16x16, single frame, generated via pngjs)
 
 - Three horizontal bars (2px tall each, 10px wide, centered): `#FFFFFF`
 - 3px vertical gap between bars
 - Background: transparent (rendered on touch control depth 100)
+- Canvas-rendered Phaser Sprite -- no HTML accessibility layer; ARIA not applicable. Keyboard alternative: Escape key opens pause menu.
 
 ---
 
