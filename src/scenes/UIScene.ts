@@ -249,10 +249,10 @@ export class UIScene extends Phaser.Scene {
 
     // Journal
     const jm = this.registry.get('journalManager') as JournalManager | undefined;
-    const npcsMetIds = this.registry.get('npcsMetIds') as Set<string> | undefined;
+    const npcsMetSet = this.registry.get('npcsMetIds') as Set<string> | undefined;
     const zm = this.registry.get('zoneManager') as { getDiscoveryState(): { discoveredLandmarks: string[] } } | undefined;
     if (jm) {
-      const npcIds = [...(npcsMetIds ?? [])];
+      const npcIds = npcsMetSet ? Array.from(npcsMetSet) : [];
       const itemIds = im ? im.getItems().map(i => i.id) : [];
       const landmarkIds = zm?.getDiscoveryState().discoveredLandmarks ?? [];
       this.journalPanel.update({

@@ -407,6 +407,9 @@ export class WorldScene extends Phaser.Scene {
       this.inventoryManager.loadState(loadedGameState.inventory);
       this.npcsMetIds = new Set(loadedGameState.discovery.npcsMetIds);
       this.collectedPickupIds = new Set(loadedGameState.discovery.collectedPickupIds);
+      // Re-store in registry since we created new Set instances
+      this.registry.set('npcsMetIds', this.npcsMetIds);
+      this.registry.set('collectedPickupIds', this.collectedPickupIds);
       this.registry.remove('loadedGameState'); // consume once
     }
 
@@ -736,9 +739,10 @@ export class WorldScene extends Phaser.Scene {
       this.gridEngine.turnTowards(target.id, oppositeDir);
       this.registry.set('lastInteractedNPC', target.id);
 
-      // Track NPC meeting for journal
+      // Track NPC meeting for journal — update registry so UIScene sees it
       if (!this.npcsMetIds.has(target.id)) {
         this.npcsMetIds.add(target.id);
+        this.registry.set('npcsMetIds', this.npcsMetIds);
       }
 
       // Use quest-state-aware dialogue if available
