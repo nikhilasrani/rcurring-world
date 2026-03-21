@@ -736,6 +736,11 @@ export class WorldScene extends Phaser.Scene {
       this.gridEngine.turnTowards(target.id, oppositeDir);
       this.registry.set('lastInteractedNPC', target.id);
 
+      // Track NPC meeting for journal
+      if (!this.npcsMetIds.has(target.id)) {
+        this.npcsMetIds.add(target.id);
+      }
+
       // Use quest-state-aware dialogue if available
       const dialogue = this.npcManager.getDialogueForNPC(target.id);
       if (dialogue) {
