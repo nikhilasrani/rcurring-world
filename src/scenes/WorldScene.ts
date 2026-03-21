@@ -377,25 +377,35 @@ export class WorldScene extends Phaser.Scene {
 
     // === Phase 3: Game Systems (Quest, Inventory, Journal, Save) ===
 
-    // Initialize managers
-    this.questManager = new QuestManager((questId, state) => {
-      eventsCenter.emit(EVENTS.QUEST_OBJECTIVE_COMPLETE, { questId, state });
-      if (state.status === 'complete') {
-        eventsCenter.emit(EVENTS.QUEST_COMPLETE, { questId, state });
-      }
-    });
-    this.inventoryManager = new InventoryManager();
-    this.journalManager = new JournalManager(journalData);
-    this.saveManager = new SaveManager();
+    // Restore managers from registry if they exist (persisted across scene restarts
+    // e.g. outdoor→interior→outdoor). Only create fresh on first run.
+    const existingQM = this.registry.get('questManager') as QuestManager | undefined;
+    if (existingQM) {
+      this.questManager = existingQM;
+      this.inventoryManager = this.registry.get('inventoryManager') as InventoryManager;
+      this.journalManager = this.registry.get('journalManager') as JournalManager;
+      this.saveManager = this.registry.get('saveManager') as SaveManager;
+    } else {
+      this.questManager = new QuestManager((questId, state) => {
+        eventsCenter.emit(EVENTS.QUEST_OBJECTIVE_COMPLETE, { questId, state });
+        if (state.status === 'complete') {
+          eventsCenter.emit(EVENTS.QUEST_COMPLETE, { questId, state });
+        }
+      });
+      this.inventoryManager = new InventoryManager();
+      this.journalManager = new JournalManager(journalData);
+      this.saveManager = new SaveManager();
+
+      this.registry.set('questManager', this.questManager);
+      this.registry.set('inventoryManager', this.inventoryManager);
+      this.registry.set('journalManager', this.journalManager);
+      this.registry.set('saveManager', this.saveManager);
+    }
 
     // Connect quest manager to NPC manager for quest-state dialogue
     this.npcManager.setQuestManager(this.questManager);
 
-    // Store managers and discovery state in registry for UIScene access
-    this.registry.set('questManager', this.questManager);
-    this.registry.set('inventoryManager', this.inventoryManager);
-    this.registry.set('journalManager', this.journalManager);
-    this.registry.set('saveManager', this.saveManager);
+    // Store discovery state in registry for UIScene access
     this.registry.set('zoneManager', this.zoneManager);
     this.registry.set('npcsMetIds', this.npcsMetIds);
     this.registry.set('collectedPickupIds', this.collectedPickupIds);
@@ -407,7 +417,6 @@ export class WorldScene extends Phaser.Scene {
       this.inventoryManager.loadState(loadedGameState.inventory);
       this.npcsMetIds = new Set(loadedGameState.discovery.npcsMetIds);
       this.collectedPickupIds = new Set(loadedGameState.discovery.collectedPickupIds);
-      // Re-store in registry since we created new Set instances
       this.registry.set('npcsMetIds', this.npcsMetIds);
       this.registry.set('collectedPickupIds', this.collectedPickupIds);
       this.registry.remove('loadedGameState'); // consume once
