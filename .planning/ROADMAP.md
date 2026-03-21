@@ -68,12 +68,16 @@ Plans:
   3. Player has a discovery journal that records landmarks visited, NPCs met, items collected, and shows zone completion percentage
   4. Player can enter a metro station, view a metro map, select a destination, and fast-travel with a transition animation (doors close, ride, doors open)
   5. Player can save manually from the pause menu or auto-save on zone transitions, then load and resume with all progress intact (position, quests, inventory, journal)
-**Plans**: TBD
+**Plans**: 7 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
-- [ ] 03-03: TBD
+- [ ] 03-01-PLAN.md -- Types, constants, data files (items/pickups/journal), pure-logic managers (Quest, Inventory, Journal, Save) with unit tests
+- [ ] 03-02-PLAN.md -- Programmatic asset generation (item icons, sparkle, save icon, hamburger icon, park coffee vendor NPC sprite)
+- [ ] 03-03-PLAN.md -- DialogBox choice mechanic, NPCManager quest-state dialogue, coffee quest data, NPC dialogue extensions
+- [ ] 03-04-PLAN.md -- PauseMenu with 5 tab panels (Inventory, Quests, Journal, Save, Settings), QuestHUD, ItemNotification
+- [ ] 03-05-PLAN.md -- MetroMap overlay with travel transition, ItemPickup entity, interior interactable data
+- [ ] 03-06-PLAN.md -- Scene integration (WorldScene, UIScene, TitleScene, BootScene, TouchControls, InteractionSystem)
+- [ ] 03-07-PLAN.md -- E2E tests and human verification of all game systems
 
 ### Phase 4: Audio and Polish
 **Goal**: The game sounds like Bengaluru -- ambient city audio, background music, and sound effects complete the "5-minute walk" experience
@@ -98,5 +102,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Foundation and Movement | 5/5 | Complete   | 2026-03-20 |
 | 2. World Interaction | 0/5 | Not started | - |
-| 3. Game Systems | 0/? | Not started | - |
+| 3. Game Systems | 0/7 | Not started | - |
 | 4. Audio and Polish | 0/? | Not started | - |
