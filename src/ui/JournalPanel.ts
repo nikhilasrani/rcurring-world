@@ -6,6 +6,7 @@ import Phaser from 'phaser';
  * Shows zone completion header ("MG Road: N% explored"),
  * three sections (Places, NPCs Met, Items Found) with discovery counts,
  * discovered entry names, and "???" for undiscovered.
+ * Scrollable when content exceeds panel height.
  * Empty state: "Your journal is empty." + "Start exploring to fill your journal!"
  */
 
@@ -30,11 +31,17 @@ export class JournalPanel {
   private emptySubtext: Phaser.GameObjects.Text;
   private panelX: number;
   private panelY: number;
-  // panelWidth available for future layout adjustments
+  private panelHeight: number;
+  private scene: Phaser.Scene;
+  private mask: Phaser.Display.Masks.GeometryMask | null = null;
+  private scrollOffset = 0;
+  private contentHeight = 0;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, _width: number, _height: number) {
+  constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number) {
+    this.scene = scene;
     this.panelX = x;
     this.panelY = y;
+    this.panelHeight = height;
 
     // Zone completion header
     this.completionText = scene.add.text(x, y, '', {
@@ -68,6 +75,25 @@ export class JournalPanel {
     this.container.setDepth(71);
     this.container.setScrollFactor(0);
     this.container.setVisible(false);
+
+    // Geometry mask to clip content to panel bounds
+    const maskShape = scene.make.graphics({});
+    maskShape.fillStyle(0xffffff);
+    maskShape.fillRect(x, y, width, height);
+    this.mask = maskShape.createGeometryMask();
+    this.container.setMask(this.mask);
+
+    // Mouse wheel scroll
+    scene.input.on('wheel', (_pointer: Phaser.Input.Pointer, _gameObjects: any, _deltaX: number, deltaY: number) => {
+      if (!this.container.visible) return;
+      this.scroll(deltaY > 0 ? 20 : -20);
+    });
+  }
+
+  private scroll(delta: number): void {
+    const maxScroll = Math.max(0, this.contentHeight - this.panelHeight);
+    this.scrollOffset = Phaser.Math.Clamp(this.scrollOffset + delta, 0, maxScroll);
+    this.container.setY(-this.scrollOffset);
   }
 
   /** Update journal with discovery data. */
@@ -77,6 +103,8 @@ export class JournalPanel {
       elem.destroy();
     }
     this.sectionElements = [];
+    this.scrollOffset = 0;
+    this.container.setY(0);
 
     const totalDiscoveries = data.places.discovered.length +
       data.npcs.discovered.length +
@@ -87,6 +115,7 @@ export class JournalPanel {
       this.completionText.setVisible(false);
       this.emptyText.setVisible(true);
       this.emptySubtext.setVisible(true);
+      this.contentHeight = 0;
       return;
     }
 
@@ -98,7 +127,6 @@ export class JournalPanel {
     this.completionText.setText(`MG Road: ${data.completion}% explored`);
 
     let currentY = this.panelY + 20;
-    const scene = this.completionText.scene;
 
     // Render sections
     const sections: [string, JournalSection][] = [
@@ -109,7 +137,7 @@ export class JournalPanel {
 
     for (const [header, section] of sections) {
       // Section header
-      const headerText = scene.add.text(this.panelX, currentY, header, {
+      const headerText = this.scene.add.text(this.panelX, currentY, header, {
         fontFamily: 'monospace',
         fontSize: '12px',
         color: '#333333',
@@ -121,7 +149,7 @@ export class JournalPanel {
       currentY += 14;
 
       // Discovery count
-      const countText = scene.add.text(
+      const countText = this.scene.add.text(
         this.panelX,
         currentY,
         `${header}: ${section.discovered.length}/${section.total} discovered`,
@@ -138,7 +166,7 @@ export class JournalPanel {
 
       // Discovered entries
       for (const entry of section.discovered) {
-        const entryText = scene.add.text(this.panelX + 8, currentY, entry.name, {
+        const entryText = this.scene.add.text(this.panelX + 8, currentY, entry.name, {
           fontFamily: 'monospace',
           fontSize: '10px',
           color: '#111111',
@@ -151,7 +179,7 @@ export class JournalPanel {
 
       // Undiscovered entries as "???"
       for (let i = 0; i < section.undiscovered; i++) {
-        const unknownText = scene.add.text(this.panelX + 8, currentY, '???', {
+        const unknownText = this.scene.add.text(this.panelX + 8, currentY, '???', {
           fontFamily: 'monospace',
           fontSize: '10px',
           color: '#666666',
@@ -164,6 +192,8 @@ export class JournalPanel {
 
       currentY += 4; // gap between sections
     }
+
+    this.contentHeight = currentY - this.panelY;
   }
 
   show(): void {
