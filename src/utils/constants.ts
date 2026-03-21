@@ -57,6 +57,7 @@ export const EVENTS = {
   PAUSE_MENU_OPEN: 'pause-menu-open',
   PAUSE_MENU_CLOSE: 'pause-menu-close',
   // Save events
+  SAVE_GAME: 'save-game',
   GAME_SAVED: 'game-saved',
   GAME_LOADED: 'game-loaded',
   SAVE_ICON_SHOW: 'save-icon-show',

@@ -13,7 +13,7 @@ import { SavePanel } from '../ui/SavePanel';
 import { SettingsPanel } from '../ui/SettingsPanel';
 import { eventsCenter } from '../utils/EventsCenter';
 import { SCENES, EVENTS, ASSETS } from '../utils/constants';
-import type { DialogueData, GameState, InventoryItem } from '../utils/types';
+import type { DialogueData, InventoryItem } from '../utils/types';
 import type { QuestManager } from '../systems/QuestManager';
 import type { InventoryManager } from '../systems/InventoryManager';
 import type { JournalManager } from '../systems/JournalManager';
@@ -74,39 +74,15 @@ export class UIScene extends Phaser.Scene {
     const settingsPanel = new SettingsPanel(this, pb.x, pb.y, pb.width, pb.height);
     this.pauseMenu.setPanels(this.questPanel, this.inventoryPanel, this.journalPanel, this.savePanel, settingsPanel);
 
-    // Wire save button callback
+    // Wire save button — delegates to WorldScene which has Grid Engine access
+    // for the player's current position. WorldScene emits GAME_SAVED on success.
     this.savePanel.onSave = () => {
-      const sm = this.registry.get('saveManager') as SaveManager | undefined;
-      const qm = this.registry.get('questManager') as QuestManager | undefined;
-      const im = this.registry.get('inventoryManager') as InventoryManager | undefined;
-      const npcsMetIds = this.registry.get('npcsMetIds') as Set<string> | undefined;
-      const collectedPickupIds = this.registry.get('collectedPickupIds') as Set<string> | undefined;
-      const playerState = this.registry.get('playerState');
-      if (!sm || !qm || !im || !playerState) {
-        this.savePanel.showFeedback(false);
-        return;
-      }
-      const gameState: GameState = {
-        version: 1,
-        timestamp: Date.now(),
-        player: playerState as GameState['player'],
-        quests: qm.getState(),
-        inventory: im.getState(),
-        discovery: {
-          zones: ['mg-road'],
-          landmarks: [],
-          npcsMetIds: [...(npcsMetIds ?? [])],
-          collectedPickupIds: [...(collectedPickupIds ?? [])],
-        },
-        settings: { musicVolume: 100, sfxVolume: 100, runDefault: false },
-      };
-      const success = sm.save(gameState);
-      this.savePanel.showFeedback(success);
-      if (success) {
-        this.savePanel.update(gameState.timestamp);
-        eventsCenter.emit(EVENTS.SAVE_ICON_SHOW);
-      }
+      eventsCenter.emit(EVENTS.SAVE_GAME);
     };
+    eventsCenter.on(EVENTS.GAME_SAVED, ({ timestamp }: { timestamp: number }) => {
+      this.savePanel.showFeedback(true);
+      this.savePanel.update(timestamp);
+    });
 
     // Save icon sprite (bottom-right corner, hidden until save event)
     this.saveIconSprite = this.add.sprite(0, 0, ASSETS.SPRITE_SAVE_ICON);

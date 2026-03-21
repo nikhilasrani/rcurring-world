@@ -330,6 +330,7 @@ export class WorldScene extends Phaser.Scene {
     };
     this.boundHandlers.buildingEnter = () => { this.performAutoSave(); };
     this.boundHandlers.buildingExit = () => { this.performAutoSave(); };
+    this.boundHandlers.saveGame = () => { this.performManualSave(); };
 
     eventsCenter.on(EVENTS.TOUCH_DIRECTION, this.boundHandlers.touchDirection);
     eventsCenter.on(EVENTS.RUN_BUTTON_DOWN, this.boundHandlers.runButtonDown);
@@ -438,6 +439,9 @@ export class WorldScene extends Phaser.Scene {
     // Auto-save on building transitions
     eventsCenter.on(EVENTS.BUILDING_ENTER, this.boundHandlers.buildingEnter);
     eventsCenter.on(EVENTS.BUILDING_EXIT, this.boundHandlers.buildingExit);
+
+    // Manual save from pause menu (needs Grid Engine for current position)
+    eventsCenter.on(EVENTS.SAVE_GAME, this.boundHandlers.saveGame);
 
     // Movement freeze listener
     eventsCenter.on(EVENTS.MOVEMENT_FREEZE, this.boundHandlers.movementFreeze);
@@ -908,6 +912,56 @@ export class WorldScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Manual save triggered from pause menu. Same as auto-save but emits
+   * GAME_SAVED so UIScene can show feedback with the correct timestamp.
+   */
+  private performManualSave(): void {
+    if (!this.saveManager || !this.questManager || !this.inventoryManager) return;
+
+    const playerState = this.registry.get('playerState') as PlayerState;
+    if (!playerState) return;
+
+    const currentPos = this.gridEngine
+      ? this.gridEngine.getPosition('player')
+      : playerState.position;
+
+    const gameState: GameState = {
+      version: 1,
+      timestamp: Date.now(),
+      player: {
+        name: playerState.name,
+        gender: playerState.gender,
+        position: currentPos,
+        facing: this.gridEngine
+          ? this.gridEngine.getFacingDirection('player')
+          : playerState.facing,
+        isRunning: playerState.isRunning,
+        currentZone: 'mg-road',
+        isInInterior: this.isInInterior,
+        interiorId: this.isInInterior ? this.sceneMode.interiorId : undefined,
+      },
+      quests: this.questManager.getState(),
+      inventory: this.inventoryManager.getState(),
+      discovery: {
+        zones: ['mg-road'],
+        landmarks: [],
+        npcsMetIds: [...this.npcsMetIds],
+        collectedPickupIds: [...this.collectedPickupIds],
+      },
+      settings: {
+        musicVolume: 100,
+        sfxVolume: 100,
+        runDefault: false,
+      },
+    };
+
+    if (this.saveManager.save(gameState)) {
+      eventsCenter.emit(EVENTS.SAVE_ICON_SHOW);
+      eventsCenter.emit(EVENTS.GAME_SAVED, { timestamp: gameState.timestamp });
+    }
+  }
+
   shutdown(): void {
     // Clean up eventsCenter listeners (global emitter — NOT cleared by Phaser's scene cleanup).
     // Use handler references so we only remove OUR listeners, not UIScene's.
@@ -923,6 +977,7 @@ export class WorldScene extends Phaser.Scene {
     if (h.npcInteract) eventsCenter.off(EVENTS.NPC_INTERACT, h.npcInteract);
     if (h.buildingEnter) eventsCenter.off(EVENTS.BUILDING_ENTER, h.buildingEnter);
     if (h.buildingExit) eventsCenter.off(EVENTS.BUILDING_EXIT, h.buildingExit);
+    if (h.saveGame) eventsCenter.off(EVENTS.SAVE_GAME, h.saveGame);
     this.boundHandlers = {};
 
     // Clear system manager references — Phaser's DisplayList.shutdown() already
