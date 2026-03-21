@@ -135,15 +135,16 @@ export class WorldScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Wire shutdown() to Phaser's SHUTDOWN event so it runs on scene.restart().
+    // Phaser does NOT auto-call a scene's shutdown() method — only init/create/update.
+    // Without this, AutoRickshawManager persists with stale character IDs, crashing
+    // gridEngine.getPosition() in update() and breaking the game loop (black screen).
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.shutdown, this);
+
     // Reset state for scene restart
     this.movementFrozen = false;
     this.touchDirection = null;
     this.runButtonHeld = false;
-
-    // Clear any lingering camera fade/flash effects from the previous scene
-    // lifecycle. Phaser recreates the camera on restart, but some versions
-    // carry effect state across shutdown/start when using scene.restart().
-    this.cameras.main.resetFX();
 
     if (this.sceneMode.mode === 'interior') {
       this.createInterior();
@@ -906,9 +907,8 @@ export class WorldScene extends Phaser.Scene {
   }
 
   shutdown(): void {
-    // Clean up event listeners to prevent memory leaks
-    // Remove only OUR event handlers -- do NOT use eventsCenter.off(EVENT)
-    // without a handler reference, as that removes ALL listeners (including UIScene's).
+    // Clean up eventsCenter listeners (global emitter — NOT cleared by Phaser's scene cleanup).
+    // Use handler references so we only remove OUR listeners, not UIScene's.
     const h = this.boundHandlers;
     if (h.touchDirection) eventsCenter.off(EVENTS.TOUCH_DIRECTION, h.touchDirection);
     if (h.runButtonDown) eventsCenter.off(EVENTS.RUN_BUTTON_DOWN, h.runButtonDown);
@@ -922,14 +922,13 @@ export class WorldScene extends Phaser.Scene {
     if (h.buildingEnter) eventsCenter.off(EVENTS.BUILDING_ENTER, h.buildingEnter);
     if (h.buildingExit) eventsCenter.off(EVENTS.BUILDING_EXIT, h.buildingExit);
     this.boundHandlers = {};
-    this.npcManager?.destroy();
+
+    // Clear system manager references — Phaser's DisplayList.shutdown() already
+    // destroys all game objects (sprites, etc.), so we only need to clear internal
+    // state (like AutoRickshawManager.autos) to prevent update() from calling
+    // gridEngine.getPosition() on characters that no longer exist after restart.
     this.autoRickshawManager?.destroy();
-    this.interactionPrompt?.destroy();
-    this.player?.destroy();
-    // Destroy item pickups
-    for (const pickup of this.itemPickups) {
-      pickup.destroy();
-    }
+    this.npcManager?.destroy();
     this.itemPickups = [];
   }
 }

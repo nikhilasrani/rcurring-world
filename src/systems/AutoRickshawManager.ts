@@ -260,7 +260,9 @@ export class AutoRickshawManager {
 
   destroy(): void {
     for (const state of this.autos.values()) {
-      state.sprite.destroy();
+      if (state.sprite && state.sprite.scene) {
+        state.sprite.destroy();
+      }
     }
     this.autos.clear();
   }
