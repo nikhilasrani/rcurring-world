@@ -8,5 +8,19 @@
   "playerSpawn": { "x": 5, "y": 8 },
   "exitPosition": { "x": 5, "y": 9 },
   "returnPosition": { "x": 40, "y": 37 },
-  "size": { "width": 12, "height": 10 }
+  "size": { "width": 12, "height": 10 },
+  "interactables": [
+    {
+      "id": "interior-coffee-counter",
+      "type": "counter",
+      "position": { "x": 6, "y": 4 },
+      "dialogue": {
+        "name": "Coffee Counter",
+        "pages": [
+          "A fresh pot of filter coffee is brewing behind the counter.",
+          "The aroma of Chikmagalur beans fills the room!"
+        ]
+      }
+    }
+  ]
 }
