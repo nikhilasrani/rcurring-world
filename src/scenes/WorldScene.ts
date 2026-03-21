@@ -396,6 +396,7 @@ export class WorldScene extends Phaser.Scene {
     this.registry.set('inventoryManager', this.inventoryManager);
     this.registry.set('journalManager', this.journalManager);
     this.registry.set('saveManager', this.saveManager);
+    this.registry.set('zoneManager', this.zoneManager);
     this.registry.set('npcsMetIds', this.npcsMetIds);
     this.registry.set('collectedPickupIds', this.collectedPickupIds);
 

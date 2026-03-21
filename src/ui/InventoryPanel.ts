@@ -1,5 +1,18 @@
 import Phaser from 'phaser';
+import { ASSETS } from '../utils/constants';
 import type { InventoryItem } from '../utils/types';
+
+/** Map item iconKey to spritesheet frame index (matches generate-item-icons.cjs order) */
+const ICON_FRAME_MAP: Record<string, number> = {
+  'item-filter-coffee': 0,
+  'item-masala-dosa': 1,
+  'item-jasmine-flowers': 2,
+  'item-metro-token': 3,
+  'item-park-leaf': 4,
+  'item-shopping-bag': 5,
+  'item-old-photo': 6,
+  'item-best-coffee': 7,
+};
 
 /**
  * InventoryPanel: 2x6 item grid with selection highlight and item detail display.
@@ -55,16 +68,34 @@ export class InventoryPanel {
     const gridStartX = x + Math.floor((width - gridWidth) / 2);
     const gridStartY = y + 20; // below heading
 
-    // Create 12 slot backgrounds
+    // Create 12 slot backgrounds with click zones
     for (let row = 0; row < InventoryPanel.ROWS; row++) {
       for (let col = 0; col < InventoryPanel.COLS; col++) {
         const sx = gridStartX + col * (InventoryPanel.SLOT_SIZE + InventoryPanel.SLOT_GAP);
         const sy = gridStartY + row * (InventoryPanel.SLOT_SIZE + InventoryPanel.SLOT_GAP);
+        const slotIndex = row * InventoryPanel.COLS + col;
 
         const slotGfx = scene.add.graphics();
         slotGfx.setScrollFactor(0);
         slotGfx.lineStyle(1, 0xCCCCCC, 1);
         slotGfx.strokeRect(sx, sy, InventoryPanel.SLOT_SIZE, InventoryPanel.SLOT_SIZE);
+
+        // Click zone for slot selection
+        const hitZone = scene.add.zone(
+          sx + InventoryPanel.SLOT_SIZE / 2,
+          sy + InventoryPanel.SLOT_SIZE / 2,
+          InventoryPanel.SLOT_SIZE,
+          InventoryPanel.SLOT_SIZE,
+        );
+        hitZone.setScrollFactor(0);
+        hitZone.setInteractive({ useHandCursor: true });
+        hitZone.on('pointerdown', () => {
+          if (slotIndex < this.currentItems.length) {
+            this.selectedIndex = slotIndex;
+            this.updateSelection();
+          }
+        });
+
         this.slots.push(slotGfx);
         this.itemIcons.push(null);
       }
@@ -154,11 +185,13 @@ export class InventoryPanel {
       this.slots[i].strokeRect(sx, sy, InventoryPanel.SLOT_SIZE, InventoryPanel.SLOT_SIZE);
 
       if (i < items.length) {
-        // Place item icon centered in slot
+        // Place item icon centered in slot using spritesheet frame
+        const frameIndex = ICON_FRAME_MAP[items[i].iconKey] ?? 0;
         const icon = this.scene.add.image(
           sx + InventoryPanel.SLOT_SIZE / 2,
           sy + InventoryPanel.SLOT_SIZE / 2,
-          items[i].iconKey,
+          ASSETS.SPRITE_ITEM_ICONS,
+          frameIndex,
         );
         icon.setDisplaySize(InventoryPanel.ICON_SIZE, InventoryPanel.ICON_SIZE);
         icon.setScrollFactor(0);
