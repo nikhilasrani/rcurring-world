@@ -45,6 +45,7 @@ export class TransitionManager {
 
     // Freeze player movement
     eventsCenter.emit(EVENTS.MOVEMENT_FREEZE, true);
+    eventsCenter.emit(EVENTS.BUILDING_ENTER);
 
     // Fade to black
     this.scene.cameras.main.fade(250, 0, 0, 0);
@@ -80,6 +81,7 @@ export class TransitionManager {
 
     // Freeze player movement
     eventsCenter.emit(EVENTS.MOVEMENT_FREEZE, true);
+    eventsCenter.emit(EVENTS.BUILDING_EXIT);
 
     // Fade to black
     this.scene.cameras.main.fade(250, 0, 0, 0);
