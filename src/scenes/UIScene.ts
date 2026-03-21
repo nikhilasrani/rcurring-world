@@ -119,11 +119,15 @@ export class UIScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-ENTER', () => {
       if (this.dialogBox.isActive()) {
         this.dialogBox.advance();
+      } else if (this.metroMap.isMapOpen()) {
+        this.metroMap.confirmStation();
       }
     });
     this.input.keyboard?.on('keydown-SPACE', () => {
       if (this.dialogBox.isActive()) {
         this.dialogBox.advance();
+      } else if (this.metroMap.isMapOpen()) {
+        this.metroMap.confirmStation();
       }
     });
 
