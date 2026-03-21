@@ -2,7 +2,7 @@
   "id": "npc-chai-walla",
   "name": "Raju",
   "spriteKey": "npc-chai-walla",
-  "position": { "x": 40, "y": 36 },
+  "position": { "x": 39, "y": 37 },
   "facing": "down",
   "patrolRadius": 2,
   "patrolDelay": 1500,

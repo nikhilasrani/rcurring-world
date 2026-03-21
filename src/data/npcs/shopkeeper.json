@@ -2,7 +2,7 @@
   "id": "npc-shopkeeper",
   "name": "Venkatesh",
   "spriteKey": "npc-shopkeeper",
-  "position": { "x": 27, "y": 37 },
+  "position": { "x": 24, "y": 37 },
   "facing": "down",
   "patrolRadius": 2,
   "patrolDelay": 1800,
