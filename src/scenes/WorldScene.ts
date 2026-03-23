@@ -10,6 +10,7 @@ import { QuestManager } from '../systems/QuestManager';
 import { InventoryManager } from '../systems/InventoryManager';
 import { JournalManager } from '../systems/JournalManager';
 import { SaveManager } from '../systems/SaveManager';
+import { AudioManager } from '../systems/AudioManager';
 import { ItemPickup } from '../entities/ItemPickup';
 import { InteractionPrompt } from '../ui/InteractionPrompt';
 import { eventsCenter } from '../utils/EventsCenter';
@@ -108,6 +109,11 @@ export class WorldScene extends Phaser.Scene {
   private itemPickups: ItemPickup[] = [];
   private npcsMetIds: Set<string> = new Set();
   private collectedPickupIds: Set<string> = new Set();
+
+  // Phase 4: Audio
+  private audioManager!: AudioManager;
+  private movementStartedSub: any = null;
+  private movementStoppedSub: any = null;
 
   // Bound event handlers (stored so shutdown can remove only OUR listeners)
   private boundHandlers: Record<string, (...args: any[]) => void> = {};
@@ -425,6 +431,32 @@ export class WorldScene extends Phaser.Scene {
     // Offer the filter coffee quest if not yet encountered
     this.questManager.offerQuest(questData.id, questData.objectives.length);
 
+    // Phase 4: Audio
+    const existingAM = this.registry.get('audioManager') as AudioManager | undefined;
+    if (existingAM) {
+      this.audioManager = existingAM;
+      this.audioManager.setScene(this);
+    } else {
+      this.audioManager = new AudioManager(this);
+      this.registry.set('audioManager', this.audioManager);
+    }
+
+    // Start outdoor BGM and ambient (per D-09: outdoor exploration theme)
+    this.audioManager.playBGM('outdoor');
+    this.audioManager.startOutdoorAmbient();
+
+    // Footstep audio gating: loop while moving, stop when idle (per D-12)
+    this.movementStartedSub = this.gridEngine.movementStarted().subscribe(({ charId }: { charId: string }) => {
+      if (charId === 'player') {
+        this.audioManager?.startFootsteps();
+      }
+    });
+    this.movementStoppedSub = this.gridEngine.movementStopped().subscribe(({ charId }: { charId: string }) => {
+      if (charId === 'player') {
+        this.audioManager?.stopFootsteps();
+      }
+    });
+
     // Spawn item pickups (skip collected ones)
     pickupsData.forEach((pickup) => {
       if (!this.collectedPickupIds.has(pickup.id)) {
@@ -598,6 +630,15 @@ export class WorldScene extends Phaser.Scene {
       returnPosition: mode.returnPosition!,
       size: mode.interiorSize!,
     } as InteriorDef);
+
+    // Phase 4: Audio - retrieve AudioManager and switch to interior audio
+    const existingAMInterior = this.registry.get('audioManager') as AudioManager | undefined;
+    if (existingAMInterior) {
+      this.audioManager = existingAMInterior;
+      this.audioManager.setScene(this);
+      // enterInterior handles BGM crossfade + ambient switch (per D-05, D-11)
+      this.audioManager.enterInterior(mode.interiorId || '');
+    }
 
     // --- Phase 3: Interior interaction system ---
     // Find matching interior def to check for interactables
@@ -920,8 +961,8 @@ export class WorldScene extends Phaser.Scene {
         collectedPickupIds: [...this.collectedPickupIds],
       },
       settings: {
-        musicVolume: 100,
-        sfxVolume: 100,
+        musicVolume: this.audioManager?.getSettings().musicVolume ?? 0.7,
+        sfxVolume: this.audioManager?.getSettings().sfxVolume ?? 0.7,
         runDefault: false,
       },
     };
@@ -969,8 +1010,8 @@ export class WorldScene extends Phaser.Scene {
         collectedPickupIds: [...this.collectedPickupIds],
       },
       settings: {
-        musicVolume: 100,
-        sfxVolume: 100,
+        musicVolume: this.audioManager?.getSettings().musicVolume ?? 0.7,
+        sfxVolume: this.audioManager?.getSettings().sfxVolume ?? 0.7,
         runDefault: false,
       },
     };
@@ -998,6 +1039,15 @@ export class WorldScene extends Phaser.Scene {
     if (h.buildingExit) eventsCenter.off(EVENTS.BUILDING_EXIT, h.buildingExit);
     if (h.saveGame) eventsCenter.off(EVENTS.SAVE_GAME, h.saveGame);
     this.boundHandlers = {};
+
+    // Clean up Grid Engine movement subscriptions for footstep audio
+    this.movementStartedSub?.unsubscribe();
+    this.movementStoppedSub?.unsubscribe();
+    this.movementStartedSub = null;
+    this.movementStoppedSub = null;
+
+    // Stop footsteps on shutdown to prevent leaking across scene restart
+    this.audioManager?.stopFootsteps();
 
     // Clear system manager references — Phaser's DisplayList.shutdown() already
     // destroys all game objects (sprites, etc.), so we only need to clear internal

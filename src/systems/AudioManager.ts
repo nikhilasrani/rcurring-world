@@ -55,6 +55,7 @@ export class AudioManager {
     eventsCenter.on(EVENTS.PAUSE_MENU_CLOSE, this.onPauseMenuClose, this);
     eventsCenter.on(EVENTS.ITEM_COLLECTED, this.onItemCollected, this);
     eventsCenter.on(EVENTS.QUEST_COMPLETE, this.onQuestComplete, this);
+    eventsCenter.on(EVENTS.DIALOGUE_ADVANCE, this.onDialogueAdvance, this);
   }
 
   /** Update scene reference after scene restart. */
@@ -428,6 +429,10 @@ export class AudioManager {
     this.playSFX('quest-complete');
   }
 
+  private onDialogueAdvance(): void {
+    this.playSFX('dialogue-tick');
+  }
+
   // --- Cleanup ---
 
   /** Remove all EventsCenter listeners and stop all sounds. */
@@ -442,6 +447,7 @@ export class AudioManager {
     eventsCenter.off(EVENTS.PAUSE_MENU_CLOSE, this.onPauseMenuClose, this);
     eventsCenter.off(EVENTS.ITEM_COLLECTED, this.onItemCollected, this);
     eventsCenter.off(EVENTS.QUEST_COMPLETE, this.onQuestComplete, this);
+    eventsCenter.off(EVENTS.DIALOGUE_ADVANCE, this.onDialogueAdvance, this);
 
     this.cancelActiveTweens();
 

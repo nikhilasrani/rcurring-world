@@ -18,6 +18,7 @@ import type { QuestManager } from '../systems/QuestManager';
 import type { InventoryManager } from '../systems/InventoryManager';
 import type { JournalManager } from '../systems/JournalManager';
 import type { SaveManager } from '../systems/SaveManager';
+import type { AudioManager } from '../systems/AudioManager';
 import questData from '../data/quests/best-filter-coffee.json';
 
 /**
@@ -44,6 +45,7 @@ export class UIScene extends Phaser.Scene {
   private questPanel!: QuestPanel;
   private journalPanel!: JournalPanel;
   private savePanel!: SavePanel;
+  private settingsPanel!: SettingsPanel;
 
   constructor() {
     super({ key: SCENES.UI });
@@ -71,8 +73,8 @@ export class UIScene extends Phaser.Scene {
     this.inventoryPanel = new InventoryPanel(this, pb.x, pb.y, pb.width, pb.height);
     this.journalPanel = new JournalPanel(this, pb.x, pb.y, pb.width, pb.height);
     this.savePanel = new SavePanel(this, pb.x, pb.y, pb.width, pb.height);
-    const settingsPanel = new SettingsPanel(this, pb.x, pb.y, pb.width, pb.height);
-    this.pauseMenu.setPanels(this.questPanel, this.inventoryPanel, this.journalPanel, this.savePanel, settingsPanel);
+    this.settingsPanel = new SettingsPanel(this, pb.x, pb.y, pb.width, pb.height);
+    this.pauseMenu.setPanels(this.questPanel, this.inventoryPanel, this.journalPanel, this.savePanel, this.settingsPanel);
 
     // Wire save button — delegates to WorldScene which has Grid Engine access
     // for the player's current position. WorldScene emits GAME_SAVED on success.
@@ -142,6 +144,13 @@ export class UIScene extends Phaser.Scene {
     });
     eventsCenter.on(EVENTS.PAUSE_MENU_CLOSE, () => {
       this.pauseMenu.close();
+      // Wire settings to AudioManager on menu close (per D-07 context)
+      const am = this.registry.get('audioManager') as AudioManager | undefined;
+      if (am) {
+        const settings = this.settingsPanel.getSettings();
+        am.setMusicVolume(settings.musicVolume);
+        am.setSFXVolume(settings.sfxVolume);
+      }
     });
 
     // Quest progress updates

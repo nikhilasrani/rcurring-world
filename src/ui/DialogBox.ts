@@ -38,6 +38,10 @@ export class DialogBox {
   private isInChoiceMode: boolean = false;
   private scene: Phaser.Scene;
 
+  // Phase 4: Dialogue tick SFX throttle
+  private lastTickTime: number = 0;
+  private static readonly TICK_INTERVAL_MS = 80;
+
   // Layout constants
   private static readonly BOX_HEIGHT = 72;
   private static readonly BOX_MARGIN = 4;
@@ -83,6 +87,14 @@ export class DialogBox {
     this.pageIndicator.setVisible(false);
 
     this.typing = new TextTyping(this.contentText, { speed: 30 });
+    this.typing.on('type', () => {
+      // Throttle dialogue tick SFX to avoid buzz (per research pitfall 5)
+      const now = Date.now();
+      if (now - this.lastTickTime >= DialogBox.TICK_INTERVAL_MS) {
+        this.lastTickTime = now;
+        eventsCenter.emit(EVENTS.DIALOGUE_ADVANCE);
+      }
+    });
     this.typing.on('complete', () => {
       this.isTypingComplete = true;
       // If this page is a choice page, show choices after typing completes
