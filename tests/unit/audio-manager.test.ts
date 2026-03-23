@@ -2,17 +2,18 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EVENTS } from '../../src/utils/constants';
 
 // Mock EventsCenter to avoid loading Phaser (needs browser window).
+// Stores listeners with their context so `this` works when emitted.
 vi.mock('../../src/utils/EventsCenter', () => {
-  const listeners: Record<string, Function[]> = {};
+  const listeners: Record<string, { cb: Function; ctx: any }[]> = {};
   return {
     eventsCenter: {
-      on: vi.fn((event: string, cb: Function) => {
+      on: vi.fn((event: string, cb: Function, ctx?: any) => {
         if (!listeners[event]) listeners[event] = [];
-        listeners[event].push(cb);
+        listeners[event].push({ cb, ctx });
       }),
       off: vi.fn(),
       emit: vi.fn((event: string, ...args: any[]) => {
-        (listeners[event] || []).forEach((cb) => cb(...args));
+        (listeners[event] || []).forEach(({ cb, ctx }) => cb.call(ctx, ...args));
       }),
       removeAllListeners: vi.fn(),
       __listeners: listeners,
