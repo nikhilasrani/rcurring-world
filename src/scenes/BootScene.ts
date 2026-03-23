@@ -156,6 +156,29 @@ export class BootScene extends Phaser.Scene {
       frameWidth: NPC_FRAME_WIDTH, frameHeight: NPC_FRAME_HEIGHT,
     });
 
+    // Phase 4: Audio assets (per D-01: MP3 format, per D-03: preload all in BootScene)
+    // BGM
+    this.load.audio(ASSETS.AUDIO_BGM_TITLE, 'assets/audio/bgm/title-theme.mp3');
+    this.load.audio(ASSETS.AUDIO_BGM_OUTDOOR, 'assets/audio/bgm/outdoor-theme.mp3');
+    this.load.audio(ASSETS.AUDIO_BGM_INTERIOR, 'assets/audio/bgm/interior-theme.mp3');
+
+    // SFX (per D-12: all required SFX)
+    this.load.audio(ASSETS.AUDIO_SFX_FOOTSTEP, 'assets/audio/sfx/footstep.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_DOOR_OPEN, 'assets/audio/sfx/door-open.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_DOOR_CLOSE, 'assets/audio/sfx/door-close.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_NPC_CHIME, 'assets/audio/sfx/npc-chime.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_MENU_OPEN, 'assets/audio/sfx/menu-open.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_MENU_CLOSE, 'assets/audio/sfx/menu-close.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_DIALOGUE_TICK, 'assets/audio/sfx/dialogue-tick.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_ITEM_COLLECTED, 'assets/audio/sfx/item-collected.mp3');
+    this.load.audio(ASSETS.AUDIO_SFX_QUEST_COMPLETE, 'assets/audio/sfx/quest-complete.mp3');
+
+    // Ambient (per D-04, D-05: 4 ambient zones)
+    this.load.audio(ASSETS.AUDIO_AMB_CITY_BASE, 'assets/audio/ambient/city-base.mp3');
+    this.load.audio(ASSETS.AUDIO_AMB_CUBBON_PARK, 'assets/audio/ambient/cubbon-park.mp3');
+    this.load.audio(ASSETS.AUDIO_AMB_METRO_INTERIOR, 'assets/audio/ambient/metro-interior.mp3');
+    this.load.audio(ASSETS.AUDIO_AMB_SHOP_INTERIOR, 'assets/audio/ambient/shop-interior.mp3');
+
     // Handle load errors gracefully (missing assets are expected until later plans)
     this.load.on('loaderror', (fileObj: Phaser.Loader.File) => {
       console.warn(`[BootScene] Failed to load: ${fileObj.key} (${fileObj.url}) -- may not exist yet`);

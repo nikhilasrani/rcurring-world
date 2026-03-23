@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { SCENES } from '../utils/constants';
 import { SaveManager } from '../systems/SaveManager';
+import { AudioManager } from '../systems/AudioManager';
 
 /**
  * TitleScene: Shows the game title over a pixel art Bengaluru skyline.
@@ -41,6 +42,29 @@ export class TitleScene extends Phaser.Scene {
     // Check for existing save
     this.saveManager = new SaveManager();
     this.hasSave = this.saveManager.hasSave();
+
+    // Initialize AudioManager if not already in registry (first boot)
+    let audioManager = this.registry.get('audioManager') as AudioManager | undefined;
+    if (!audioManager) {
+      audioManager = new AudioManager(this);
+      this.registry.set('audioManager', audioManager);
+    } else {
+      audioManager.setScene(this);
+    }
+
+    // Load volume settings from saved game if available
+    if (this.hasSave) {
+      const loadedState = this.saveManager.load();
+      if (loadedState?.settings) {
+        audioManager.loadSettings({
+          musicVolume: loadedState.settings.musicVolume <= 1 ? loadedState.settings.musicVolume : loadedState.settings.musicVolume / 100,
+          sfxVolume: loadedState.settings.sfxVolume <= 1 ? loadedState.settings.sfxVolume : loadedState.settings.sfxVolume / 100,
+        });
+      }
+    }
+
+    // Start title BGM (per D-09: dedicated title theme, D-10: slower arrangement of outdoor theme)
+    audioManager.startTitleMusic();
 
     const { width } = this.scale.gameSize;
 
@@ -310,6 +334,10 @@ export class TitleScene extends Phaser.Scene {
         isRunning: loadedState.player.isRunning,
       });
 
+      // Stop title music before transitioning
+      const audioManager = this.registry.get('audioManager') as AudioManager | undefined;
+      audioManager?.stopTitleMusic();
+
       this.scene.start(SCENES.WORLD);
     }
   }
@@ -318,6 +346,11 @@ export class TitleScene extends Phaser.Scene {
   private startNewGame(): void {
     if (this.started) return;
     this.started = true;
+
+    // Stop title music before transitioning
+    const audioManager = this.registry.get('audioManager') as AudioManager | undefined;
+    audioManager?.stopTitleMusic();
+
     this.scene.start(SCENES.NAME_ENTRY);
   }
 }

@@ -103,6 +103,23 @@ export const ASSETS = {
   SPRITE_SAVE_ICON: 'save-icon',
   SPRITE_HAMBURGER: 'hamburger-icon',
   SPRITE_NPC_PARK_COFFEE: 'npc-park-coffee-vendor',
+  // Audio assets (Phase 4)
+  AUDIO_BGM_TITLE: 'bgm-title',
+  AUDIO_BGM_OUTDOOR: 'bgm-outdoor',
+  AUDIO_BGM_INTERIOR: 'bgm-interior',
+  AUDIO_SFX_FOOTSTEP: 'sfx-footstep',
+  AUDIO_SFX_DOOR_OPEN: 'sfx-door-open',
+  AUDIO_SFX_DOOR_CLOSE: 'sfx-door-close',
+  AUDIO_SFX_NPC_CHIME: 'sfx-npc-chime',
+  AUDIO_SFX_MENU_OPEN: 'sfx-menu-open',
+  AUDIO_SFX_MENU_CLOSE: 'sfx-menu-close',
+  AUDIO_SFX_DIALOGUE_TICK: 'sfx-dialogue-tick',
+  AUDIO_SFX_ITEM_COLLECTED: 'sfx-item-collected',
+  AUDIO_SFX_QUEST_COMPLETE: 'sfx-quest-complete',
+  AUDIO_AMB_CITY_BASE: 'amb-city-base',
+  AUDIO_AMB_CUBBON_PARK: 'amb-cubbon-park',
+  AUDIO_AMB_METRO_INTERIOR: 'amb-metro-interior',
+  AUDIO_AMB_SHOP_INTERIOR: 'amb-shop-interior',
 } as const;
 
 // Tilemap layer names (must match Tiled export)
