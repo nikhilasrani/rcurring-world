@@ -63,8 +63,14 @@ export class TitleScene extends Phaser.Scene {
       }
     }
 
-    // Start title BGM (per D-09: dedicated title theme, D-10: slower arrangement of outdoor theme)
-    audioManager.startTitleMusic();
+    // Start title BGM — defer if AudioContext is locked (Chrome autoplay policy)
+    if (this.sound.locked) {
+      this.sound.once('unlocked', () => {
+        audioManager!.startTitleMusic();
+      });
+    } else {
+      audioManager.startTitleMusic();
+    }
 
     const { width } = this.scale.gameSize;
 
