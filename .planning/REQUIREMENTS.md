@@ -63,10 +63,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Audio
 
-- [ ] **AUDO-01**: Basic SFX play for key actions: footsteps, door open/close, NPC interaction chime, menu sounds
-- [ ] **AUDO-02**: Area-specific background music plays (at least outdoor theme + interior theme)
-- [ ] **AUDO-03**: Music crossfades on zone/building transitions
-- [ ] **AUDO-04**: Ambient city sounds are layered by area (e.g., traffic near roads, birds in Cubbon Park, announcements near metro)
+- [x] **AUDO-01**: Basic SFX play for key actions: footsteps, door open/close, NPC interaction chime, menu sounds
+- [x] **AUDO-02**: Area-specific background music plays (at least outdoor theme + interior theme)
+- [x] **AUDO-03**: Music crossfades on zone/building transitions
+- [x] **AUDO-04**: Ambient city sounds are layered by area (e.g., traffic near roads, birds in Cubbon Park, announcements near metro)
 
 ### Save
 
@@ -168,10 +168,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SAVE-03 | Phase 3 | Complete |
 | SAVE-04 | Phase 3 | Complete |
 | PLAT-04 | Phase 3 | Complete |
-| AUDO-01 | Phase 4 | Pending |
-| AUDO-02 | Phase 4 | Pending |
-| AUDO-03 | Phase 4 | Pending |
-| AUDO-04 | Phase 4 | Pending |
+| AUDO-01 | Phase 4 | Complete |
+| AUDO-02 | Phase 4 | Complete |
+| AUDO-03 | Phase 4 | Complete |
+| AUDO-04 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 42 total

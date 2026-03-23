@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-stopped_at: Completed 03-06-PLAN.md
-last_updated: "2026-03-21T11:48:18.969Z"
+status: Ready to execute
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-03-23T14:40:09.844Z"
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 17
-  completed_plans: 17
+  total_plans: 20
+  completed_plans: 18
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-19)
 
 **Core value:** The city must feel like Bengaluru -- recognizable landmarks, authentic interactions, and nostalgic pixel art that makes locals say "I know that place."
-**Current focus:** Phase 03 — game-systems
+**Current focus:** Phase 04 — audio-and-polish
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
+Phase: 04 (audio-and-polish) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Plan: Not started
 | Phase 03 P04 | 5min | 2 tasks | 8 files |
 | Phase 03 P05 | 2min | 2 tasks | 4 files |
 | Phase 03 P06 | 5min | 2 tasks | 7 files |
+| Phase 04 P01 | 5min | 2 tasks | 20 files |
 
 ## Accumulated Context
 
@@ -117,6 +118,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Quest offered at WorldScene creation via offerQuest() idempotent call for first-encounter dialogue
 - [Phase 03]: InteractionTarget type extended with counter/object for interior interactable type safety
 - [Phase 03]: TitleScene defaults to NEW GAME selection when no save exists, CONTINUE greyed out
+- [Phase 04]: EventsCenter listeners use context binding (third arg) for proper this in AudioManager event handlers
+- [Phase 04]: Ambient base+overlay model: city-base at 0.4 background, zone-specific overlays at 0.6
+- [Phase 04]: zoneNameToId mapping bridges ZoneManager display names to landmark IDs for audio config lookup
 
 ### Pending Todos
 
@@ -128,6 +132,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T04:15:09.325Z
-Stopped at: Completed 03-06-PLAN.md
+Last session: 2026-03-23T14:40:09.842Z
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
