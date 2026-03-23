@@ -91,8 +91,8 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md -- AudioManager class, audio config data, placeholder MP3 assets, and unit tests
-- [ ] 04-02-PLAN.md -- Scene integration (BootScene preloading, TitleScene music, WorldScene/UIScene wiring, save volume fix)
-- [ ] 04-03-PLAN.md -- E2E audio test, full build verification, and human audio verification checkpoint
+- [x] 04-02-PLAN.md -- Scene integration (BootScene preloading, TitleScene music, WorldScene/UIScene wiring, save volume fix)
+- [x] 04-03-PLAN.md -- E2E audio test, full build verification, and human audio verification checkpoint
 
 ## Progress
 

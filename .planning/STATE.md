@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to execute
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-23T14:40:09.844Z"
+status: Phase complete — ready for verification
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-03-23T14:57:52.097Z"
 progress:
   total_phases: 4
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 20
-  completed_plans: 18
+  completed_plans: 20
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-19)
 ## Current Position
 
 Phase: 04 (audio-and-polish) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -61,6 +61,8 @@ Plan: 2 of 3
 | Phase 03 P05 | 2min | 2 tasks | 4 files |
 | Phase 03 P06 | 5min | 2 tasks | 7 files |
 | Phase 04 P01 | 5min | 2 tasks | 20 files |
+| Phase 04 P02 | 5min | 2 tasks | 7 files |
+| Phase 04 P03 | 78s | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -121,6 +123,13 @@ Recent decisions affecting current work:
 - [Phase 04]: EventsCenter listeners use context binding (third arg) for proper this in AudioManager event handlers
 - [Phase 04]: Ambient base+overlay model: city-base at 0.4 background, zone-specific overlays at 0.6
 - [Phase 04]: zoneNameToId mapping bridges ZoneManager display names to landmark IDs for audio config lookup
+- [Phase 04]: AudioManager created in TitleScene first boot so title music plays before WorldScene
+- [Phase 04]: Volume normalization on load handles legacy 0-100 and new 0-1 save formats
+- [Phase 04]: Footstep audio gated by Grid Engine movement observables with subscription cleanup in shutdown
+- [Phase 04]: Dialogue tick SFX throttled to 80ms interval to avoid per-character buzz
+- [Phase 04]: Settings panel wires to AudioManager on PAUSE_MENU_CLOSE for batch apply
+- [Phase 04]: E2E audio test verifies cache.audio.exists() not sound.get() since BootScene uses this.load.audio()
+- [Phase 04]: Chrome AudioContext autoplay fix: TitleScene checks sound.locked and defers to unlocked event
 
 ### Pending Todos
 
@@ -132,6 +141,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-23T14:40:09.842Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-23T14:57:52.095Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None
