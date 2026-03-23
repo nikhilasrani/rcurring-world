@@ -87,11 +87,12 @@ Plans:
   1. Key actions produce sound effects -- footsteps, door open/close, NPC interaction chime, menu sounds
   2. Area-specific background music plays (at least outdoor and interior themes) and crossfades on zone/building transitions
   3. Ambient city sounds are layered by area -- traffic near roads, birds in Cubbon Park, announcements near metro
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md -- AudioManager class, audio config data, placeholder MP3 assets, and unit tests
+- [ ] 04-02-PLAN.md -- Scene integration (BootScene preloading, TitleScene music, WorldScene/UIScene wiring, save volume fix)
+- [ ] 04-03-PLAN.md -- E2E audio test, full build verification, and human audio verification checkpoint
 
 ## Progress
 
@@ -103,4 +104,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Foundation and Movement | 5/5 | Complete   | 2026-03-20 |
 | 2. World Interaction | 0/5 | Not started | - |
 | 3. Game Systems | 4/7 | In Progress|  |
-| 4. Audio and Polish | 0/? | Not started | - |
+| 4. Audio and Polish | 0/3 | Not started | - |
