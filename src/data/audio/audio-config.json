@@ -1,0 +1,53 @@
+{
+  "bgm": {
+    "title": { "key": "bgm-title", "file": "assets/audio/bgm/title-theme.mp3", "loop": true },
+    "outdoor": { "key": "bgm-outdoor", "file": "assets/audio/bgm/outdoor-theme.mp3", "loop": true },
+    "interior": { "key": "bgm-interior", "file": "assets/audio/bgm/interior-theme.mp3", "loop": true }
+  },
+  "sfx": {
+    "footstep": { "key": "sfx-footstep", "file": "assets/audio/sfx/footstep.mp3" },
+    "door-open": { "key": "sfx-door-open", "file": "assets/audio/sfx/door-open.mp3" },
+    "door-close": { "key": "sfx-door-close", "file": "assets/audio/sfx/door-close.mp3" },
+    "npc-chime": { "key": "sfx-npc-chime", "file": "assets/audio/sfx/npc-chime.mp3" },
+    "menu-open": { "key": "sfx-menu-open", "file": "assets/audio/sfx/menu-open.mp3" },
+    "menu-close": { "key": "sfx-menu-close", "file": "assets/audio/sfx/menu-close.mp3" },
+    "dialogue-tick": { "key": "sfx-dialogue-tick", "file": "assets/audio/sfx/dialogue-tick.mp3" },
+    "item-collected": { "key": "sfx-item-collected", "file": "assets/audio/sfx/item-collected.mp3" },
+    "quest-complete": { "key": "sfx-quest-complete", "file": "assets/audio/sfx/quest-complete.mp3" }
+  },
+  "ambient": {
+    "city-base": { "key": "amb-city-base", "file": "assets/audio/ambient/city-base.mp3", "loop": true },
+    "cubbon-park": { "key": "amb-cubbon-park", "file": "assets/audio/ambient/cubbon-park.mp3", "loop": true },
+    "metro-interior": { "key": "amb-metro-interior", "file": "assets/audio/ambient/metro-interior.mp3", "loop": true },
+    "shop-interior": { "key": "amb-shop-interior", "file": "assets/audio/ambient/shop-interior.mp3", "loop": true }
+  },
+  "zoneAmbientMap": {
+    "chinnaswamy-stadium": "city-base",
+    "ub-city": "city-base",
+    "cubbon-park": "cubbon-park",
+    "vidhana-soudha": "city-base",
+    "mg-road-metro": "city-base"
+  },
+  "interiorAmbientMap": {
+    "interior-metro": "metro-interior",
+    "interior-coffee": "shop-interior",
+    "interior-ubcity": "shop-interior",
+    "interior-library": "shop-interior"
+  },
+  "zoneNameToId": {
+    "Chinnaswamy Stadium": "chinnaswamy-stadium",
+    "UB City": "ub-city",
+    "Cubbon Park": "cubbon-park",
+    "Vidhana Soudha": "vidhana-soudha",
+    "MG Road Metro": "mg-road-metro"
+  },
+  "interiorBGM": "interior",
+  "outdoorBGM": "outdoor",
+  "titleBGM": "title",
+  "crossfade": {
+    "musicDurationMs": 2000,
+    "ambientDurationMs": 1000,
+    "duckLevel": 0.5,
+    "duckDurationMs": 300
+  }
+}
