@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase complete — ready for verification
+status: v1.0 milestone complete
 stopped_at: Completed 04-03-PLAN.md
-last_updated: "2026-03-23T14:57:52.097Z"
+last_updated: "2026-03-31T12:54:29.855Z"
 progress:
   total_phases: 4
   completed_phases: 4
@@ -16,7 +16,10 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-19)
+See: .planning/PROJECT.md (updated 2026-03-31)
+
+**Core value:** The city must feel like Bengaluru -- recognizable landmarks, authentic interactions, and nostalgic pixel art that makes locals say "I know that place."
+**Current focus:** v1.0 shipped — planning next milestone
 
 **Core value:** The city must feel like Bengaluru -- recognizable landmarks, authentic interactions, and nostalgic pixel art that makes locals say "I know that place."
 **Current focus:** Phase 04 — audio-and-polish
