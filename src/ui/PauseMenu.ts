@@ -186,6 +186,11 @@ export class PauseMenu {
     return this.isOpen;
   }
 
+  /** Returns the index of the currently active tab. */
+  getActiveTabIndex(): number {
+    return this.activeTabIndex;
+  }
+
   /** Reposition all elements relative to viewport bounds. */
   reposition(bounds: { x: number; y: number; width: number; height: number }): void {
     this.bounds = bounds;

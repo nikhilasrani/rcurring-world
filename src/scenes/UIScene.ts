@@ -199,17 +199,43 @@ export class UIScene extends Phaser.Scene {
       }
     });
 
-    // Left/Right: navigate pause menu tabs or metro map stations
-    this.input.keyboard?.on('keydown-LEFT', () => {
+    // Q/E: shoulder buttons — always switch pause menu tabs (even when panel captures L/R)
+    this.input.keyboard?.on('keydown-Q', () => {
       if (this.pauseMenu.isMenuOpen()) {
         this.pauseMenu.navigateTab('left');
+      }
+    });
+    this.input.keyboard?.on('keydown-E', () => {
+      if (this.pauseMenu.isMenuOpen()) {
+        this.pauseMenu.navigateTab('right');
+      }
+    });
+
+    // Left/Right: navigate pause menu tabs, panel items, or metro map stations
+    this.input.keyboard?.on('keydown-LEFT', () => {
+      if (this.pauseMenu.isMenuOpen()) {
+        const tab = this.pauseMenu.getActiveTabIndex();
+        if (tab === 4) { // SETTINGS — adjust slider value
+          this.settingsPanel.adjustValue('left');
+        } else if (tab === 1) { // INVENTORY — grid navigation
+          this.inventoryPanel.navigate('left');
+        } else {
+          this.pauseMenu.navigateTab('left');
+        }
       } else if (this.metroMap.isMapOpen()) {
         this.metroMap.navigateStation('left');
       }
     });
     this.input.keyboard?.on('keydown-RIGHT', () => {
       if (this.pauseMenu.isMenuOpen()) {
-        this.pauseMenu.navigateTab('right');
+        const tab = this.pauseMenu.getActiveTabIndex();
+        if (tab === 4) { // SETTINGS — adjust slider value
+          this.settingsPanel.adjustValue('right');
+        } else if (tab === 1) { // INVENTORY — grid navigation
+          this.inventoryPanel.navigate('right');
+        } else {
+          this.pauseMenu.navigateTab('right');
+        }
       } else if (this.metroMap.isMapOpen()) {
         this.metroMap.navigateStation('right');
       }
@@ -219,11 +245,25 @@ export class UIScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-UP', () => {
       if (this.dialogBox.isActive() && this.dialogBox.isChoiceActive()) {
         this.dialogBox.moveChoiceCursor('up');
+      } else if (this.pauseMenu.isMenuOpen()) {
+        const tab = this.pauseMenu.getActiveTabIndex();
+        if (tab === 4) { // SETTINGS — navigate between items
+          this.settingsPanel.navigate('up');
+        } else if (tab === 1) { // INVENTORY — grid navigation
+          this.inventoryPanel.navigate('up');
+        }
       }
     });
     this.input.keyboard?.on('keydown-DOWN', () => {
       if (this.dialogBox.isActive() && this.dialogBox.isChoiceActive()) {
         this.dialogBox.moveChoiceCursor('down');
+      } else if (this.pauseMenu.isMenuOpen()) {
+        const tab = this.pauseMenu.getActiveTabIndex();
+        if (tab === 4) { // SETTINGS — navigate between items
+          this.settingsPanel.navigate('down');
+        } else if (tab === 1) { // INVENTORY — grid navigation
+          this.inventoryPanel.navigate('down');
+        }
       }
     });
   }

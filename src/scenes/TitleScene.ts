@@ -16,6 +16,10 @@ export class TitleScene extends Phaser.Scene {
   private saveManager!: SaveManager;
   private hasSave = false;
 
+  // Audio unlock gate — true until user's first interaction unlocks AudioContext
+  private awaitingUnlock = false;
+  private promptText!: Phaser.GameObjects.Text;
+
   // Menu state
   private selectedIndex = 0;
   private menuTexts: Phaser.GameObjects.Text[] = [];
@@ -63,15 +67,6 @@ export class TitleScene extends Phaser.Scene {
       }
     }
 
-    // Start title BGM — defer if AudioContext is locked (Chrome autoplay policy)
-    if (this.sound.locked) {
-      this.sound.once('unlocked', () => {
-        audioManager!.startTitleMusic();
-      });
-    } else {
-      audioManager.startTitleMusic();
-    }
-
     const { width } = this.scale.gameSize;
 
     // Title background image (pixel art Bengaluru skyline)
@@ -111,6 +106,7 @@ export class TitleScene extends Phaser.Scene {
     }).setOrigin(0.5, 0.5);
     continueText.setInteractive({ useHandCursor: this.hasSave });
     continueText.on('pointerdown', () => {
+      if (this.awaitingUnlock) return;
       if (this.hasSave) {
         this.selectedIndex = 0;
         this.updateCursor();
@@ -129,6 +125,7 @@ export class TitleScene extends Phaser.Scene {
     }).setOrigin(0.5, 0.5);
     newGameText.setInteractive({ useHandCursor: true });
     newGameText.on('pointerdown', () => {
+      if (this.awaitingUnlock) return;
       this.selectedIndex = 1;
       this.updateCursor();
       this.confirmSelection();
@@ -147,6 +144,51 @@ export class TitleScene extends Phaser.Scene {
     // Default selection: CONTINUE if save exists, otherwise NEW GAME
     this.selectedIndex = this.hasSave ? 0 : 1;
     this.updateCursor();
+
+    // === Audio unlock gate ===
+    // Chrome autoplay policy: AudioContext is locked until user gesture.
+    // Show "Click to begin" prompt and gate the menu behind it so the first
+    // interaction unlocks audio + starts title music. The menu becomes active
+    // only after the unlock, giving the user time to hear title music.
+    if (this.sound.locked) {
+      this.awaitingUnlock = true;
+
+      // Hide menu until audio unlocked
+      for (const t of this.menuTexts) t.setVisible(false);
+      this.cursorText.setVisible(false);
+
+      // Blinking "Click anywhere to begin" prompt
+      this.promptText = this.add.text(width / 2, menuY + menuSpacing / 2, 'Click anywhere to begin', {
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        color: '#E8B830',
+        stroke: '#000000',
+        strokeThickness: 2,
+      }).setOrigin(0.5, 0.5);
+
+      this.tweens.add({
+        targets: this.promptText,
+        alpha: 0.3,
+        duration: 800,
+        yoyo: true,
+        repeat: -1,
+      });
+
+      // When AudioContext unlocks, reveal menu and start title music
+      this.sound.once('unlocked', () => {
+        this.awaitingUnlock = false;
+        audioManager!.startTitleMusic();
+
+        // Remove prompt, show menu
+        if (this.promptText) this.promptText.destroy();
+        for (const t of this.menuTexts) t.setVisible(true);
+        this.cursorText.setVisible(true);
+      });
+    } else {
+      // Audio already unlocked (e.g., returning to title after playing)
+      this.awaitingUnlock = false;
+      audioManager.startTitleMusic();
+    }
 
     // === Overwrite warning text (hidden initially) ===
     const warningY = menuY + menuSpacing * 2 + 16;
@@ -203,6 +245,7 @@ export class TitleScene extends Phaser.Scene {
 
     // === Keyboard input ===
     this.input.keyboard?.on('keydown-UP', () => {
+      if (this.awaitingUnlock) return;
       if (this.showingOverwriteWarning) {
         if (this.warningSelectedIndex > 0) {
           this.warningSelectedIndex--;
@@ -214,6 +257,7 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.input.keyboard?.on('keydown-DOWN', () => {
+      if (this.awaitingUnlock) return;
       if (this.showingOverwriteWarning) {
         if (this.warningSelectedIndex < 1) {
           this.warningSelectedIndex++;
@@ -225,6 +269,7 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.input.keyboard?.on('keydown-ENTER', () => {
+      if (this.awaitingUnlock) return;
       if (this.showingOverwriteWarning) {
         this.confirmOverwriteSelection();
       } else {
@@ -233,6 +278,7 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.input.keyboard?.on('keydown-SPACE', () => {
+      if (this.awaitingUnlock) return;
       if (this.showingOverwriteWarning) {
         this.confirmOverwriteSelection();
       } else {
